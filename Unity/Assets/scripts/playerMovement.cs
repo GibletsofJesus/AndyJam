@@ -6,6 +6,8 @@ public class playerMovement : Actor {
     Rigidbody2D rig;
     public float moveSpeed;
 
+    public AudioClip[] shootSounds;
+
     Vector3 rotLerp;
 
 	// Use this for initialization
@@ -21,27 +23,16 @@ public class playerMovement : Actor {
 
         Quaternion q = Quaternion.Euler(rotLerp);
         float angle=0;
-
-        //If difference in y rotation is voer 60 degrees 
-        /*if (transform.rotation.eulerAngles.y < 40 && rotLerp.y == -45)
-        {
-            StartCoroutine(doABarrrelRoll(1));
-        }
-        else if (transform.rotation.eulerAngles.y > 315 && rotLerp.y == 45)
-        {
-            StartCoroutine(doABarrrelRoll(-1));
-        }
-        */
+        
         if (!rolling)
             angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotLerp.y, Time.deltaTime * 5);
 
-
         transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
     }
+
     bool rolling;
     IEnumerator doABarrrelRoll(int dir)
     {
-        Debug.Log("rolling");
         rolling = true;
         Vector3 initialRot = transform.rotation.eulerAngles;
         Vector3 goalRot = rotLerp;
@@ -58,11 +49,11 @@ public class playerMovement : Actor {
         }
 
         rolling = false;
-        Debug.Log("Stop rolling");
     }
 
     void inputThings()
     {
+        #region move
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             if (!rolling)
@@ -97,6 +88,15 @@ public class playerMovement : Actor {
         if (Input.GetKey(KeyCode.DownArrow))
         {
             rig.AddForce(-Vector2.up * moveSpeed, ForceMode2D.Impulse);
+        }
+        #endregion
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
+
+            if (CameraShake.instance.shakeDuration < 0.2f)
+                CameraShake.instance.shakeDuration += 0.2f;
         }
     }
 }
