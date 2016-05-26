@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class playerMovement : MonoBehaviour {
+public class playerMovement : Actor {
+
+    public GameObject parent;
 
     Rigidbody2D rig;
     public float moveSpeed;
@@ -18,9 +20,55 @@ public class playerMovement : MonoBehaviour {
     void Update()
     {
         inputThings();
-        transform.rotation = Quaternion.Lerp(transform.rotation,Quaternion.Euler(rotLerp), Time.deltaTime * 5);
+
+        Quaternion q = Quaternion.Euler(rotLerp);
+        float angle=0;
+
         //If difference in y rotation is voer 60 degrees 
-	}
+        if (transform.rotation.eulerAngles.y < 40 && rotLerp.y == -45)
+        {
+            StartCoroutine(doABarrrelRoll(1));
+        }
+        else if (transform.rotation.eulerAngles.y > 315 && rotLerp.y == 45)
+        {
+            StartCoroutine(doABarrrelRoll(-1));
+        }
+
+        if (!rolling)
+            angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotLerp.y, Time.deltaTime * 5);
+
+
+        transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
+    }
+    bool rolling;
+    IEnumerator doABarrrelRoll(int dir)
+    {
+        rolling = true;
+        Vector3 initialRot = parent.transform.rotation.eulerAngles;
+        Vector3 goalRot = rotLerp;
+        float t=0;
+        if (dir > 0)
+        {
+            goalRot.y += 360;
+        }
+        else
+        {
+            goalRot.y -= 360;
+        }
+
+        Vector3 currentRot = initialRot;
+
+        while (t < .5f)
+        {
+            currentRot.y = Mathf.Lerp(initialRot.y, goalRot.y, t / .5f);
+            transform.rotation= Quaternion.Euler(currentRot);
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        rolling = false;
+        //parent.transform.Rotate(Vector3.left);
+    }
 
     void inputThings()
     {
