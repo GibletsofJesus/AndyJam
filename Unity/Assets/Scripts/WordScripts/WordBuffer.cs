@@ -11,7 +11,10 @@ public class WordBuffer : MonoBehaviour
 	private string currentWord = string.Empty;
 	private const int MaxCharacters = 15;
 
-	private List<Word> words = new List<Word>();
+	[SerializeField] private List<Word> words = new List<Word>();
+
+	private float submitCooldown = 1.0f;
+	private float currentSubmitCooldown = 0.0f;
 
 	void Start()
 	{
@@ -20,37 +23,59 @@ public class WordBuffer : MonoBehaviour
 
 	void Update()
 	{
-		foreach (char _c in Input.inputString) 
+		currentSubmitCooldown = Mathf.Max (0.0f, currentSubmitCooldown - Time.deltaTime);
+		//Can input text
+		if(currentSubmitCooldown == 0.0f)
 		{
-			//If backspace then clear the word
-			if(_c == '\b')
+			foreach (char _c in Input.inputString) 
 			{
-				currentWord = string.Empty;
-				WordHUD.instance.UpdateText(currentWord);
-			}
-			//Else other empty space value then do nothing
-			else if((int)_c < 33 || (int)_c > 126)
-			{
-			}
-			//Add to word string
-			else
-			{
-				if(currentWord.Length <= MaxCharacters)
+				//If backspace then clear the word
+				if(_c == '\b')
 				{
-					currentWord += char.ToUpper(_c);
-					WordHUD.instance.UpdateText(currentWord);
-					//Test to see if any words match
-					foreach (Word _w in words) 
+					currentWord = string.Empty;
+					InputHUD.instance.UpdateText(currentWord);
+				}
+				//Else other empty space value then do nothing
+				else if((int)_c < 33 || (int)_c > 126)
+				{
+				}
+				//Add to word string
+				else
+				{
+					if(currentWord.Length <= MaxCharacters)
 					{
-						if(_w.Match(currentWord))
+						currentWord += char.ToUpper(_c);
+						InputHUD.instance.UpdateText(currentWord);
+						//Test to see if any words match
+						foreach (Word _w in words) 
 						{
-							currentWord = string.Empty;
-							WordHUD.instance.UpdateText(currentWord);
-							break;
+							if(_w.Match(currentWord))
+							{
+								InputHUD.instance.Success();
+								currentSubmitCooldown = submitCooldown;
+								break;
+							}
+						}
+						//If max word reached
+						if(currentWord.Length == MaxCharacters)
+						{
+							InputHUD.instance.Fail();
+							currentSubmitCooldown = submitCooldown;
 						}
 					}
 				}
 			}
 		}
+		//Cannot input text
+		else
+		{
+			if(currentSubmitCooldown < 0.2f)
+			{
+				currentWord = string.Empty;
+				InputHUD.instance.Reset();
+			}
+		}
 	}
+
+
 }
