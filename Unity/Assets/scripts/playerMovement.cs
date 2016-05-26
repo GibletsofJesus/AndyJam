@@ -7,7 +7,7 @@ public class playerMovement : Actor {
     public float moveSpeed;
 
     public AudioClip[] shootSounds;
-
+    public ParticleSystem[] muzzleflash;
     Vector3 rotLerp;
 
 	// Use this for initialization
@@ -93,6 +93,10 @@ public class playerMovement : Actor {
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            foreach(ParticleSystem ps in muzzleflash)
+            {
+                ps.Emit(1);
+            }
             soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
 
             if (CameraShake.instance.shakeDuration < 0.2f)
