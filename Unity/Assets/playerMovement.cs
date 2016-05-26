@@ -4,6 +4,7 @@ using System.Collections;
 public class playerMovement : MonoBehaviour {
 
     Rigidbody2D rig;
+    public float moveSpeed;
 
 	// Use this for initialization
 	void Start ()
@@ -21,8 +22,20 @@ public class playerMovement : MonoBehaviour {
     {
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            rig.AddForce(
-            }
+            rig.AddForce(-Vector2.right * moveSpeed,ForceMode2D.Impulse);
+        }
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            rig.AddForce(Vector2.right * moveSpeed, ForceMode2D.Impulse);
+        }
 
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            rig.AddForce(Vector2.up * moveSpeed, ForceMode2D.Impulse);
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            rig.AddForce(-Vector2.up * moveSpeed, ForceMode2D.Impulse);
+        }
     }
 }
