@@ -38,12 +38,14 @@ public class Projectile : MonoBehaviour
       
             if (col.gameObject.tag == "Player")
             {
-               //do somethign with player
-            
+                col.gameObject.GetComponent<Actor>().TakeDamage(damage);
             }
-           
+            else
+            {
+                DeactivateProj();
+            }
         
-        DeactivateProj();
+      
     }
     void DeactivateProj()
     {
@@ -54,7 +56,6 @@ public class Projectile : MonoBehaviour
     }
     public void SetProjectile(int _damage, Vector2 _direction,float _speed = 500, float _aliveTime = 2)
     {
-     
         damage = _damage;
         direction = _direction;
         maxAlive = _aliveTime;

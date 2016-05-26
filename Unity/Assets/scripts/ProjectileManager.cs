@@ -18,6 +18,7 @@ public class ProjectileManager : MonoBehaviour
 	}
 	public Projectile PoolingProjectile()
     {
+        Debug.Log(projList.Count);
         for (int i=0;i<projList.Count;i++)
         {
             if (!projList[i].isActiveAndEnabled)

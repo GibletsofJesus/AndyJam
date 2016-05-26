@@ -6,6 +6,7 @@ public class Actor : MonoBehaviour
     private float health;
     Projectile projectile;
     private float speed;
+    public GameObject shootTransform;
 
     void Awake()
     {
@@ -20,6 +21,7 @@ public class Actor : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+      
         Death();
 	}
    
@@ -27,6 +29,10 @@ public class Actor : MonoBehaviour
     {
         Projectile p = ProjectileManager.instance.PoolingProjectile();
         p.SetProjectile(10, transform.up);
+        p.transform.position = shootTransform.transform.position;
+        p.gameObject.SetActive(true);
+       // p.transform.position = transform.position;
+
     }
    
     public void TakeDamage(float _damage)
