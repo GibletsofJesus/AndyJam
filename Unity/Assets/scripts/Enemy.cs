@@ -1,39 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour 
+public class Enemy : Actor
 {
     RaycastHit2D hit;
-    private float health;
-    Projectile projectile;
-    float speed;
-    void Awake()
-    {
-        projectile = GetComponent<Projectile>();
-    }
+   
+  
 
     void Update()
     {
         Movement();
     }
-    public void SetEnemy(float _health,float _speed)
+   
+    
+    
+      
+    public override void Shoot()
     {
-        speed = _speed;
-        health = _health;
-    }
-    void Shoot()
-    {
-       hit = Physics2D.Raycast(transform.position + transform.up, transform.up, 10);
-       if (hit.rigidbody.gameObject.tag == "Player")
-       {
-           projectile.Fire(transform.up);
-       }
-
+        hit = Physics2D.Raycast(transform.position + transform.up, transform.up, 10);
+        if (hit.rigidbody.gameObject.tag == "Player")
+        {
+            base.Shoot();
+        }
     }
     void Movement()
     {
-        Vector2 movement = transform.up * (speed * Time.deltaTime);
+        Vector2 movement = transform.up * GetSpeed();
         transform.Translate(movement, Space.World);
     }
-
+   
 }

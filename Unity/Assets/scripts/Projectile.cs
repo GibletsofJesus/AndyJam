@@ -3,48 +3,61 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour
 {
-
-    float damage;
+    int damage;
+    float maxAlive;
+    float aliveTime = 2;
     float speed;
-    float aliveTime;
-    float currentAliveTime;
+    Vector2 direction;
+    Rigidbody2D body;
 
     // Use this for initialization
-    void Start()
+    public virtual void Start()
     {
-      
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        body = GetComponent<Rigidbody2D>();
 
     }
-    public void Fire(Vector2 _direction)
-    {
-        transform.Translate(_direction);
-    }
-    public void WeaponVariables(float _damage, float _speed,float _aliveTime)
-    {
-        damage = _damage;
-        speed = _speed;
-        aliveTime = _aliveTime;
-        currentAliveTime = aliveTime;
-    }
+  
     void Alive()
     {
-        if (currentAliveTime <=0)
+        aliveTime -= Time.deltaTime;
+        if (aliveTime <= 0)
         {
-            gameObject.SetActive(false);
+            DeactivateProj();
         }
     }
-    void OnTriggerEnter2D(Collider2D col)
+    // Update is called once per frame
+    public virtual void Update()
     {
-        if (col.GetComponent<playerMovement>())
-        {
-            //do a thing
-        }
-         gameObject.SetActive(false);
-       
+
+        body.velocity = transform.up * (speed * Time.deltaTime);
+        Alive();
+    }
+
+    public virtual void OnTriggerEnter2D(Collider2D col)
+    {
+      
+            if (col.gameObject.tag == "Player")
+            {
+               //do somethign with player
+            
+            }
+           
+        
+        DeactivateProj();
+    }
+    void DeactivateProj()
+    {
+        aliveTime = maxAlive;
+        gameObject.SetActive(false);
+        gameObject.GetComponent<Projectile>().enabled = false;
+
+    }
+    public void SetProjectile(int _damage, Vector2 _direction,float _speed = 500, float _aliveTime = 2)
+    {
+     
+        damage = _damage;
+        direction = _direction;
+        maxAlive = _aliveTime;
+        speed = _speed;
     }
 }
