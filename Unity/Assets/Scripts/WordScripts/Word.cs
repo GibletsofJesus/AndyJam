@@ -3,16 +3,16 @@ using System.Collections;
 
 public abstract class Word : MonoBehaviour 
 {
-	private string thisWord = string.Empty;
+	protected string thisWord = string.Empty;
 	public string word {get {return thisWord;} set{ thisWord = value;}}
 
 	[Range(0.0f, 300.0f)]public float wordCooldown = 10.0f;
 	private float currentCooldown;
 
-	private delegate void BehaviorDelegate();
-	private BehaviorDelegate behavior = null;
+	protected delegate void BehaviorDelegate();
+	protected BehaviorDelegate behavior = null;
 
-	private void Start()
+	protected virtual void Start()
 	{
 		currentCooldown = wordCooldown;
 	}
@@ -32,7 +32,7 @@ public abstract class Word : MonoBehaviour
 		return false;
 	}
 
-	public void ActivateBehavior()
+	private void ActivateBehavior()
 	{
 		//Activate behavior
 		if(wordCooldown == currentCooldown)
@@ -47,5 +47,5 @@ public abstract class Word : MonoBehaviour
 		}
 	}
 
-	public abstract void Behavior();
+	protected abstract void Behavior();
 }
