@@ -4,18 +4,16 @@ using UnityEngine.UI;
 
 public class WordHUD : MonoBehaviour 
 {
-	private static WordHUD staticInstance = null;
-	public static WordHUD instance {get {return staticInstance;} set{}}
+	[SerializeField] private Text text = null;
+	[SerializeField] private Image cooldownImage = null;
 
-	[SerializeField] private Text inputText = null;
-
-	private void Start()
+	public void UpdateCooldown(float _fill)
 	{
-		staticInstance = this;
+		cooldownImage.fillAmount = _fill;
 	}
 
-	public void UpdateText(string _text)
+	public void TriggerSuccess()
 	{
-		inputText.text = _text;
+		cooldownImage.fillAmount = 0.0f;
 	}
 }

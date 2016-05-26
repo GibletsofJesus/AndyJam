@@ -12,6 +12,8 @@ public abstract class Word : MonoBehaviour
 	protected delegate void BehaviorDelegate();
 	protected BehaviorDelegate behavior = null;
 
+	[SerializeField] private WordHUD wordHUD = null;
+
 	protected virtual void Start()
 	{
 		currentCooldown = wordCooldown;
@@ -20,11 +22,12 @@ public abstract class Word : MonoBehaviour
 	private void Update()
 	{
 		currentCooldown = Mathf.Min(currentCooldown + Time.deltaTime, wordCooldown);
+		wordHUD.UpdateCooldown (currentCooldown / wordCooldown);
 	}
 
 	public bool Match(string _word)
 	{
-		if(thisWord == word)
+		if(thisWord == _word)
 		{
 			ActivateBehavior();
 			return true;
@@ -38,6 +41,7 @@ public abstract class Word : MonoBehaviour
 		if(wordCooldown == currentCooldown)
 		{
 			currentCooldown = 0.0f;
+			wordHUD.TriggerSuccess();
 			behavior();
 		}
 		//Behavior on cooldown, do something to show this (flicker red?)
