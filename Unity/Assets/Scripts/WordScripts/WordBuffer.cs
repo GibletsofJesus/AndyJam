@@ -9,7 +9,7 @@ public class WordBuffer : MonoBehaviour
 	public static WordBuffer instance {get {return staticInstance;} set{}}
 
 	private string currentWord = string.Empty;
-	private const int MaxCharacters = 15;
+	private const int MaxCharacters = 20;
 
 	[SerializeField] private List<Word> words = new List<Word>();
 
@@ -44,7 +44,7 @@ public class WordBuffer : MonoBehaviour
 				{
 					if(currentWord.Length <= MaxCharacters)
 					{
-						currentWord += char.ToUpper(_c);
+						currentWord += char.ToLower(_c);
 						InputHUD.instance.UpdateText(currentWord);
 						//Test to see if any words match
 						foreach (Word _w in words) 
