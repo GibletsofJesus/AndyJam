@@ -29,7 +29,7 @@ public class Projectile : MonoBehaviour
     public virtual void Update()
     {
 
-        body.velocity = transform.up * (speed * Time.deltaTime);
+        body.velocity = direction * (speed * Time.deltaTime);
         Alive();
     }
 
@@ -60,5 +60,6 @@ public class Projectile : MonoBehaviour
         direction = _direction;
         maxAlive = _aliveTime;
         speed = _speed;
+        transform.up = _direction;
     }
 }

@@ -5,13 +5,16 @@ public class Enemy : Actor
 {
    
     Ray2D rayCast;
-    RaycastHit2D hit;  
+    RaycastHit2D hit;
+    Vector2 target;
     void Start()
     {
-        SetActor(20, 1);
+       
+        SetActor(20, 1,0.5f);
     }
-    void Update()
+   public override void Update()
     {
+        base.Update();
      //   Movement();
        
         rayCast.origin = gameObject.transform.position + -gameObject.transform.up;
@@ -20,13 +23,11 @@ public class Enemy : Actor
         Debug.DrawRay(rayCast.origin, rayCast.direction * 10, Color.red);
         if (hit.collider)
         {
-            Debug.Log(hit.collider.gameObject.ToString());
             if (hit.rigidbody.gameObject.GetComponent<Actor>())
             {
-                Debug.Log("hit");
                 //if (Vector2.Distance(transform.position, hit.point) > 5.5f)
 
-                Shoot();
+                Shoot(-transform.up.normalized);
             }
         }
        
@@ -35,10 +36,10 @@ public class Enemy : Actor
     
     
       
-    public override void Shoot()
+    public override void Shoot(Vector2 _direction)
     {
-                      Debug.Log("hit player");
-                base.Shoot();
+                    
+                base.Shoot(_direction);
           
        
     }
@@ -46,6 +47,7 @@ public class Enemy : Actor
     {
         Vector2 movement = -transform.up * GetSpeed();
         transform.Translate(movement, Space.World);
+
     }
    
 }

@@ -4,13 +4,15 @@ using System.Collections;
 public class Actor : MonoBehaviour
 {
     private float health;
-    Projectile projectile;
+    public Projectile projectile;
     private float speed;
     public GameObject shootTransform;
+    float shotCooldown;
+    float maxShotCooldown;
 
     void Awake()
     {
-        projectile = GetComponent<Projectile>();
+        shotCooldown = maxShotCooldown;
     }
    
 	// Use this for initialization
@@ -19,22 +21,32 @@ public class Actor : MonoBehaviour
 	}
    
 	// Update is called once per frame
-	void Update ()
+	public virtual void Update ()
     {
       
         Death();
+        CoolDown();
 	}
    
-    public virtual void Shoot()
+    public virtual void Shoot(Vector2 _direction)
     {
-        Projectile p = ProjectileManager.instance.PoolingProjectile();
-        p.SetProjectile(10, transform.up);
-        p.transform.position = shootTransform.transform.position;
-        p.gameObject.SetActive(true);
-       // p.transform.position = transform.position;
+        if (shotCooldown >= maxShotCooldown)
+        {
+            Projectile p = ProjectileManager.instance.PoolingProjectile();
+            p.SetProjectile(10, _direction);
+            p.transform.position = shootTransform.transform.position;
+            p.gameObject.SetActive(true);
+            // p.transform.position = transform.position;
+        }
 
     }
-   
+   void CoolDown()
+    {
+       if (shotCooldown<maxShotCooldown)
+       {
+           shotCooldown += Time.deltaTime;
+       }
+    }
     public void TakeDamage(float _damage)
     {
         health -= _damage;
@@ -52,9 +64,10 @@ public class Actor : MonoBehaviour
         return speed * Time.deltaTime; ;
     }
     
-    public void SetActor(float _health, float _speed)
+    public void SetActor(float _health, float _speed,float _maxShotCooldown)
     {
         speed = _speed;
         health = _health;
+        maxShotCooldown = _maxShotCooldown;
     }
 }
