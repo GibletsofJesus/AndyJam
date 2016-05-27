@@ -8,10 +8,12 @@ public class UpdateWord : AbilityWord
 		wordTiers = new string[] {"update.exe"};
 		behavior = Behavior;
 		base.Start ();
+		wordActive = true;
+		wordHUD.Activate ();
 	}
 	
 	protected override void Behavior ()
 	{
-
+		UpdateBehavior.instance.ApplyUpdate ();
 	}
 }
