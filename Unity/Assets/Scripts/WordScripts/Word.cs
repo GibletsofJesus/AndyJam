@@ -47,7 +47,7 @@ public abstract class Word : MonoBehaviour
 		//Behavior on cooldown, do something to show this (flicker red?)
 		else
 		{
-
+		
 		}
 	}
 
