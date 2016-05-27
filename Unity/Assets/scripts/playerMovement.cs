@@ -121,6 +121,7 @@ public class playerMovement : Actor
 
                     if (CameraShake.instance.shakeDuration < 0.2f)
                         CameraShake.instance.shakeDuration += 0.2f;
+                    CameraShake.instance.shakeAmount = 0.05f;
                 }
             }
         }
@@ -130,5 +131,6 @@ public class playerMovement : Actor
         base.TakeDamage(_damage);
         if (CameraShake.instance.shakeDuration < 0.2f)
             CameraShake.instance.shakeDuration += 0.2f;
+        CameraShake.instance.shakeAmount = 0.5f;
     }
 }
