@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class playerMovement : Actor {
+public class playerMovement : Actor 
+{
 
     Rigidbody2D rig;
     public float moveSpeed;
-
+    
     public AudioClip[] shootSounds;
     public ParticleSystem[] muzzleflash;
     Vector3 rotLerp;
@@ -19,6 +20,14 @@ public class playerMovement : Actor {
 	// Update is called once per frame
     void Update()
     {
+        if (transform.position.x <= -8.2f)
+        {
+            rig.AddForce(Vector2.right, ForceMode2D.Impulse);
+        }
+        if (transform.position.x >=8.2f)
+        {
+            rig.AddForce(-Vector2.right, ForceMode2D.Impulse);
+        }
         inputThings();
 
         Quaternion q = Quaternion.Euler(rotLerp);
@@ -56,14 +65,14 @@ public class playerMovement : Actor {
         #region move
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            if (!rolling)
-            {
-                if (transform.rotation.eulerAngles.y > 314 && transform.rotation.eulerAngles.y < 317)
-                    StartCoroutine(doABarrrelRoll(-1));
+                if (!rolling)
+                {
+                    if (transform.rotation.eulerAngles.y > 314 && transform.rotation.eulerAngles.y < 317)
+                        StartCoroutine(doABarrrelRoll(-1));
 
-                rotLerp = new Vector3(0, 45, 0);
-            }
-            rig.AddForce(-Vector2.right * moveSpeed, ForceMode2D.Impulse);
+                    rotLerp = new Vector3(0, 45, 0);
+                }
+                rig.AddForce(-Vector2.right * moveSpeed, ForceMode2D.Impulse);
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -73,9 +82,10 @@ public class playerMovement : Actor {
                     StartCoroutine(doABarrrelRoll(1));
                 rotLerp = new Vector3(0, -45, 0);
             }
-            
+
             rig.AddForce(Vector2.right * moveSpeed, ForceMode2D.Impulse);
         }
+
         else
         {
             rotLerp = Vector3.zero;

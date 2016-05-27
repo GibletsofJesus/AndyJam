@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour
     public virtual void Update()
     {
 
-        body.velocity = direction * (speed * Time.deltaTime);
+        body.velocity = direction * (speed);// * Time.deltaTime);
         Alive();
     }
 
@@ -42,7 +42,7 @@ public class Projectile : MonoBehaviour
             }
             else
             {
-                DeactivateProj();
+            //    DeactivateProj();
             }
         
       
@@ -54,7 +54,7 @@ public class Projectile : MonoBehaviour
         gameObject.GetComponent<Projectile>().enabled = false;
 
     }
-    public void SetProjectile(int _damage, Vector2 _direction,GameObject _actor,float _speed = 500, float _aliveTime = 2)
+    public void SetProjectile(int _damage, Vector2 _direction,GameObject _actor,float _speed = 50, float _aliveTime = 2)
     {
         damage = _damage;
         direction = _direction;

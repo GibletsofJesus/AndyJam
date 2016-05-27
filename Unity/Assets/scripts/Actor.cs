@@ -4,6 +4,7 @@ using System.Collections;
 public class Actor : MonoBehaviour
 {
     private float health;
+    private float damage;
     public Projectile projectile;
     private float speed;
     public GameObject shootTransform;
@@ -36,7 +37,7 @@ public class Actor : MonoBehaviour
             p.SetProjectile(10, _direction,gameObject);
             p.transform.position = shootTransform.transform.position;
             p.gameObject.SetActive(true);
-            // p.transform.position = transform.position;
+            shotCooldown = 0;
         }
 
     }
@@ -64,10 +65,11 @@ public class Actor : MonoBehaviour
         return speed * Time.deltaTime; ;
     }
     
-    public void SetActor(float _health, float _speed,float _maxShotCooldown)
+    public void SetActor(float _health,float _damage, float _speed,float _maxShotCooldown)
     {
         speed = _speed;
         health = _health;
+        damage = _damage;
         maxShotCooldown = _maxShotCooldown;
     }
 }
