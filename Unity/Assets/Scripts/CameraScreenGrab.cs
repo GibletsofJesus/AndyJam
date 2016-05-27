@@ -33,32 +33,39 @@ public class CameraScreenGrab : MonoBehaviour {
 
 	void OnGUI()
 	{
-		if (Event.current.type == EventType.Repaint)
-			Graphics.DrawTexture(new Rect(0,0,Screen.width, Screen.height), tex);
-	}	
-	void OnPostRender()
-	{
-		// Draw a quad over the whole screen with the above shader
-		GL.PushMatrix ();
-		GL.LoadOrtho ();
-		for (var i = 0; i < mat.passCount; ++i) {
-			mat.SetPass (i);
-			GL.Begin( GL.QUADS );
-			GL.Vertex3( 0, 0, 0.1f );
-			GL.Vertex3( 1, 0, 0.1f );
-			GL.Vertex3( 1, 1, 0.1f );
-			GL.Vertex3( 0, 1, 0.1f );
-			GL.End();
-		}
-		GL.PopMatrix ();	
-		
-		
-		DestroyImmediate(tex);
-
-		tex = new Texture2D(Mathf.FloorToInt(GetComponent<Camera>().pixelWidth), Mathf.FloorToInt(GetComponent<Camera>().pixelHeight));
-		tex.filterMode = filterMode;
-		tex.ReadPixels(new Rect(0, 0, GetComponent<Camera>().pixelWidth, GetComponent<Camera>().pixelHeight), 0, 0);
-		tex.Apply();
+        if (pixelSize > 1)
+        {
+            if (Event.current.type == EventType.Repaint)
+                Graphics.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), tex);
+        }
 	}
+    void OnPostRender()
+    {
+        if (pixelSize > 1)
+        {
+            // Draw a quad over the whole screen with the above shader
+            GL.PushMatrix();
+            GL.LoadOrtho();
+            for (var i = 0; i < mat.passCount; ++i)
+            {
+                mat.SetPass(i);
+                GL.Begin(GL.QUADS);
+                GL.Vertex3(0, 0, 0.1f);
+                GL.Vertex3(1, 0, 0.1f);
+                GL.Vertex3(1, 1, 0.1f);
+                GL.Vertex3(0, 1, 0.1f);
+                GL.End();
+            }
+            GL.PopMatrix();
+
+
+            DestroyImmediate(tex);
+
+            tex = new Texture2D(Mathf.FloorToInt(GetComponent<Camera>().pixelWidth), Mathf.FloorToInt(GetComponent<Camera>().pixelHeight));
+            tex.filterMode = filterMode;
+            tex.ReadPixels(new Rect(0, 0, GetComponent<Camera>().pixelWidth, GetComponent<Camera>().pixelHeight), 0, 0);
+            tex.Apply();
+        }
+    }
 
 }
