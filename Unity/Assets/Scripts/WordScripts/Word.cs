@@ -6,27 +6,22 @@ public abstract class Word : MonoBehaviour
 	protected string thisWord = string.Empty;
 	public string word {get {return thisWord;} set{ thisWord = value;}}
 
-	[Range(0.0f, 300.0f)]public float wordCooldown = 10.0f;
-	private float currentCooldown;
-
+	protected bool wordActive = false;
+	
 	protected delegate void BehaviorDelegate();
 	protected BehaviorDelegate behavior = null;
 
-	[SerializeField] private WordHUD wordHUD = null;
-
 	protected virtual void Start()
 	{
-		currentCooldown = wordCooldown;
-	}
-
-	private void Update()
-	{
-		currentCooldown = Mathf.Min(currentCooldown + Time.deltaTime, wordCooldown);
-		wordHUD.UpdateCooldown (currentCooldown / wordCooldown);
+		wordActive = false;
 	}
 
 	public bool Match(string _word)
 	{
+		if (!wordActive) 
+		{
+			return false;
+		}
 		if(thisWord == _word)
 		{
 			ActivateBehavior();
@@ -35,20 +30,9 @@ public abstract class Word : MonoBehaviour
 		return false;
 	}
 
-	private void ActivateBehavior()
+	protected virtual void ActivateBehavior ()
 	{
-		//Activate behavior
-		if(wordCooldown == currentCooldown)
-		{
-			currentCooldown = 0.0f;
-			wordHUD.TriggerSuccess();
-			behavior();
-		}
-		//Behavior on cooldown, do something to show this (flicker red?)
-		else
-		{
-		
-		}
+		behavior();
 	}
 
 	protected abstract void Behavior();

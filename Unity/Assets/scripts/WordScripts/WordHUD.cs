@@ -16,4 +16,19 @@ public class WordHUD : MonoBehaviour
 	{
 		cooldownImage.fillAmount = 0.0f;
 	}
+
+	public void Deactivate()
+	{
+		text.color = Color.red;
+	}
+
+	public void Activate()
+	{
+		text.color = Color.white;
+	}
+
+	public void UpdateWord(string _word)
+	{
+		text.text = _word;
+	}
 }
