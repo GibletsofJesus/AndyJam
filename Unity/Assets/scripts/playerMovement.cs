@@ -6,7 +6,6 @@ public class playerMovement : Actor
 
     Rigidbody2D rig;
     public float moveSpeed;
-    
     public AudioClip[] shootSounds;
     public ParticleSystem[] muzzleflash;
     Vector3 rotLerp;
@@ -14,22 +13,24 @@ public class playerMovement : Actor
 	// Use this for initialization
 	void Start ()
     {
-        SetActor(100, 1, 1, 0.5f);
+        SetActor(100, 1, 1, base.maxShotCooldown);
         rig = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
-   public override void Update()
+   void FixedUpdate()
     {
         base.Update();
-        if (transform.position.x <= -8.2f)
+
+        //Whoever did this, you are scum.
+        /*if (transform.position.x <= -8.2f)
         {
             rig.AddForce(Vector2.right, ForceMode2D.Impulse);
         }
         if (transform.position.x >=8.2f)
         {
             rig.AddForce(-Vector2.right, ForceMode2D.Impulse);
-        }
+        }*/
         inputThings();
 
         Quaternion q = Quaternion.Euler(rotLerp);
@@ -37,7 +38,7 @@ public class playerMovement : Actor
         
         if (!rolling)
             angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotLerp.y, Time.deltaTime * 5);
-
+        
         transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
     }
 
@@ -107,11 +108,9 @@ public class playerMovement : Actor
         {
             if (ShotCoolDown())
             {
-
-
                 Shoot(transform.up, shootTransform, gameObject.tag);
+                base.shotCooldown = 0;
                 {
-
                     foreach (ParticleSystem ps in muzzleflash)
                     {
                         ps.Emit(1);
@@ -120,8 +119,8 @@ public class playerMovement : Actor
                     soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
 
                     if (CameraShake.instance.shakeDuration < 0.2f)
-                        CameraShake.instance.shakeDuration += 0.2f;
-                    CameraShake.instance.shakeAmount = 0.05f;
+                        CameraShake.instance.shakeDuration = 0.2f;
+                    CameraShake.instance.shakeAmount = 0.15f;
                 }
             }
         }

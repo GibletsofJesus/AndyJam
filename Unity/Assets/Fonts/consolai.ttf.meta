@@ -3,16 +3,20 @@ guid: c3f5b2869bcb6ac42b2880525df093b8
 timeCreated: 1464358803
 licenseType: Pro
 TrueTypeFontImporter:
-  serializedVersion: 2
+  serializedVersion: 3
   fontSize: 16
   forceTextureCase: -2
   characterSpacing: 1
   characterPadding: 0
   includeFontData: 1
-  use2xBehaviour: 0
   fontNames: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e39d51205337bda458832daaad90f3e3, type: 3}
+  - {fileID: 12800000, guid: c663448341aecff4e9a5b3e2b144c948, type: 3}
+  - {fileID: 12800000, guid: 8222e197cd116594e98a6983f3ab20ae, type: 3}
   customCharacters: 
   fontRenderingMode: 0
+  ascentCalculationMode: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 

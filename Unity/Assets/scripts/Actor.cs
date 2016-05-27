@@ -8,23 +8,17 @@ public class Actor : MonoBehaviour
     public Projectile projectile;
     private float speed;
     public GameObject[] shootTransform;
-    float shotCooldown;
-    float maxShotCooldown;
+    public float shotCooldown;
+    public float maxShotCooldown;
 
     void Awake()
     {
         shotCooldown = maxShotCooldown;
     }
    
-	// Use this for initialization
-	void Start () {
-	
-	}
-   
 	// Update is called once per frame
 	public virtual void Update ()
     {
-      
         Death();
         CoolDown();
 	}
