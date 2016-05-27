@@ -5,17 +5,19 @@ public class Projectile : MonoBehaviour
 {
     int damage;
     float maxAlive;
-    float aliveTime = 2;
+    float aliveTime = 1.5f;
     float speed;
     Vector2 direction;
     Rigidbody2D body;
     string ignoreActor;
     public TrailRenderer trail;
-
+    Vector3 screenBottom;
+    Vector3 screenTop;
     // Use this for initialization
     public virtual void Start()
     {
-       
+        screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
+        screenTop = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 1));
         body = GetComponent<Rigidbody2D>();
     }
   
@@ -33,6 +35,7 @@ public class Projectile : MonoBehaviour
 
         body.velocity = direction * (speed);// * Time.deltaTime);
         Alive();
+        OffScreen();
     }
 
     public virtual void OnTriggerEnter2D(Collider2D col)
@@ -46,7 +49,14 @@ public class Projectile : MonoBehaviour
             }
         }
     }    
-      
+      void OffScreen()
+    {
+          if (transform.position.y>screenTop.y||transform.position.y<screenBottom.y)
+          {
+              DeactivateProj();
+          }
+         
+    }
     
     void DeactivateProj()
     {
