@@ -33,7 +33,7 @@ public class Actor : MonoBehaviour
         if (shotCooldown >= maxShotCooldown)
         {
             Projectile p = ProjectileManager.instance.PoolingProjectile();
-            p.SetProjectile(10, _direction);
+            p.SetProjectile(10, _direction,gameObject);
             p.transform.position = shootTransform.transform.position;
             p.gameObject.SetActive(true);
             // p.transform.position = transform.position;

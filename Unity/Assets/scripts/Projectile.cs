@@ -14,7 +14,6 @@ public class Projectile : MonoBehaviour
     public virtual void Start()
     {
         body = GetComponent<Rigidbody2D>();
-
     }
   
     void Alive()
@@ -39,6 +38,7 @@ public class Projectile : MonoBehaviour
             if (col.gameObject.tag == "Player")
             {
                 col.gameObject.GetComponent<Actor>().TakeDamage(damage);
+                DeactivateProj();
             }
             else
             {
@@ -54,7 +54,7 @@ public class Projectile : MonoBehaviour
         gameObject.GetComponent<Projectile>().enabled = false;
 
     }
-    public void SetProjectile(int _damage, Vector2 _direction,float _speed = 500, float _aliveTime = 2)
+    public void SetProjectile(int _damage, Vector2 _direction,GameObject _actor,float _speed = 500, float _aliveTime = 2)
     {
         damage = _damage;
         direction = _direction;
