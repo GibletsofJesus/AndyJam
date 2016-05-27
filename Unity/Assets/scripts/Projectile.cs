@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour
     float speed;
     Vector2 direction;
     Rigidbody2D body;
+    string ignoreActor;
 
     // Use this for initialization
     public virtual void Start()
@@ -34,16 +35,18 @@ public class Projectile : MonoBehaviour
 
     public virtual void OnTriggerEnter2D(Collider2D col)
     {
-      
-            if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag != ignoreActor)
+        {
+            if (col.gameObject.GetComponent<Actor>())
             {
                 col.gameObject.GetComponent<Actor>().TakeDamage(damage);
                 DeactivateProj();
             }
             else
             {
-            //    DeactivateProj();
+                //    DeactivateProj();
             }
+        }
         
       
     }
@@ -54,12 +57,13 @@ public class Projectile : MonoBehaviour
         gameObject.GetComponent<Projectile>().enabled = false;
 
     }
-    public void SetProjectile(int _damage, Vector2 _direction,GameObject _actor,float _speed = 50, float _aliveTime = 2)
+    public void SetProjectile(int _damage, Vector2 _direction,string _ignoreActor,float _speed = 50, float _aliveTime = 2)
     {
         damage = _damage;
         direction = _direction;
         maxAlive = _aliveTime;
         speed = _speed;
         transform.up = _direction;
+        ignoreActor = _ignoreActor;
     }
 }

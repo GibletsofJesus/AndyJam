@@ -7,16 +7,19 @@ public class Enemy : Actor
     Ray2D rayCast;
     RaycastHit2D hit;
     Vector2 target;
+    protected float safeHealth;
+    
     void Start()
     {
        
-        SetActor(20,1, 1.5f,0.8f);
+        SetActor(200,1, 1.5f,0.8f);
+        safeHealth = GetHealth();
     }
    public override void Update()
     {
         base.Update();
      //   Movement();
-       
+        transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
         //rayCast.origin = gameObject.transform.position + -gameObject.transform.up;
         //rayCast.direction = -transform.up * 10;
         //hit = Physics2D.Raycast(rayCast.origin, rayCast.direction * 10);
@@ -26,29 +29,33 @@ public class Enemy : Actor
         //    if (hit.rigidbody.gameObject.GetComponent<Actor>())
         //    {
         //        //if (Vector2.Distance(transform.position, hit.point) > 5.5f)
-
-                Shoot(-transform.up.normalized);
-                Movement();
+        if (ShotCoolDown())
+        {
+            Shoot(-transform.up.normalized, shootTransform,gameObject.tag);
+        }
+       Movement();
         //    }
         //}
        
     }
    
-    
-    
-      
-    public override void Shoot(Vector2 _direction)
-    {
-                    
-                base.Shoot(_direction);
-          
-       
-    }
+    public void ResetEnemy()
+   {
+       ResetHealth(safeHealth);
+   }
+    void OnCollisionEnter2D(Collision2D col)
+   {
+        if (col.gameObject.GetComponent<playerMovement>())
+        {
+            col.gameObject.GetComponent<playerMovement>().TakeDamage(GetDamage());
+            gameObject.SetActive(false);
+        }
+   }
+
     void Movement()
     {
         Vector2 movement = -transform.up * GetSpeed();
         transform.Translate(movement, Space.World);
-
     }
     public void KillEnemy()
     {

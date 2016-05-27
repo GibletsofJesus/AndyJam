@@ -14,12 +14,14 @@ public class playerMovement : Actor
 	// Use this for initialization
 	void Start ()
     {
+        SetActor(100, 1, 1, 0.5f);
         rig = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
-    void Update()
+   public override void Update()
     {
+        base.Update();
         if (transform.position.x <= -8.2f)
         {
             rig.AddForce(Vector2.right, ForceMode2D.Impulse);
@@ -101,16 +103,32 @@ public class playerMovement : Actor
         }
         #endregion
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
-            foreach(ParticleSystem ps in muzzleflash)
+            if (ShotCoolDown())
             {
-                ps.Emit(1);
-            }
-            soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
 
-            if (CameraShake.instance.shakeDuration < 0.2f)
-                CameraShake.instance.shakeDuration += 0.2f;
+
+                Shoot(transform.up, shootTransform, gameObject.tag);
+                {
+
+                    foreach (ParticleSystem ps in muzzleflash)
+                    {
+                        ps.Emit(1);
+                    }
+
+                    soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
+
+                    if (CameraShake.instance.shakeDuration < 0.2f)
+                        CameraShake.instance.shakeDuration += 0.2f;
+                }
+            }
         }
+    }
+    public override void TakeDamage(float _damage)
+    {
+        base.TakeDamage(_damage);
+        if (CameraShake.instance.shakeDuration < 0.2f)
+            CameraShake.instance.shakeDuration += 0.2f;
     }
 }

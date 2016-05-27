@@ -35,6 +35,7 @@ public class EnemyManager : MonoBehaviour
             if (!enemyList[i].isActiveAndEnabled)
             {
                 enemyList[i].enabled = true;
+               // enemyList[i].gameObject.SetActive(true);
                 return enemyList[i];
             }
         }
@@ -55,6 +56,7 @@ public class EnemyManager : MonoBehaviour
                 {
                     Enemy e = EnemyPooling();
                     e.transform.position = t.position;
+                    e.ResetEnemy();
                     e.gameObject.SetActive(true);
 
                 }
