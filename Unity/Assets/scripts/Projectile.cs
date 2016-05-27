@@ -10,10 +10,12 @@ public class Projectile : MonoBehaviour
     Vector2 direction;
     Rigidbody2D body;
     string ignoreActor;
+    public TrailRenderer trail;
 
     // Use this for initialization
     public virtual void Start()
     {
+       
         body = GetComponent<Rigidbody2D>();
     }
   
@@ -42,22 +44,20 @@ public class Projectile : MonoBehaviour
                 col.gameObject.GetComponent<Actor>().TakeDamage(damage);
                 DeactivateProj();
             }
-            else
-            {
-                //    DeactivateProj();
-            }
         }
-        
+    }    
       
-    }
+    
     void DeactivateProj()
     {
+        trail.time = 0.00001f;
         aliveTime = maxAlive;
         gameObject.SetActive(false);
         gameObject.GetComponent<Projectile>().enabled = false;
-
+        
     }
-    public void SetProjectile(int _damage, Vector2 _direction,string _ignoreActor,float _speed = 50, float _aliveTime = 2)
+    public void SetProjectile(int _damage, Vector2 _direction,string _ignoreActor,float _speed = 50
+        , float _aliveTime = 2, float trailRendTime = 0.1f)
     {
         damage = _damage;
         direction = _direction;
@@ -65,5 +65,6 @@ public class Projectile : MonoBehaviour
         speed = _speed;
         transform.up = _direction;
         ignoreActor = _ignoreActor;
+        trail.time = trailRendTime;
     }
 }
