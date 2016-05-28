@@ -11,8 +11,12 @@ public abstract class AbilityWord : Word
 
 	[SerializeField] protected WordHUD wordHUD = null;
 
+	private const int pixels = 32;
+	private float pixelCooldown;
+
 	protected override void Start ()
 	{
+		pixelCooldown =(1.0f / (float)pixels) * 1000.0f;
 		word = wordTiers [0];
 		currentTier = 0;
 		currentCooldown = wordCooldown;
@@ -23,7 +27,16 @@ public abstract class AbilityWord : Word
 	private void Update()
 	{
 		currentCooldown = Mathf.Min(currentCooldown + Time.deltaTime, wordCooldown);
-		wordHUD.UpdateCooldown (wordCooldown == 0.0f ? 1.0f : (currentCooldown / wordCooldown));
+		if(wordCooldown == 0.0f)
+		{
+			wordHUD.UpdateCooldown (1.0f);
+		}
+		else
+		{
+			float _cooldownPercent = currentCooldown / wordCooldown;
+			wordHUD.UpdateCooldown (((_cooldownPercent * 1000.0f) - ((_cooldownPercent * 1000.0f) % pixelCooldown)) / 1000.0f);
+		}
+
 	}
 
 	protected override void ActivateBehavior ()

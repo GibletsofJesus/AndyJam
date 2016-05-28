@@ -33,6 +33,7 @@ public class EnemyManager : MonoBehaviour
         transformList.Add(formation2);
         transformList.Add(formation3);
 	}
+<<<<<<< HEAD
     // Update is called once per frame
     void Update()
     {
@@ -41,12 +42,20 @@ public class EnemyManager : MonoBehaviour
         CircleSwarm();
     }
 	public Enemy EnemyPooling()
+=======
+
+    public Enemy EnemyPooling()
+>>>>>>> origin/master
     {
-        for (int i=0;i<enemyList.Count;i++)
+        for (int i = 0; i < enemyList.Count; i++)
         {
             if (!enemyList[i].isActiveAndEnabled&&enemyList[i].tag == currentType.tag)
             {
                 enemyList[i].enabled = true;
+<<<<<<< HEAD
+=======
+                // enemyList[i].gameObject.SetActive(true);
+>>>>>>> origin/master
                 return enemyList[i];
             }
         }
@@ -74,6 +83,7 @@ public class EnemyManager : MonoBehaviour
                         Vector2 iPos = enemyList[i].transform.position;
                         Vector2 jPos = enemyList[j].transform.position;
 
+<<<<<<< HEAD
                         if (Vector2.Distance(iPos,jPos)<2)
                         {
                             enemyList[i].body.AddForce(iPos - jPos);
@@ -90,6 +100,32 @@ public class EnemyManager : MonoBehaviour
             }
         }
     }
+=======
+    public GameObject FindClosestEnemyToPlayer(float maxDistance, Transform origin)
+    {
+        GameObject target = this.gameObject;
+        float lowestDistance = 999;
+
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            enemyList[i].GetComponent<SpriteRenderer>().color = Color.white;
+            float distance = Vector2.Distance(enemyList[i].transform.position, origin.position);
+            if (distance < lowestDistance && distance < maxDistance)
+            {
+                target = enemyList[i].gameObject;
+                lowestDistance = distance;
+            }
+        }
+        if (target != this.gameObject)
+        {
+            target.GetComponent<SpriteRenderer>().color = Color.red;
+            return target;
+        }
+        else
+            return null;
+    }
+
+>>>>>>> origin/master
     void SpawnEnemies()
     {
         int currentTrans = Random.Range(0, 3);
@@ -112,9 +148,19 @@ public class EnemyManager : MonoBehaviour
     }
     void Cooldown()
     {
-        if (currentCooldown<=coolDown)
+        if (currentCooldown <= coolDown)
         {
             currentCooldown += Time.deltaTime;
         }
     }
+<<<<<<< HEAD
+=======
+    // Update is called once per frame
+	void Update ()
+    {
+        Cooldown();
+        SpawnEnemies();
+	
+	}
+>>>>>>> origin/master
 }

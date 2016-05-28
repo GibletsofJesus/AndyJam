@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Actor : MonoBehaviour
 {
-    private float health;
+    public float health;
     private float damage;
     public Projectile projectile;
     private float speed;
@@ -23,17 +23,16 @@ public class Actor : MonoBehaviour
         CoolDown();
 	}
    
-    public virtual void Shoot(Vector2 _direction,GameObject[] _shootTransform, string _ignore)
+    public virtual void Shoot(Vector2 _direction,GameObject[] _shootTransform, string _ignore,bool _homing)
     {
         for (int i = 0; i < _shootTransform.Length; i++)
         {
-            Projectile p = ProjectileManager.instance.PoolingProjectile();
-            p.SetProjectile(10, _direction, _ignore);
+            Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
+            p.SetProjectile(10, _direction, _ignore,_homing,this);
             p.transform.position = _shootTransform[i].transform.position;
             p.gameObject.SetActive(true);
             shotCooldown = 0;
         }
-           
     }
     public bool ShotCoolDown()
     {

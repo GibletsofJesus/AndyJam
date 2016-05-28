@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ProjectileManager : MonoBehaviour 
 {
     public static ProjectileManager instance = null;
-    public Projectile projectile;
+    public GameObject projectile;
     List<Projectile> projList = new List<Projectile>();
    
     // Use this for initialization
@@ -16,7 +16,8 @@ public class ProjectileManager : MonoBehaviour
             instance = this;
         }
 	}
-	public Projectile PoolingProjectile()
+
+	public Projectile PoolingProjectile(Transform t)
     {
         for (int i=0;i<projList.Count;i++)
         {
@@ -27,7 +28,9 @@ public class ProjectileManager : MonoBehaviour
             }
         }
 
-        Projectile p = Instantiate(projectile);
+        GameObject newProj = Instantiate(projectile,t.position,t.rotation) as GameObject;
+        //newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;
+        Projectile p =newProj.GetComponent<Projectile>();
         projList.Add(p);
         return p;
     }
