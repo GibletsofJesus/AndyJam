@@ -33,7 +33,7 @@ public class EnemyManager : MonoBehaviour
         transformList.Add(formation2);
         transformList.Add(formation3);
 	}
-<<<<<<< HEAD
+
     // Update is called once per frame
     void Update()
     {
@@ -41,21 +41,20 @@ public class EnemyManager : MonoBehaviour
         SpawnEnemies();
         CircleSwarm();
     }
-	public Enemy EnemyPooling()
-=======
+	//public Enemy EnemyPooling()
+
 
     public Enemy EnemyPooling()
->>>>>>> origin/master
+
     {
         for (int i = 0; i < enemyList.Count; i++)
         {
             if (!enemyList[i].isActiveAndEnabled&&enemyList[i].tag == currentType.tag)
             {
                 enemyList[i].enabled = true;
-<<<<<<< HEAD
-=======
+
                 // enemyList[i].gameObject.SetActive(true);
->>>>>>> origin/master
+
                 return enemyList[i];
             }
         }
@@ -83,7 +82,7 @@ public class EnemyManager : MonoBehaviour
                         Vector2 iPos = enemyList[i].transform.position;
                         Vector2 jPos = enemyList[j].transform.position;
 
-<<<<<<< HEAD
+
                         if (Vector2.Distance(iPos,jPos)<2)
                         {
                             enemyList[i].body.AddForce(iPos - jPos);
@@ -100,7 +99,7 @@ public class EnemyManager : MonoBehaviour
             }
         }
     }
-=======
+
     public GameObject FindClosestEnemyToPlayer(float maxDistance, Transform origin)
     {
         GameObject target = this.gameObject;
@@ -125,7 +124,6 @@ public class EnemyManager : MonoBehaviour
             return null;
     }
 
->>>>>>> origin/master
     void SpawnEnemies()
     {
         int currentTrans = Random.Range(0, 3);
@@ -153,14 +151,13 @@ public class EnemyManager : MonoBehaviour
             currentCooldown += Time.deltaTime;
         }
     }
-<<<<<<< HEAD
-=======
-    // Update is called once per frame
-	void Update ()
-    {
-        Cooldown();
-        SpawnEnemies();
+
+    //// Update is called once per frame
+    //void Update ()
+    //{
+    //    Cooldown();
+    //    SpawnEnemies();
 	
-	}
->>>>>>> origin/master
+    //}
+
 }

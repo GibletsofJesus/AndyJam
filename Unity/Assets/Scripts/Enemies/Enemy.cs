@@ -32,7 +32,7 @@ public class Enemy : Actor
         //        //if (Vector2.Distance(transform.position, hit.point) > 5.5f)
         if (ShotCoolDown())
         {
-            Shoot(-transform.up.normalized, shootTransform,gameObject.tag);
+            Shoot(-transform.up.normalized, shootTransform,gameObject.tag,false);
         }
        Movement();
        KillEnemy();

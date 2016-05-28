@@ -28,24 +28,22 @@ public class playerMovement : Actor
     {
         base.Update();
 
-<<<<<<< HEAD
+
         //Whoever did this, you are scum.
-        if (transform.position.x <= -11f)
-=======
+       // if (transform.position.x <= -11f)
         if (homingBullets)
->>>>>>> origin/master
-        {
+       {
             if (!target || !target.activeSelf)
             {
                 target = EnemyManager.instance.FindClosestEnemyToPlayer(50, transform);
             }
         }
-<<<<<<< HEAD
+
         if (transform.position.x >=11f)
         {
             rig.AddForce(-Vector2.right, ForceMode2D.Impulse);
         }
-=======
+
 
         if (transform.position.x <= -screenBottom.x-1f)
         {
@@ -56,7 +54,7 @@ public class playerMovement : Actor
             rig.AddForce(-Vector2.right*2, ForceMode2D.Impulse);
         }
 
->>>>>>> origin/master
+
         inputThings();
 
         Quaternion q = Quaternion.Euler(rotLerp);
