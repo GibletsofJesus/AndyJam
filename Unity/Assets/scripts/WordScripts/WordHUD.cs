@@ -31,4 +31,11 @@ public class WordHUD : MonoBehaviour
 	{
 		text.text = _word;
 	}
+
+	/*void Update()
+	{
+		if (text.text == "firewall.exe") {
+			Debug.Log(cooldownImage.fillAmount);
+		}
+	}*/
 }
