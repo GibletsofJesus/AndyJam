@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Actor : MonoBehaviour
 {
-    private float health;
+    public float health;
     private float damage;
     public Projectile projectile;
     private float speed;
@@ -33,7 +33,6 @@ public class Actor : MonoBehaviour
             p.gameObject.SetActive(true);
             shotCooldown = 0;
         }
-           
     }
     public bool ShotCoolDown()
     {

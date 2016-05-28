@@ -11,13 +11,12 @@ public class Projectile : MonoBehaviour
     Rigidbody2D body;
     string ignoreActor;
     public TrailRenderer trail;
-    Vector3 screenBottom;
-    Vector3 screenTop;
+    public Vector3 screenBottom,screenTop;
     // Use this for initialization
     public virtual void Start()
     {
-        screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
-        screenTop = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 1));
+        screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f ,-.5f, .3f));
+        screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
         body = GetComponent<Rigidbody2D>();
     }
   
@@ -29,10 +28,9 @@ public class Projectile : MonoBehaviour
             DeactivateProj();
         }
     }
-    // Update is called once per frame
+
     public virtual void Update()
     {
-
         body.velocity = direction * (speed);// * Time.deltaTime);
         Alive();
         OffScreen();
@@ -48,27 +46,30 @@ public class Projectile : MonoBehaviour
                 DeactivateProj();
             }
         }
-    }    
-      void OffScreen()
-    {
-          if (transform.position.y>screenTop.y||transform.position.y<screenBottom.y)
-          {
-              DeactivateProj();
-          }
-         
     }
-    
+
+    void OffScreen()
+    {
+        if (transform.position.y > screenTop.y || transform.position.y < screenBottom.y)
+        {
+            DeactivateProj();
+        }
+
+    }
+
     void DeactivateProj()
     {
         trail.time = 0.00001f;
+        trail.enabled = false;
         aliveTime = maxAlive;
         gameObject.SetActive(false);
-        gameObject.GetComponent<Projectile>().enabled = false;
-        
+        gameObject.GetComponent<Projectile>().enabled = false;        
     }
+
     public void SetProjectile(int _damage, Vector2 _direction,string _ignoreActor,float _speed = 50
-        , float _aliveTime = 2, float trailRendTime = 0.1f)
+        , float _aliveTime = 2, float trailRendTime = .05f)
     {
+        trail.probeAnchor = transform;
         damage = _damage;
         direction = _direction;
         maxAlive = _aliveTime;
@@ -76,5 +77,6 @@ public class Projectile : MonoBehaviour
         transform.up = _direction;
         ignoreActor = _ignoreActor;
         trail.time = trailRendTime;
+        trail.enabled = false;
     }
 }

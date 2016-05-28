@@ -28,6 +28,7 @@ public class ProjectileManager : MonoBehaviour
         }
 
         Projectile p = Instantiate(projectile);
+        //p.gameObject.hideFlags = HideFlags.HideInHierarchy;
         projList.Add(p);
         return p;
     }

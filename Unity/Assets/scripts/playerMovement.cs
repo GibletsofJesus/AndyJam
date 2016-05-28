@@ -10,9 +10,13 @@ public class playerMovement : Actor
     public ParticleSystem[] muzzleflash;
     Vector3 rotLerp;
 
-	// Use this for initialization
-	void Start ()
+    public Vector3 screenBottom, screenTop;
+
+    // Use this for initialization
+    public virtual void Start()
     {
+        screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f, -.5f, .3f));
+        screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
         SetActor(100, 1, 1, base.maxShotCooldown);
         rig = GetComponent<Rigidbody2D>();
 	}
@@ -22,15 +26,15 @@ public class playerMovement : Actor
     {
         base.Update();
 
-        //Whoever did this, you are scum.
-        /*if (transform.position.x <= -8.2f)
+        if (transform.position.x <= -screenBottom.x-1f)
         {
-            rig.AddForce(Vector2.right, ForceMode2D.Impulse);
+            rig.AddForce(Vector2.right*2, ForceMode2D.Impulse);
         }
-        if (transform.position.x >=8.2f)
+        if (transform.position.x >= screenBottom.x+1f)
         {
-            rig.AddForce(-Vector2.right, ForceMode2D.Impulse);
-        }*/
+            rig.AddForce(-Vector2.right*2, ForceMode2D.Impulse);
+        }
+
         inputThings();
 
         Quaternion q = Quaternion.Euler(rotLerp);
@@ -93,7 +97,7 @@ public class playerMovement : Actor
         {
             rotLerp = Vector3.zero;
         }
-
+        /*
         if (Input.GetKey(KeyCode.UpArrow))
         {
             rig.AddForce(Vector2.up * moveSpeed, ForceMode2D.Impulse);
@@ -101,7 +105,7 @@ public class playerMovement : Actor
         if (Input.GetKey(KeyCode.DownArrow))
         {
             rig.AddForce(-Vector2.up * moveSpeed, ForceMode2D.Impulse);
-        }
+        }*/
         #endregion
 
         if (Input.GetKey(KeyCode.Space))
