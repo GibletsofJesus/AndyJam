@@ -15,7 +15,7 @@ public class HUDData : MonoBehaviour
 	public Color deactivateColour = Color.white;
 	public Color activateColour = Color.white;
 	
-	private void Start () 
+	private void Awake () 
 	{
 		staticInstance = this;
 	}

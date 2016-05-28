@@ -24,9 +24,13 @@ public class VisualCommandPanel : MonoBehaviour
 
 	private string currentMessage = string.Empty;
 
-	private void Start()
+	private void Awake()
 	{
 		staticInstance = this;
+	}
+
+	private void Start()
+	{
 		AddMessage ("\nNotice Me Senpai!");
 		AddMessage ("\n...");
 		AddMessage ("\n...");
