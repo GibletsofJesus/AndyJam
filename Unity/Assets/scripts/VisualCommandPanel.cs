@@ -31,18 +31,7 @@ public class VisualCommandPanel : MonoBehaviour
 
 	private void Start()
 	{
-		AddMessage ("\nNotice Me Senpai!");
-		AddMessage ("\n...");
-		AddMessage ("\n...");
-		AddMessage ("\n...");
-		AddMessage ("\nInitilising Game");
-		AddMessage ("\nMaking harder than #DarkSouls3");
-		AddMessage ("\nCompiling SkyNet");
-		AddMessage ("\nZooming in and enhancing");
-		AddMessage ("\nDetermining if games are art");
-		AddMessage ("\nDividing by zero");
-		AddMessage ("\nDownloading additional ram");
-		AddMessage ("Jam sequence Engaged");
+		AddMessage ("Jam sequence Engaged", string.Empty);
 	}
 
 	private void Update()
@@ -74,8 +63,8 @@ public class VisualCommandPanel : MonoBehaviour
 		{
 			underscoreAppearCooldown = 0.0f;
 			UpdateUnderscore(false);
-			currentMessage = messageBuffer[messageBuffer.Count - 1];
-			messageBuffer.RemoveAt(messageBuffer.Count - 1);
+			currentMessage = messageBuffer[0];
+			messageBuffer.RemoveAt(0);
 		}
 		//No message so start flashing underscore
 		else
@@ -109,8 +98,8 @@ public class VisualCommandPanel : MonoBehaviour
 		}
 	}
 
-	public void AddMessage(string _message)
+	public void AddMessage(string _message, string _preMessage = "\n")
 	{
-		messageBuffer.Add (_message);
+		messageBuffer.Add (_preMessage + _message);
 	}
 }

@@ -35,6 +35,7 @@ public class UpdateBehavior : MonoBehaviour
 	public static UpdateBehavior instance {get {return staticInstance;} set{}}
 
 	private int nextUpdate = 0;
+	private int numUpdates = 0;
 	private int startingScore = 0;
 	[SerializeField] private UpdateLog[] updateLog = null;
 
@@ -50,13 +51,30 @@ public class UpdateBehavior : MonoBehaviour
 
 	private void Update()
 	{
-		tempScore += 5;///temp///
+		tempScore += 25;///temp///
+		if((nextUpdate + numUpdates) < updateLog.Length)
+		{
+			int _prevUpdates = numUpdates;
+			while(updateLog[nextUpdate + numUpdates].scoreRequirement <= (tempScore - startingScore))
+			{
+				++numUpdates;
+				if((nextUpdate + numUpdates) >= updateLog.Length)
+				{
+					break;
+				}
+			}
+			if(_prevUpdates != numUpdates)
+			{
+				VisualCommandPanel.instance.AddMessage(numUpdates.ToString() + " Updates available!");
+			}
+		}
 	}
 
 	public void FactoryReset()
 	{
 		startingScore = tempScore;///TEMPORARY VARIABLE HERE///
 		nextUpdate = 0;
+		numUpdates = 0;
 	}
 
 	public void ApplyUpdate()
@@ -83,6 +101,8 @@ public class UpdateBehavior : MonoBehaviour
 					break;
 				}
 			}
+			VisualCommandPanel.instance.AddMessage(numUpdates.ToString() + "/" + numUpdates.ToString() + " Updates installed");
+			numUpdates = 0;
 		}
 	}
 }
