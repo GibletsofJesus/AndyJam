@@ -10,7 +10,7 @@ public class playerMovement : Actor
     public ParticleSystem[] muzzleflash;
     Vector3 rotLerp;
 
-    public Vector3 screenBottom, screenTop;
+    Vector3 screenBottom, screenTop;
 
     // Use this for initialization
     public virtual void Start()
@@ -108,6 +108,7 @@ public class playerMovement : Actor
         }*/
         #endregion
 
+        #region shoot
         if (Input.GetKey(KeyCode.Space))
         {
             if (ShotCoolDown())
@@ -128,6 +129,7 @@ public class playerMovement : Actor
                 }
             }
         }
+        #endregion
     }
     public override void TakeDamage(float _damage)
     {

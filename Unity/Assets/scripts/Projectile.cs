@@ -11,10 +11,12 @@ public class Projectile : MonoBehaviour
     Rigidbody2D body;
     string ignoreActor;
     public TrailRenderer trail;
-    public Vector3 screenBottom,screenTop;
+    public ParticleSystem ps;
+    Vector3 screenBottom,screenTop;
     // Use this for initialization
     public virtual void Start()
     {
+
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f ,-.5f, .3f));
         screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
         body = GetComponent<Rigidbody2D>();
@@ -27,6 +29,9 @@ public class Projectile : MonoBehaviour
         {
             DeactivateProj();
         }
+
+        if (transform.position != Vector3.zero)
+            ps.Play();
     }
 
     public virtual void Update()
@@ -76,7 +81,8 @@ public class Projectile : MonoBehaviour
         speed = _speed;
         transform.up = _direction;
         ignoreActor = _ignoreActor;
-        trail.time = trailRendTime;
+
         trail.enabled = false;
+        trail.time = trailRendTime;
     }
 }

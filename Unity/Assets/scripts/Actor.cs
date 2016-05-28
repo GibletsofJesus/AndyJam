@@ -27,7 +27,7 @@ public class Actor : MonoBehaviour
     {
         for (int i = 0; i < _shootTransform.Length; i++)
         {
-            Projectile p = ProjectileManager.instance.PoolingProjectile();
+            Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
             p.SetProjectile(10, _direction, _ignore);
             p.transform.position = _shootTransform[i].transform.position;
             p.gameObject.SetActive(true);
