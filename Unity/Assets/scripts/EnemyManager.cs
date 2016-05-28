@@ -6,7 +6,12 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance = null;
     public Enemy enemy;
+    public Enemy_Circle circle;
+    public Enemy_Diagonal diagonal;
+    public Enemy_KeyLogger keyLogger;
+    Enemy currentType;
     List<Enemy> enemyList = new List<Enemy>();
+    List<Enemy> swarmEnemy = new List<Enemy>();
     public Transform[] formation1;
     public Transform[] formation2;
     public Transform[] formation3;
@@ -18,6 +23,7 @@ public class EnemyManager : MonoBehaviour
 	// Use this for initialization
 	void Awake() 
     {
+        currentType = enemy;
         if (instance == null)
         {
             instance = this;
@@ -27,23 +33,63 @@ public class EnemyManager : MonoBehaviour
         transformList.Add(formation2);
         transformList.Add(formation3);
 	}
-
+    // Update is called once per frame
+    void Update()
+    {
+        Cooldown();
+        SpawnEnemies();
+        CircleSwarm();
+    }
 	public Enemy EnemyPooling()
     {
         for (int i=0;i<enemyList.Count;i++)
         {
-            if (!enemyList[i].isActiveAndEnabled)
+            if (!enemyList[i].isActiveAndEnabled&&enemyList[i].tag == currentType.tag)
             {
                 enemyList[i].enabled = true;
-               // enemyList[i].gameObject.SetActive(true);
                 return enemyList[i];
             }
         }
-        Enemy e = Instantiate(enemy);
+        Enemy e = Instantiate(currentType);
         enemyList.Add(e);
         return e;
     }
+    void CircleSwarm()
+    {
+        if (currentType.name == "DOS")
+        {
+            for (int i = 0; i < enemyList.Count; i++)
+            {
+                if (enemyList[i].isActiveAndEnabled&&!swarmEnemy.Contains(enemyList[i]))
+                {
+                    swarmEnemy.Add(enemyList[i]);
+                }
+            }
+            for (int i=0;i<swarmEnemy.Count;i++)
+            {
+                for (int j=0;j<enemyList.Count;j++)
+                {
+                    if (i!=j)
+                    {
+                        Vector2 iPos = enemyList[i].transform.position;
+                        Vector2 jPos = enemyList[j].transform.position;
 
+                        if (Vector2.Distance(iPos,jPos)<2)
+                        {
+                            enemyList[i].body.AddForce(iPos - jPos);
+                        }
+                    }
+                }
+            }
+            foreach (Enemy e in swarmEnemy)
+            {
+                if (!e.isActiveAndEnabled)
+                {
+                    swarmEnemy.Remove(e);
+                }
+            }
+        }
+    }
     void SpawnEnemies()
     {
         int currentTrans = Random.Range(0, 3);
@@ -58,7 +104,6 @@ public class EnemyManager : MonoBehaviour
                     e.transform.position = t.position;
                     e.ResetEnemy();
                     e.gameObject.SetActive(true);
-
                 }
                 currentCooldown = 0;
                 prevTrans = currentTrans;
@@ -72,11 +117,4 @@ public class EnemyManager : MonoBehaviour
             currentCooldown += Time.deltaTime;
         }
     }
-	// Update is called once per frame
-	void Update ()
-    {
-        Cooldown();
-        SpawnEnemies();
-	
-	}
 }

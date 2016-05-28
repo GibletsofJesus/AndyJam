@@ -23,14 +23,14 @@ public class playerMovement : Actor
         base.Update();
 
         //Whoever did this, you are scum.
-        /*if (transform.position.x <= -8.2f)
+        if (transform.position.x <= -11f)
         {
             rig.AddForce(Vector2.right, ForceMode2D.Impulse);
         }
-        if (transform.position.x >=8.2f)
+        if (transform.position.x >=11f)
         {
             rig.AddForce(-Vector2.right, ForceMode2D.Impulse);
-        }*/
+        }
         inputThings();
 
         Quaternion q = Quaternion.Euler(rotLerp);

@@ -6,8 +6,9 @@ public class Enemy : Actor
    
     Ray2D rayCast;
     RaycastHit2D hit;
-    Vector2 target;
+    public Vector2 target;
     protected float safeHealth;
+    public Rigidbody2D body;
     
     void Start()
     {
@@ -34,25 +35,30 @@ public class Enemy : Actor
             Shoot(-transform.up.normalized, shootTransform,gameObject.tag);
         }
        Movement();
+       KillEnemy();
         //    }
         //}
        
     }
    
-    public void ResetEnemy()
+    public virtual void ResetEnemy()
    {
        ResetHealth(safeHealth);
    }
     void OnCollisionEnter2D(Collision2D col)
    {
-        if (col.gameObject.GetComponent<playerMovement>())
+        if (col.gameObject.tag == gameObject.tag)
+        {
+            Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
+        }
+        else if (col.gameObject.GetComponent<playerMovement>())
         {
             col.gameObject.GetComponent<playerMovement>().TakeDamage(GetDamage());
             gameObject.SetActive(false);
         }
    }
 
-    void Movement()
+    public virtual void Movement()
     {
         Vector2 movement = -transform.up * GetSpeed();
         transform.Translate(movement, Space.World);
@@ -60,7 +66,7 @@ public class Enemy : Actor
     public void KillEnemy()
     {
         Vector3 posToCam = Camera.main.WorldToViewportPoint(transform.position);
-        if (posToCam.y<0)
+        if (posToCam.y<-0.1f)
         {
             gameObject.SetActive(false);
         }
