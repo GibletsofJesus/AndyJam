@@ -43,7 +43,7 @@ public class UpdateBehavior : MonoBehaviour
 	/// Temp
 	/// </summary>
 
-	private void Start()
+	private void Awake()
 	{
 		staticInstance = this;
 	}

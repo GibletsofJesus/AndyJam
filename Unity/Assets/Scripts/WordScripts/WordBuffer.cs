@@ -16,12 +16,12 @@ public class WordBuffer : MonoBehaviour
 	private float submitCooldown = 1.0f;
 	private float currentSubmitCooldown = 0.0f;
 
-	void Start()
+	private void Awake()
 	{
 		staticInstance = this;
 	}
 
-	void Update()
+	private void Update()
 	{
 		currentSubmitCooldown = Mathf.Max (0.0f, currentSubmitCooldown - Time.deltaTime);
 		//Can input text
@@ -35,6 +35,26 @@ public class WordBuffer : MonoBehaviour
 					currentWord = string.Empty;
 					InputHUD.instance.UpdateText(currentWord);
 				}
+				else if(_c == '\r')
+				{
+					bool _match = false;
+					//Test to see if any words match
+					foreach (AbilityWord _w in abilityWords) 
+					{
+						if(_w.Match(currentWord))
+						{
+							_match = true;
+							InputHUD.instance.Success();
+							currentSubmitCooldown = submitCooldown;
+							break;
+						}
+					}
+					if(!_match)
+					{
+						InputHUD.instance.Fail();
+						currentSubmitCooldown = submitCooldown;
+					}
+				}
 				//Else other empty space value then do nothing
 				else if((int)_c < 33 || (int)_c > 126)
 				{
@@ -46,16 +66,6 @@ public class WordBuffer : MonoBehaviour
 					{
 						currentWord += char.ToLower(_c);
 						InputHUD.instance.UpdateText(currentWord);
-						//Test to see if any words match
-						foreach (AbilityWord _w in abilityWords) 
-						{
-							if(_w.Match(currentWord))
-							{
-								InputHUD.instance.Success();
-								currentSubmitCooldown = submitCooldown;
-								break;
-							}
-						}
 						//If max word reached
 						if(currentWord.Length == MaxCharacters)
 						{
