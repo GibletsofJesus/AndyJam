@@ -11,7 +11,6 @@ public class Enemy : Actor
     
     void Start()
     {
-       
         SetActor(200,1, 1.5f,0.8f);
         safeHealth = GetHealth();
     }
@@ -31,11 +30,12 @@ public class Enemy : Actor
         //        //if (Vector2.Distance(transform.position, hit.point) > 5.5f)
         if (ShotCoolDown())
         {
-            Shoot(-transform.up.normalized, shootTransform,gameObject.tag);
+            Shoot(-transform.up.normalized, shootTransform,gameObject.tag,false);
         }
        Movement();
         //    }
         //}
+       KillEnemy();
        
     }
    
@@ -60,7 +60,7 @@ public class Enemy : Actor
     public void KillEnemy()
     {
         Vector3 posToCam = Camera.main.WorldToViewportPoint(transform.position);
-        if (posToCam.y<0)
+        if (posToCam.y<-.05f)
         {
             gameObject.SetActive(false);
         }

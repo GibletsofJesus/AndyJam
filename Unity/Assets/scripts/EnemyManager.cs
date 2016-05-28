@@ -28,20 +28,44 @@ public class EnemyManager : MonoBehaviour
         transformList.Add(formation3);
 	}
 
-	public Enemy EnemyPooling()
+    public Enemy EnemyPooling()
     {
-        for (int i=0;i<enemyList.Count;i++)
+        for (int i = 0; i < enemyList.Count; i++)
         {
             if (!enemyList[i].isActiveAndEnabled)
             {
                 enemyList[i].enabled = true;
-               // enemyList[i].gameObject.SetActive(true);
+                // enemyList[i].gameObject.SetActive(true);
                 return enemyList[i];
             }
         }
         Enemy e = Instantiate(enemy);
         enemyList.Add(e);
         return e;
+    }
+
+    public GameObject FindClosestEnemyToPlayer(float maxDistance, Transform origin)
+    {
+        GameObject target = this.gameObject;
+        float lowestDistance = 999;
+
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            enemyList[i].GetComponent<SpriteRenderer>().color = Color.white;
+            float distance = Vector2.Distance(enemyList[i].transform.position, origin.position);
+            if (distance < lowestDistance && distance < maxDistance)
+            {
+                target = enemyList[i].gameObject;
+                lowestDistance = distance;
+            }
+        }
+        if (target != this.gameObject)
+        {
+            target.GetComponent<SpriteRenderer>().color = Color.red;
+            return target;
+        }
+        else
+            return null;
     }
 
     void SpawnEnemies()
@@ -67,12 +91,12 @@ public class EnemyManager : MonoBehaviour
     }
     void Cooldown()
     {
-        if (currentCooldown<=coolDown)
+        if (currentCooldown <= coolDown)
         {
             currentCooldown += Time.deltaTime;
         }
     }
-	// Update is called once per frame
+    // Update is called once per frame
 	void Update ()
     {
         Cooldown();

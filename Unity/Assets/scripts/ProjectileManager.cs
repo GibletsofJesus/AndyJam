@@ -16,6 +16,7 @@ public class ProjectileManager : MonoBehaviour
             instance = this;
         }
 	}
+
 	public Projectile PoolingProjectile(Transform t)
     {
         for (int i=0;i<projList.Count;i++)
@@ -28,7 +29,7 @@ public class ProjectileManager : MonoBehaviour
         }
 
         GameObject newProj = Instantiate(projectile,t.position,t.rotation) as GameObject;
-        newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;
+        //newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;
         Projectile p =newProj.GetComponent<Projectile>();
         projList.Add(p);
         return p;

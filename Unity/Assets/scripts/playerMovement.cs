@@ -3,18 +3,20 @@ using System.Collections;
 
 public class playerMovement : Actor 
 {
-
+    public static playerMovement instance;
     Rigidbody2D rig;
     public float moveSpeed;
     public AudioClip[] shootSounds;
     public ParticleSystem[] muzzleflash;
     Vector3 rotLerp;
-
+    public GameObject target;
     Vector3 screenBottom, screenTop;
+    public bool homingBullets;
 
     // Use this for initialization
     public virtual void Start()
     {
+        instance = this;
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f, -.5f, .3f));
         screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
         SetActor(100, 1, 1, base.maxShotCooldown);
@@ -25,6 +27,14 @@ public class playerMovement : Actor
    void FixedUpdate()
     {
         base.Update();
+
+        if (homingBullets)
+        {
+            if (!target || !target.activeSelf)
+            {
+                target = EnemyManager.instance.FindClosestEnemyToPlayer(50, transform);
+            }
+        }
 
         if (transform.position.x <= -screenBottom.x-1f)
         {
@@ -113,14 +123,13 @@ public class playerMovement : Actor
         {
             if (ShotCoolDown())
             {
-                Shoot(transform.up, shootTransform, gameObject.tag);
+                Shoot(transform.up, shootTransform, gameObject.tag,homingBullets);
                 base.shotCooldown = 0;
                 {
                     foreach (ParticleSystem ps in muzzleflash)
                     {
                         ps.Emit(1);
                     }
-
                     soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
 
                     if (CameraShake.instance.shakeDuration < 0.2f)
