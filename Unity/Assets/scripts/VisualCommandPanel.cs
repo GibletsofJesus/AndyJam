@@ -22,16 +22,22 @@ public class VisualCommandPanel : MonoBehaviour
 	[SerializeField] private float underscoreAppearRate = 0.1f;
 	private float underscoreAppearCooldown = 0.0f;
 
+	private TextGenerationSettings settings; 
+	[SerializeField] private RectTransform rectTransform = null;
+
 	private string currentMessage = string.Empty;
 
 	private void Awake()
 	{
 		staticInstance = this;
+		settings = textField.GetGenerationSettings(new Vector2(rectTransform.rect.width, rectTransform.rect.height));
+		settings.verticalOverflow = VerticalWrapMode.Overflow;
 	}
 
 	private void Start()
 	{
 		AddMessage ("Jam sequence Engaged", string.Empty);
+
 	}
 
 	private void Update()
@@ -49,6 +55,15 @@ public class VisualCommandPanel : MonoBehaviour
 				{
 					textField.text += currentMessage[charReader];
 					++charReader;
+
+					//To get the text to scroll need to force create new updated text generator
+					TextGenerator generator = new TextGenerator();
+					generator.Populate(textField.text, settings);
+
+					if(generator.lineCount > 19)//should find the realtime amount of possible lines
+					{
+						textField.text = textField.text.Substring (textField.cachedTextGenerator.GetLinesArray () [1].startCharIdx);
+					}
 				}
 				//When complete reset
 				else

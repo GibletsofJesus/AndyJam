@@ -16,6 +16,12 @@ public class WordBuffer : MonoBehaviour
 	private float submitCooldown = 1.0f;
 	private float currentSubmitCooldown = 0.0f;
 
+	private bool underscoreVisible = false;
+	[SerializeField] private float underscoreFlickerRate = 0.05f;
+	private float underscoreFlickerCooldown = 0.0f;
+	[SerializeField] private float underscoreAppearRate = 0.1f;
+	private float underscoreAppearCooldown = 0.0f;
+
 	private void Awake()
 	{
 		staticInstance = this;
@@ -32,11 +38,15 @@ public class WordBuffer : MonoBehaviour
 				//If backspace then clear the word
 				if(_c == '\b')
 				{
+					underscoreAppearCooldown = 0.0f;
+					underscoreVisible = InputHUD.instance.UpdateUnderscore(false);
 					currentWord = string.Empty;
 					InputHUD.instance.UpdateText(currentWord);
 				}
 				else if(_c == '\r')
 				{
+					underscoreAppearCooldown = 0.0f;
+					underscoreVisible = InputHUD.instance.UpdateUnderscore(false);
 					bool _match = false;
 					//Test to see if any words match
 					foreach (AbilityWord _w in abilityWords) 
@@ -45,6 +55,7 @@ public class WordBuffer : MonoBehaviour
 						{
 							_match = true;
 							InputHUD.instance.Success();
+							VisualCommandPanel.instance.AddMessage("Running " + currentWord);
 							currentSubmitCooldown = submitCooldown;
 							break;
 						}
@@ -52,6 +63,7 @@ public class WordBuffer : MonoBehaviour
 					if(!_match)
 					{
 						InputHUD.instance.Fail();
+						VisualCommandPanel.instance.AddMessage("Unrecognised Command");
 						currentSubmitCooldown = submitCooldown;
 					}
 				}
@@ -64,6 +76,8 @@ public class WordBuffer : MonoBehaviour
 				{
 					if(currentWord.Length <= MaxCharacters)
 					{
+						underscoreAppearCooldown = 0.0f;
+						underscoreVisible = InputHUD.instance.UpdateUnderscore(false);
 						currentWord += char.ToLower(_c);
 						InputHUD.instance.UpdateText(currentWord);
 						//If max word reached
@@ -75,11 +89,21 @@ public class WordBuffer : MonoBehaviour
 					}
 				}
 			}
+			underscoreAppearCooldown += Time.deltaTime;
+			if(underscoreAppearCooldown >= underscoreAppearRate)
+			{
+				underscoreFlickerCooldown += Time.deltaTime;
+				if(underscoreFlickerCooldown >= underscoreFlickerRate)
+				{
+					underscoreFlickerCooldown = 0.0f;
+					underscoreVisible = InputHUD.instance.UpdateUnderscore(!underscoreVisible);
+				}
+			}
 		}
 		//Cannot input text
 		else
 		{
-			if(currentSubmitCooldown < 0.2f)
+			if(currentSubmitCooldown < 0.05f)
 			{
 				currentWord = string.Empty;
 				InputHUD.instance.Reset();
@@ -91,6 +115,8 @@ public class WordBuffer : MonoBehaviour
 	{
 		abilityWords [_index].SetTier (_tier);
 	}
+
+
 
 
 }

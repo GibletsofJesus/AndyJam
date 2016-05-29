@@ -13,7 +13,9 @@ public class InputHUD : MonoBehaviour
 	public Color failColour;
 	private Color defaultColour;
 
-	private void Start()
+	private bool underscoreVisible = false;
+
+	private void Awake()
 	{
 		staticInstance = this;
 		defaultColour = inputText.color;
@@ -38,6 +40,23 @@ public class InputHUD : MonoBehaviour
 	{
 		inputText.text = string.Empty;
 		inputText.color = defaultColour;
+	}
+
+	public bool UpdateUnderscore(bool _underscore)
+	{
+		if(_underscore != underscoreVisible)
+		{
+			underscoreVisible = _underscore;
+			if(underscoreVisible)
+			{
+				inputText.text += "_";
+			}
+			else
+			{
+				inputText.text = inputText.text.Remove(inputText.text.Length - 1);
+			}
+		}
+		return underscoreVisible;
 	}
 }
 
