@@ -9,17 +9,23 @@ public class EnemyManager : MonoBehaviour
     public Enemy_Circle circle;
     public Enemy_Diagonal diagonal;
     public Enemy_KeyLogger keyLogger;
+    public Boss bigBoss;
     Enemy currentType;
     List<Enemy> enemyList = new List<Enemy>();
     List<Enemy> swarmEnemy = new List<Enemy>();
     public Transform[] formation1;
     public Transform[] formation2;
     public Transform[] formation3;
+    
+    bool boss = false;
     Transform[] formation;
     List<Transform[]> transformList = new List<Transform[]>();
     float coolDown = 3;
     float currentCooldown;
+    float circleCooldown = 1;
     int prevTrans = 4;
+    int maxCircleSpawn = 10;
+
 	// Use this for initialization
 	void Awake() 
     {
@@ -38,10 +44,23 @@ public class EnemyManager : MonoBehaviour
     void Update()
     {
         Cooldown();
-        SpawnEnemies();
-        CircleSwarm();
+      SpawnEnemies();
+     ///   CircleSwarm();
+      //  EnemiesOrBoss();
+        //if (CurrentlyActiveEnemies() <=10)
+        //{
+        //    for (int i = 0; i < maxCircleSpawn; i++)
+        //    {
+        //        Cooldown();
+        //        if (circleCooldown >= 1)
+        //        {
+        //            currentType = circle;
+        //        ///    SpawnCircling();
+        //        }
+        //    }
+        //}
     }
-	//public Enemy EnemyPooling()
+
 
 
     public Enemy EnemyPooling()
@@ -52,9 +71,6 @@ public class EnemyManager : MonoBehaviour
             if (!enemyList[i].isActiveAndEnabled&&enemyList[i].tag == currentType.tag)
             {
                 enemyList[i].enabled = true;
-
-                // enemyList[i].gameObject.SetActive(true);
-
                 return enemyList[i];
             }
         }
@@ -107,13 +123,13 @@ public class EnemyManager : MonoBehaviour
 
         for (int i = 0; i < enemyList.Count; i++)
         {
-            enemyList[i].GetComponent<SpriteRenderer>().color = Color.white;
-            float distance = Vector2.Distance(enemyList[i].transform.position, origin.position);
-            if (distance < lowestDistance && distance < maxDistance)
-            {
-                target = enemyList[i].gameObject;
-                lowestDistance = distance;
-            }
+                enemyList[i].GetComponent<SpriteRenderer>().color = Color.white;
+                float distance = Vector2.Distance(enemyList[i].transform.position, origin.position);
+                if (distance < lowestDistance && distance < maxDistance)
+                {
+                    target = enemyList[i].gameObject;
+                    lowestDistance = distance;
+                }
         }
         if (target != this.gameObject)
         {
@@ -144,12 +160,83 @@ public class EnemyManager : MonoBehaviour
             }
         }
     }
+    void SpawnBoss()
+    {
+        currentType = bigBoss;
+            Enemy b = EnemyPooling();
+            Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f,1.2f));
+        spawnPos.z=0;
+        b.transform.position = spawnPos;
+          //  b.transform.position.z = 0;
+            b.gameObject.SetActive(true);
+            boss = true;
+              
+    }
+    void EnemiesOrBoss()
+    {
+        if (!boss)
+        {
+            SpawnBoss();
+        }
+        else
+        {
+          //  SpawnEnemies();
+        }
+    }
+    public void SpawnBossEnemies(Vector2 _spawnPoint,Enemy _enemy)
+    {
+        currentType = _enemy;
+        Enemy e = EnemyPooling();
+        e.transform.position = _spawnPoint;
+        e.ResetEnemy();
+        e.gameObject.SetActive(true);
+        
+    }
+    void SpawnCircling()
+    {
+       
+       
+       //     for (int i = 0; i < maxCircleSpawn; i++)
+       //     {
+       //         if (circleCooldown >= 1)
+       //         {
+       // currentType = circle;
+       //// if (currentCooldown >= coolDown)
+        {
+            Enemy e = EnemyPooling();
+            e.transform.position = formation3[0].position;
+            e.ResetEnemy();
+            e.gameObject.SetActive(true);
+            circleCooldown = 0;
+        //}
+        //currentCooldown = 0;
+        //    }
+        }
+    }
+    int CurrentlyActiveEnemies()
+    {
+        int enemies = 0;
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            if (enemyList[i].isActiveAndEnabled)
+            {
+                enemies++;
+            }
+            else
+            {
+                continue;
+            }
+        }
+        return enemies;
+    }
+    
     void Cooldown()
     {
         if (currentCooldown <= coolDown)
         {
             currentCooldown += Time.deltaTime;
         }
+        circleCooldown += Time.deltaTime;
     }
 
     //// Update is called once per frame

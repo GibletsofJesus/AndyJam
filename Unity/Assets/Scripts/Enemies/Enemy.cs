@@ -9,7 +9,7 @@ public class Enemy : Actor
     public Vector2 target;
     protected float safeHealth;
     public Rigidbody2D body;
-    
+        
     void Start()
     {
        
@@ -19,26 +19,16 @@ public class Enemy : Actor
    public override void Update()
     {
         base.Update();
-     //   Movement();
+   
         transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
-        //rayCast.origin = gameObject.transform.position + -gameObject.transform.up;
-        //rayCast.direction = -transform.up * 10;
-        //hit = Physics2D.Raycast(rayCast.origin, rayCast.direction * 10);
-        //Debug.DrawRay(rayCast.origin, rayCast.direction * 10, Color.red);
-        //if (hit.collider)
-        //{
-        //    if (hit.rigidbody.gameObject.GetComponent<Actor>())
-        //    {
-        //        //if (Vector2.Distance(transform.position, hit.point) > 5.5f)
+       
         if (ShotCoolDown())
         {
             Shoot(-transform.up.normalized, shootTransform,gameObject.tag,false);
         }
        Movement();
        KillEnemy();
-        //    }
-        //}
-       
+             
     }
    
     public virtual void ResetEnemy()
@@ -50,6 +40,7 @@ public class Enemy : Actor
         if (col.gameObject.tag == gameObject.tag)
         {
             Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
+            Debug.Log("enemy hit " + col.gameObject.name);
         }
         else if (col.gameObject.GetComponent<playerMovement>())
         {

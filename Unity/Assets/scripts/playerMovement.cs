@@ -39,10 +39,10 @@ public class playerMovement : Actor
             }
         }
 
-        if (transform.position.x >=11f)
-        {
-            rig.AddForce(-Vector2.right, ForceMode2D.Impulse);
-        }
+        //if (transform.position.x >=11f)
+        //{
+        //    rig.AddForce(-Vector2.right, ForceMode2D.Impulse);
+        //}
 
 
         if (transform.position.x <= -screenBottom.x-1f)
