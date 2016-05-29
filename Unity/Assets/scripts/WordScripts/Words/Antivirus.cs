@@ -10,8 +10,12 @@ public class Antivirus : AbilityWord
 	protected override void Start ()
 	{
 		wordTiers = new string[] {"antivirus.exe", "antivirus.exe", "antivirus.exe"};
-		behavior = Behavior;
 		base.Start ();
+	}
+
+	protected override void TriggerBehavior ()
+	{
+		base.TriggerBehavior ();
 	}
 	
 	protected override void Behavior ()
@@ -25,5 +29,10 @@ public class Antivirus : AbilityWord
 		case 2:
 			break;
 		}
+	}
+
+	protected override void EndBehavior()
+	{
+		base.EndBehavior ();
 	}
 }

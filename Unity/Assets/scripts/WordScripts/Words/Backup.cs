@@ -6,8 +6,12 @@ public class Backup : AbilityWord
 	protected override void Start ()
 	{
 		wordTiers = new string[] {"backup.exe", "backup.exe", "backup.exe"};
-		behavior = Behavior;
 		base.Start ();
+	}
+	
+	protected override void TriggerBehavior ()
+	{
+		base.TriggerBehavior ();
 	}
 	
 	protected override void Behavior ()
@@ -21,5 +25,10 @@ public class Backup : AbilityWord
 		case 2:
 			break;
 		}
+	}
+	
+	protected override void EndBehavior()
+	{
+		base.EndBehavior ();
 	}
 }

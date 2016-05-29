@@ -6,12 +6,21 @@ public class FactoryReset : AbilityWord
 	protected override void Start ()
 	{
 		wordTiers = new string[] {"factory-reset.exe"};
-		behavior = Behavior;
 		base.Start ();
+	}
+	
+	protected override void TriggerBehavior ()
+	{
+		base.TriggerBehavior ();
 	}
 	
 	protected override void Behavior ()
 	{
 
+	}
+	
+	protected override void EndBehavior()
+	{
+		base.EndBehavior ();
 	}
 }

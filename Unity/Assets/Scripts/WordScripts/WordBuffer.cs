@@ -55,7 +55,6 @@ public class WordBuffer : MonoBehaviour
 						{
 							_match = true;
 							InputHUD.instance.Success();
-							VisualCommandPanel.instance.AddMessage("Running " + currentWord);
 							currentSubmitCooldown = submitCooldown;
 							break;
 						}

@@ -27,6 +27,7 @@ public struct UpdateLog
 	public UpdateTypes type;
 	public float updateIncrement;
 	public float scoreRequirement;
+	public string updateMessage;
 }
 
 public class UpdateBehavior : MonoBehaviour 
@@ -38,6 +39,7 @@ public class UpdateBehavior : MonoBehaviour
 	private int numUpdates = 0;
 	private int startingScore = 0;
 	[SerializeField] private UpdateLog[] updateLog = null;
+	private bool updating = false;
 
 	private int tempScore = 0;
 	/// <summary>
@@ -51,21 +53,25 @@ public class UpdateBehavior : MonoBehaviour
 
 	private void Update()
 	{
-		tempScore += 25;///temp///
-		if((nextUpdate + numUpdates) < updateLog.Length)
+		tempScore += 5;///temp///
+		//If not currently updating, determine if there are any further updates
+		if(!updating)
 		{
-			int _prevUpdates = numUpdates;
-			while(updateLog[nextUpdate + numUpdates].scoreRequirement <= (tempScore - startingScore))
+			if((nextUpdate + numUpdates) < updateLog.Length)
 			{
-				++numUpdates;
-				if((nextUpdate + numUpdates) >= updateLog.Length)
+				int _prevUpdates = numUpdates;
+				while(updateLog[nextUpdate + numUpdates].scoreRequirement <= (tempScore - startingScore))
 				{
-					break;
+					++numUpdates;
+					if((nextUpdate + numUpdates) >= updateLog.Length)
+					{
+						break;
+					}
 				}
-			}
-			if(_prevUpdates != numUpdates)
-			{
-				VisualCommandPanel.instance.AddMessage(numUpdates.ToString() + " Updates available!");
+				if(_prevUpdates != numUpdates)
+				{
+					VisualCommandPanel.instance.AddMessage(numUpdates.ToString() + " updates available!");
+				}
 			}
 		}
 	}
@@ -77,32 +83,32 @@ public class UpdateBehavior : MonoBehaviour
 		numUpdates = 0;
 	}
 
-	public void ApplyUpdate()
+	public int PrepareUpdates()
 	{
-		//If not the last update
-		if(nextUpdate != updateLog.Length)
+		updating = numUpdates > 0 ? true : false;
+		return numUpdates;
+	}
+
+	public void ApplyNextUpdate ()
+	{
+		if(updateLog[nextUpdate].type < UpdateTypes.MAX_ABILITY_UPDATES)
 		{
-			//Can get next update
-			while(updateLog[nextUpdate].scoreRequirement <= (tempScore - startingScore))
-			{
-				if(updateLog[nextUpdate].type < UpdateTypes.MAX_ABILITY_UPDATES)
-				{
-					WordBuffer.instance.AbilityWordUpdate((int)updateLog[nextUpdate].type, (int)updateLog[nextUpdate].updateIncrement);
-				}
-				//Else if in case more update types
-				else if (updateLog[nextUpdate].type < UpdateTypes.MAX_UPDATES)
-				{
-					//Improve player stats
-				}
-				++nextUpdate;
-				//break out loop on last update
-				if(nextUpdate == updateLog.Length)
-				{
-					break;
-				}
-			}
-			VisualCommandPanel.instance.AddMessage(numUpdates.ToString() + "/" + numUpdates.ToString() + " Updates installed");
-			numUpdates = 0;
+			WordBuffer.instance.AbilityWordUpdate((int)updateLog[nextUpdate].type, (int)updateLog[nextUpdate].updateIncrement);
 		}
+		//Else if in case more update types
+		else if (updateLog[nextUpdate].type < UpdateTypes.MAX_UPDATES)
+		{
+			//Improve player stats
+		}
+
+		VisualCommandPanel.instance.AddMessage (updateLog[nextUpdate].updateMessage);
+		++nextUpdate;
+	}
+
+	public void FinishUpdate()
+	{
+		updating = false;
+		VisualCommandPanel.instance.AddMessage(numUpdates.ToString() + "/" + numUpdates.ToString() + " Updates installed");
+		numUpdates = 0;
 	}
 }

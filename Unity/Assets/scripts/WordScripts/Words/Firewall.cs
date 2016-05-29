@@ -8,10 +8,14 @@ public class Firewall : AbilityWord
 	protected override void Start ()
 	{
 		wordTiers = new string[] {"firewall.exe", "firewall.exe", "firewall.exe"};
-		behavior = Behavior;
 		base.Start ();
 	}
 
+	protected override void TriggerBehavior ()
+	{
+		base.TriggerBehavior ();
+	}
+	
 	protected override void Behavior ()
 	{
 		switch (currentTier) 
@@ -23,5 +27,10 @@ public class Firewall : AbilityWord
 		case 2:
 			break;
 		}
+	}
+	
+	protected override void EndBehavior()
+	{
+		base.EndBehavior ();
 	}
 }

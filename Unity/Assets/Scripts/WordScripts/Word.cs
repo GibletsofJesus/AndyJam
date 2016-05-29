@@ -7,13 +7,20 @@ public abstract class Word : MonoBehaviour
 	public string word {get {return thisWord;} set{ thisWord = value;}}
 
 	protected bool wordActive = false;
-	
-	protected delegate void BehaviorDelegate();
-	protected BehaviorDelegate behavior = null;
+
+	protected bool behaviorActive = false;
 
 	protected virtual void Start()
 	{
 		wordActive = false;
+	}
+
+	protected virtual void Update()
+	{
+		if(behaviorActive)
+		{
+			Behavior ();
+		}
 	}
 
 	public bool Match(string _word)
@@ -24,16 +31,21 @@ public abstract class Word : MonoBehaviour
 		}
 		if(thisWord == _word)
 		{
-			ActivateBehavior();
+			TriggerBehavior();
 			return true;
 		}
 		return false;
 	}
 
-	protected virtual void ActivateBehavior ()
+	protected virtual void TriggerBehavior ()
 	{
-		behavior();
+		behaviorActive = true;
 	}
 
 	protected abstract void Behavior();
+
+	protected virtual void EndBehavior()
+	{
+		behaviorActive = false;
+	}
 }

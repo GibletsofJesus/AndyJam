@@ -12,7 +12,7 @@ public abstract class AbilityWord : Word
 	[SerializeField] protected WordHUD wordHUD = null;
 
 	private const int pixels = 32;
-	private float pixelCooldown;
+	protected float pixelCooldown;
 
 	protected override void Start ()
 	{
@@ -24,39 +24,48 @@ public abstract class AbilityWord : Word
 		base.Start ();
 	}
 
-	private void Update()
+	protected override void Update()
 	{
-		currentCooldown = Mathf.Min(currentCooldown + Time.deltaTime, wordCooldown);
-		if(wordCooldown == 0.0f)
+		if(!behaviorActive)
 		{
-			wordHUD.UpdateCooldown (1.0f);
+			currentCooldown = Mathf.Min(currentCooldown + Time.deltaTime, wordCooldown);
+			if(wordCooldown == 0.0f)
+			{
+				wordHUD.UpdateCooldown (1.0f);
+			}
+			else
+			{
+				float _cooldownPercent = currentCooldown / wordCooldown;
+				wordHUD.UpdateCooldown (((_cooldownPercent * 1000.0f) - ((_cooldownPercent * 1000.0f) % pixelCooldown)) / 1000.0f);
+			}
 		}
-		else
-		{
-			float _cooldownPercent = currentCooldown / wordCooldown;
-			wordHUD.UpdateCooldown (((_cooldownPercent * 1000.0f) - ((_cooldownPercent * 1000.0f) % pixelCooldown)) / 1000.0f);
-		}
-
+		base.Update ();
 	}
 
-	protected override void ActivateBehavior ()
+	protected override void TriggerBehavior ()
 	{
 		//Activate behavior
-		if(wordCooldown == currentCooldown)
+		if(!behaviorActive)
 		{
 			currentCooldown = 0.0f;
 			wordHUD.TriggerSuccess();
-			behavior();
+			VisualCommandPanel.instance.AddMessage("Running " + wordTiers[currentTier]);
+			base.TriggerBehavior();
 		}
 		//Behavior on cooldown, do something to show this (flicker red?)
 		else
 		{
-			
+			VisualCommandPanel.instance.AddMessage(wordTiers[currentTier] + " already running");
 		}
 	}
 
 	protected override void Behavior ()
 	{
+	}
+
+	protected override void EndBehavior()
+	{
+		base.EndBehavior ();
 	}
 
 	public void SetTier(int _tier)
