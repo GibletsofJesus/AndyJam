@@ -53,7 +53,7 @@ public class UpdateBehavior : MonoBehaviour
 
 	private void Update()
 	{
-		tempScore += 5;///temp///
+		tempScore += 15;///temp///
 		//If not currently updating, determine if there are any further updates
 		if(!updating)
 		{
