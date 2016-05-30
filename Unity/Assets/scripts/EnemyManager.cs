@@ -58,7 +58,7 @@ public class EnemyManager : MonoBehaviour
             boss = true;
         }
         CircleSwarm();
-        Debug.Log(totalEnemyCount);
+
  
         //if (CurrentlyActiveEnemies() <=10)
         //{

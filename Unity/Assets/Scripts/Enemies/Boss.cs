@@ -7,6 +7,7 @@ public class Boss : Enemy
     public Vector2 bossTarget = new Vector2(0,9.3f);
     public Transform[] eyeShot;
     public Enemy littleBastards;
+    public Enemy rareBastards;
     float maxCool = 5;
     float minicool = 0.8f;
     float minicooler = 0.8f;
@@ -27,27 +28,20 @@ public class Boss : Enemy
     {
         
         MiniCool();
-        if (cool<maxCool)
+
+        if (cool<=maxCool)
         {
             cool += Time.deltaTime;
         }
-        else// if (cool>=maxCool)
-        {
-            dosCount = 0;
-        }
-        if (dosCount<10)
-        {
-            if (MiniCool()&&move)
-            {
-                MouthShooting();
-                dosCount++;
-            }
-        }
-        else
-        {
-            Debug.Log("count " + dosCount + " cool " + cool);
-            cool = 0;
-        }
+              
+       if(move)
+       {
+          EyeShooting();
+       }
+      
+      
+        Debug.Log("count " + dosCount + " cool " + cool);
+
         base.Update();
 	}
     public override void Movement()
@@ -58,16 +52,28 @@ public class Boss : Enemy
             move = true;
         }
     }
-    void MouthShooting()
+    void EyeShooting()
     {
-        Debug.Log("doscount " + dosCount);
-        EnemyManager.instance.SpawnBossEnemies(mouthShot.transform.position,littleBastards);
-        minicooler = 0;
-        cool = 0;
+        if (dosCount<10&&cool>=maxCool)
+        {
+            if (MiniCool())
+            {
+              EnemyManager.instance.SpawnBossEnemies(eyeShot[Random.Range(0,4)].position, littleBastards);
+                minicooler = 0;
+                dosCount++;
+            }
+        }
+        else
+        {
+            dosCount = 0;
+        }
+        if (dosCount >= 10 && cool >= maxCool)
+        {
+            cool = 0;
+        }
     }
    
   
-
    bool MiniCool()
     {
         if (minicooler <= minicool)
