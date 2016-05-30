@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Firewall : AbilityWord
 {
-	[SerializeField] private float wallHealth;
+    [SerializeField] private GameObject[] firewalls = null;
 
-	protected override void Start ()
+    protected override void Start ()
 	{
 		wordTiers = new string[] {"firewall.exe", "firewall.exe", "firewall.exe"};
 		base.Start ();
@@ -14,23 +14,23 @@ public class Firewall : AbilityWord
 	protected override void TriggerBehavior ()
 	{
 		base.TriggerBehavior ();
+        for(int i = 0; i < currentTier + 1; ++i)
+        {
+            firewalls[i].SetActive(true);
+        }
 	}
 	
 	protected override void Behavior ()
 	{
-		switch (currentTier) 
-		{
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		}
-	}
+        //If last firewall broken
+        if (!firewalls[0].activeSelf)
+        {
+            EndBehavior();
+        }
+    }
 	
 	protected override void EndBehavior()
 	{
 		base.EndBehavior ();
-	}
+    }
 }
