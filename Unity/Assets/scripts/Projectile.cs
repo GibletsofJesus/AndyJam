@@ -44,8 +44,11 @@ public class Projectile : MonoBehaviour
             DeactivateProj();
         }
 
-        if (transform.position != Vector3.zero)
-            ps.Play();
+        /*
+            if (transform.position != Vector3.zero)
+                ps.Play();
+*/
+
     }
 
     public virtual void Update()
