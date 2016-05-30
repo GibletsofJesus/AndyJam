@@ -58,7 +58,7 @@ public class Projectile : MonoBehaviour
         else
         {
             body.velocity = transform.up * speed;
-                //direction * (speed);// * Time.deltaTime);
+            //direction * (speed);// * Time.deltaTime);
         }
 
         Alive();
