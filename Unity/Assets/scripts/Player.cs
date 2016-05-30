@@ -10,6 +10,8 @@ public class Player : Actor
 	[SerializeField] private int defaultLives = 3;
 	private int lives;
 
+    private int score = 0;
+
   
     //public float moveSpeed;
     public AudioClip[] shootSounds;
@@ -162,9 +164,9 @@ public class Player : Actor
     {
 		//Do not call base as players have lives
 		health -= _damage;
+        PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
 		if(health <= 0)
 		{
-			--lives;
 			//Out of lives then kill player
 			if(lives == 0)
 			{
@@ -174,7 +176,9 @@ public class Player : Actor
 			else
 			{
 				health = updatedDefaultHealth;
-			}
+                --lives;
+                PlayerHUD.instance.UpdateLives(lives);
+            }
 		}
         if (CameraShake.instance.shakeDuration < 0.2f)
             CameraShake.instance.shakeDuration += 0.2f;
@@ -185,6 +189,22 @@ public class Player : Actor
 	{
 		base.Reset ();
 		updatedDefaultHealth = defaultHealth;
-		lives = defaultLives;
+        PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
+        lives = defaultLives;
+        PlayerHUD.instance.UpdateLives(lives);
+        score = 0;
+        PlayerHUD.instance.UpdateScore(score);
 	}
+
+    public int GetScore()
+    {
+        return score;
+    }
+
+    public void IncreaseScore(int _score)
+    {
+        score += _score;
+        PlayerHUD.instance.UpdateScore(score);
+    }
+
 }
