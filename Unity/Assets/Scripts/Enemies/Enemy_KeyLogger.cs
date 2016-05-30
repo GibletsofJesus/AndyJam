@@ -9,7 +9,7 @@ public class Enemy_KeyLogger : Enemy
 	void Start () 
     {
         player = GameObject.FindGameObjectWithTag("Player");
-	    SetActor(20, 1, 1, 0.8f);
+	    SetActor(2, 1, 1, 0.8f);
         safeHealth = GetHealth();
 	}
 	

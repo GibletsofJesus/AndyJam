@@ -71,7 +71,6 @@ public class Projectile : MonoBehaviour
         {
             if (col.gameObject.GetComponent<Actor>())
             {
-                Debug.Log("Projectile hit " +col.gameObject.name);
                 col.gameObject.GetComponent<Actor>().TakeDamage(damage);
                 DeactivateProj();
             }

@@ -17,15 +17,16 @@ public class EnemyManager : MonoBehaviour
     public Transform[] formation2;
     public Transform[] formation3;
     
-    bool boss = false;
+   // bool boss = false;
     Transform[] formation;
     List<Transform[]> transformList = new List<Transform[]>();
     float coolDown = 3;
     float currentCooldown;
     float circleCooldown = 1;
     int prevTrans = 4;
+    int totalEnemyCount = 0;
     int maxCircleSpawn = 10;
-
+    bool boss = false;
 	// Use this for initialization
 	void Awake() 
     {
@@ -44,9 +45,21 @@ public class EnemyManager : MonoBehaviour
     void Update()
     {
         Cooldown();
-      SpawnEnemies();
-     ///   CircleSwarm();
-      //  EnemiesOrBoss();
+        if (totalEnemyCount <= 10)
+        {
+       //     SpawnEnemies();
+        }
+
+       // else if (CurrentlyActiveEnemies()<1)
+        if (!boss)
+        {
+            currentType = bigBoss;
+            SpawnBoss();
+            boss = true;
+        }
+        CircleSwarm();
+        Debug.Log(totalEnemyCount);
+ 
         //if (CurrentlyActiveEnemies() <=10)
         //{
         //    for (int i = 0; i < maxCircleSpawn; i++)
@@ -64,7 +77,6 @@ public class EnemyManager : MonoBehaviour
 
 
     public Enemy EnemyPooling()
-
     {
         for (int i = 0; i < enemyList.Count; i++)
         {
@@ -120,7 +132,10 @@ public class EnemyManager : MonoBehaviour
     {
         GameObject target = this.gameObject;
         float lowestDistance = 999;
-
+        if (currentType==bigBoss)
+        {
+            return null;
+        }
         for (int i = 0; i < enemyList.Count; i++)
         {
                 enemyList[i].GetComponent<SpriteRenderer>().color = Color.white;
@@ -154,6 +169,7 @@ public class EnemyManager : MonoBehaviour
                     e.transform.position = t.position;
                     e.ResetEnemy();
                     e.gameObject.SetActive(true);
+                    totalEnemyCount++;
                 }
                 currentCooldown = 0;
                 prevTrans = currentTrans;
@@ -167,22 +183,11 @@ public class EnemyManager : MonoBehaviour
             Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f,1.2f));
         spawnPos.z=0;
         b.transform.position = spawnPos;
-          //  b.transform.position.z = 0;
-            b.gameObject.SetActive(true);
-            boss = true;
+        b.gameObject.SetActive(true);
+       // boss = true;
               
     }
-    void EnemiesOrBoss()
-    {
-        if (!boss)
-        {
-            SpawnBoss();
-        }
-        else
-        {
-          //  SpawnEnemies();
-        }
-    }
+
     public void SpawnBossEnemies(Vector2 _spawnPoint,Enemy _enemy)
     {
         currentType = _enemy;
@@ -238,13 +243,4 @@ public class EnemyManager : MonoBehaviour
         }
         circleCooldown += Time.deltaTime;
     }
-
-    //// Update is called once per frame
-    //void Update ()
-    //{
-    //    Cooldown();
-    //    SpawnEnemies();
-	
-    //}
-
 }

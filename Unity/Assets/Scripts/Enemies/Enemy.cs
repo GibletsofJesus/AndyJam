@@ -13,7 +13,7 @@ public class Enemy : Actor
     void Start()
     {
        
-        SetActor(200,1, 1.5f,0.8f);
+        SetActor(2,1, 1.5f,0.8f);
         safeHealth = GetHealth();
     }
    public override void Update()
@@ -40,7 +40,6 @@ public class Enemy : Actor
         if (col.gameObject.tag == gameObject.tag)
         {
             Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
-            Debug.Log("enemy hit " + col.gameObject.name);
         }
         else if (col.gameObject.GetComponent<playerMovement>())
         {
