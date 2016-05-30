@@ -36,7 +36,7 @@ public class Actor : MonoBehaviour
         CoolDown();
 	}
    
-    protected virtual void Shoot(ProjectileData _projData, Vector2 _direction,GameObject[] _shootTransform, bool _homing)
+    protected virtual bool Shoot(ProjectileData _projData, Vector2 _direction,GameObject[] _shootTransform, bool _homing)
     {
 		if(shootCooldown >= shootRate)
 		{
@@ -47,8 +47,10 @@ public class Actor : MonoBehaviour
 	            p.transform.position = _shootTransform[i].transform.position;
 	            p.gameObject.SetActive(true);
 				shootCooldown = 0;
-	        }
-		}
+            }
+            return true;
+        }
+        return false;
     }
     /*public bool ShotCoolDown()
     {

@@ -144,12 +144,14 @@ public class Player : Actor
         #region shoot
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            Shoot(projData, transform.up, shootTransform,homingBullets);
+            if (Shoot(projData, transform.up, shootTransform,homingBullets))
             {
                 foreach (ParticleSystem ps in muzzleflash)
                 {
                     ps.Emit(1);
                 }
+                Debug.Log("Play sound");
+
                 soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
 
                 if (CameraShake.instance.shakeDuration < 0.2f)
