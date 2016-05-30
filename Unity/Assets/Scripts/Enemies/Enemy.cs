@@ -3,58 +3,57 @@ using System.Collections;
 
 public class Enemy : Actor
 {
-   
     Ray2D rayCast;
     RaycastHit2D hit;
     public Vector2 target;
-    protected float safeHealth;
-    public Rigidbody2D body;
-        
+      
+	protected override void Awake()
+	{
+		base.Awake ();
+	}
+
     void Start()
     {
-       
-        SetActor(200,1, 1.5f,0.8f);
-        safeHealth = GetHealth();
+        //SetActor(200,1, 1.5f,0.8f);
+        //safeHealth = GetHealth();
     }
-   public override void Update()
+
+    protected override void Update()
     {
         base.Update();
    
         transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
        
-        if (ShotCoolDown())
-        {
-            Shoot(-transform.up.normalized, shootTransform,gameObject.tag,false);
-        }
-       Movement();
-       KillEnemy();
+
+        Shoot(projData,-transform.up.normalized, shootTransform,false);
+       
+        Movement();
+        KillEnemy();
              
     }
    
-    public virtual void ResetEnemy()
-   {
-       ResetHealth(safeHealth);
-   }
-    void OnCollisionEnter2D(Collision2D col)
-   {
+  
+    /*protected virtual void OnCollisionEnter2D(Collision2D _col)
+    {
         if (col.gameObject.tag == gameObject.tag)
         {
             Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
             Debug.Log("enemy hit " + col.gameObject.name);
         }
-        else if (col.gameObject.GetComponent<playerMovement>())
+        else if (col.gameObject.tag = "Player")
         {
             col.gameObject.GetComponent<playerMovement>().TakeDamage(GetDamage());
             gameObject.SetActive(false);
         }
-   }
+    }*/
 
-    public virtual void Movement()
+    protected virtual void Movement()
     {
-        Vector2 movement = -transform.up * GetSpeed();
+        Vector2 movement = -transform.up * speed * Time.deltaTime;
         transform.Translate(movement, Space.World);
     }
-    public void KillEnemy()
+
+    protected void KillEnemy()
     {
         Vector3 posToCam = Camera.main.WorldToViewportPoint(transform.position);
         if (posToCam.y<-0.1f)
@@ -62,5 +61,10 @@ public class Enemy : Actor
             gameObject.SetActive(false);
         }
     }
+
+	protected override void Reset()
+	{
+		base.Reset ();
+	}
    
 }

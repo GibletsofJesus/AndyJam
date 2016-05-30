@@ -9,20 +9,21 @@ public class Enemy_KeyLogger : Enemy
 	void Start () 
     {
         player = GameObject.FindGameObjectWithTag("Player");
-	    SetActor(20, 1, 1, 0.8f);
-        safeHealth = GetHealth();
+	    //SetActor(20, 1, 1, 0.8f);
+       // safeHealth = GetHealth();
 	}
 	
 	// Update is called once per frame
-	public override void Update () 
+	protected override void Update () 
     {
         base.Update();
 	}
-    public override void Movement()
+
+    protected override void Movement()
     {
         target = player.transform.position;
 
-        Vector2 lerp = Vector2.MoveTowards(transform.position, new Vector2(target.x, target.y), GetSpeed()*10);
+        Vector2 lerp = Vector2.MoveTowards(transform.position, new Vector2(target.x, target.y), speed*10);
 
         if (lerp.y < target.y + 8)
         {
@@ -34,11 +35,11 @@ public class Enemy_KeyLogger : Enemy
             lerp.x = target.x;
         }
 
-        transform.position = Vector2.MoveTowards(transform.position,lerp,GetSpeed()*10);
+        transform.position = Vector2.MoveTowards(transform.position,lerp,speed*10);
     }
-    public override void ResetEnemy()
+    protected override void Reset()
     {
-        base.ResetEnemy();
+        base.Reset();
         withinDist = false;
     }
 }

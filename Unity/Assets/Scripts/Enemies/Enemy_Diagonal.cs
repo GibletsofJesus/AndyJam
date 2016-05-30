@@ -8,18 +8,18 @@ public class Enemy_Diagonal : Enemy
     // Use this for initialization
     void Start()
     {
-        SetActor(10, 1, 5, 1f);
+        //SetActor(10, 1, 5, 1f);
         moveToDir = new Vector2(15, 0);
-        safeHealth = GetHealth();
+        //safeHealth = GetHealth();
     }
 
     // Update is called once per frame
-    public override void Update()
+    protected override void Update()
     {
         base.Update();
     }
 
-    public override void Movement()
+    protected override void Movement()
     {
         moveToDir.y = transform.position.y;
         if (Vector2.Distance(moveToDir, transform.position) < edgeWeight)
@@ -27,6 +27,6 @@ public class Enemy_Diagonal : Enemy
             moveToDir *= -1;
         }
 
-        transform.Translate(new Vector2(moveToDir.x / 10, -transform.up.y) * GetSpeed(), Space.World);
+        transform.Translate(new Vector2(moveToDir.x / 10, -transform.up.y) * speed, Space.World);
     }
 }

@@ -101,7 +101,7 @@ public class EnemyManager : MonoBehaviour
 
                         if (Vector2.Distance(iPos,jPos)<2)
                         {
-                            enemyList[i].body.AddForce(iPos - jPos);
+                            enemyList[i].rig.AddForce(iPos - jPos);
                         }
                     }
                 }
@@ -152,7 +152,7 @@ public class EnemyManager : MonoBehaviour
                 {
                     Enemy e = EnemyPooling();
                     e.transform.position = t.position;
-                    e.ResetEnemy();
+                    //e.ResetEnemy();
                     e.gameObject.SetActive(true);
                 }
                 currentCooldown = 0;
@@ -188,7 +188,7 @@ public class EnemyManager : MonoBehaviour
         currentType = _enemy;
         Enemy e = EnemyPooling();
         e.transform.position = _spawnPoint;
-        e.ResetEnemy();
+        //e.ResetEnemy();
         e.gameObject.SetActive(true);
         
     }
@@ -205,7 +205,7 @@ public class EnemyManager : MonoBehaviour
         {
             Enemy e = EnemyPooling();
             e.transform.position = formation3[0].position;
-            e.ResetEnemy();
+            //e.ResetEnemy();
             e.gameObject.SetActive(true);
             circleCooldown = 0;
         //}

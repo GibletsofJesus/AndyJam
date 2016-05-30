@@ -11,16 +11,16 @@ public class Enemy_Circle : Enemy
 	void Start () 
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        SetActor(10, 0, 5, 1);
-        safeHealth = GetHealth();
+        //SetActor(10, 0, 5, 1);
+        //safeHealth = GetHealth();
 	}
 	
 	// Update is called once per frame
-	public override void Update () 
+	protected override void Update () 
     {
        base.Update();
 	}
-    public override void Movement()
+	protected override void Movement()
     {
         if (player != null)
         {
@@ -32,7 +32,7 @@ public class Enemy_Circle : Enemy
         {
             if (distance > 7)
             {
-                transform.position = Vector2.MoveTowards(transform.position, moveTarget, GetSpeed() * 2);
+				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2);
             }
             else
             {
@@ -41,22 +41,22 @@ public class Enemy_Circle : Enemy
         }
         if (circleJerks)
         {
-              transform.RotateAround(moveTarget, transform.forward, 45 * GetSpeed());
+              transform.RotateAround(moveTarget, transform.forward, 45 * speed);
             
             if (distance<=6)
             {
-                transform.position = Vector2.MoveTowards(transform.position, (pos + moveTarget), GetSpeed() * 2);
+				transform.position = Vector2.MoveTowards(transform.position, (pos + moveTarget), speed * 2);
             }
             else if (distance>7)
             {
-                transform.position = Vector2.MoveTowards(transform.position, moveTarget, GetSpeed() * 2);
+				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2);
             }
         }
     }
 
-    public override void ResetEnemy()
+    protected override void Reset()
     {
-        base.ResetEnemy();
+        base.Reset();
         circleJerks = false;
     }
     //public override void Shoot(Vector2 _direction, GameObject[] _shootTransform, string _ignore)

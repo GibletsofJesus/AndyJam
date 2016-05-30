@@ -1,43 +1,54 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class playerMovement : Actor 
+public class Player : Actor 
 {
-    public static playerMovement instance;
-    Rigidbody2D rig;
-    public float moveSpeed;
+	private static Player staticInstance = null;
+	public static Player instance {get {return staticInstance;} set{}}
+
+	protected float updatedDefaultHealth;
+	[SerializeField] private int defaultLives = 3;
+	private int lives;
+
+  
+    //public float moveSpeed;
     public AudioClip[] shootSounds;
     public ParticleSystem[] muzzleflash;
     Vector3 rotLerp;
-    public GameObject target;
+    //public GameObject target;
     Vector3 screenBottom, screenTop;
     public bool homingBullets;
 
+	protected override void Awake()
+	{
+		staticInstance = this;
+		base.Awake ();
+		updatedDefaultHealth = defaultHealth;
+		lives = defaultLives;
+	}
+
     // Use this for initialization
-    public virtual void Start()
+    protected virtual void Start()
     {
-        instance = this;
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f, -.5f, .3f));
         screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
-        SetActor(100, 1, 1, base.maxShotCooldown);
-        rig = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
-   void FixedUpdate()
+    protected void FixedUpdate()
     {
         base.Update();
 
 
         //Whoever did this, you are scum.
        // if (transform.position.x <= -11f)
-        if (homingBullets)
+       /* if (homingBullets)
        {
             if (!target || !target.activeSelf)
             {
                 target = EnemyManager.instance.FindClosestEnemyToPlayer(50, transform);
             }
-        }
+        }*/
 
         //if (transform.position.x >=11f)
         //{
@@ -87,7 +98,7 @@ public class playerMovement : Actor
         rolling = false;
     }
 
-    void inputThings()
+    private void inputThings()
     {
         #region move
         if (Input.GetKey(KeyCode.LeftArrow))
@@ -99,7 +110,7 @@ public class playerMovement : Actor
 
                     rotLerp = new Vector3(0, 45, 0);
                 }
-                rig.AddForce(-Vector2.right * moveSpeed, ForceMode2D.Impulse);
+                rig.AddForce(-Vector2.right * speed, ForceMode2D.Impulse);
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -110,7 +121,7 @@ public class playerMovement : Actor
                 rotLerp = new Vector3(0, -45, 0);
             }
 
-            rig.AddForce(Vector2.right * moveSpeed, ForceMode2D.Impulse);
+            rig.AddForce(Vector2.right * speed, ForceMode2D.Impulse);
         }
 
         else
@@ -129,32 +140,51 @@ public class playerMovement : Actor
         #endregion
 
         #region shoot
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
-            if (ShotCoolDown())
+            Shoot(projData, transform.up, shootTransform,homingBullets);
             {
-                Shoot(transform.up, shootTransform, gameObject.tag,homingBullets);
-                base.shotCooldown = 0;
+                foreach (ParticleSystem ps in muzzleflash)
                 {
-                    foreach (ParticleSystem ps in muzzleflash)
-                    {
-                        ps.Emit(1);
-                    }
-                    soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
-
-                    if (CameraShake.instance.shakeDuration < 0.2f)
-                        CameraShake.instance.shakeDuration = 0.2f;
-                    CameraShake.instance.shakeAmount = 0.15f;
+                    ps.Emit(1);
                 }
-            }
+                soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
+
+                if (CameraShake.instance.shakeDuration < 0.2f)
+                    CameraShake.instance.shakeDuration = 0.2f;
+                CameraShake.instance.shakeAmount = 0.15f;
+            } 
         }
         #endregion
     }
+
     public override void TakeDamage(float _damage)
     {
-        base.TakeDamage(_damage);
+		//Do not call base as players have lives
+		health -= _damage;
+		if(health <= 0)
+		{
+			--lives;
+			//Out of lives then kill player
+			if(lives == 0)
+			{
+				Death ();
+			}
+			//If not dead then reset health to the current upgraded amount
+			else
+			{
+				health = updatedDefaultHealth;
+			}
+		}
         if (CameraShake.instance.shakeDuration < 0.2f)
             CameraShake.instance.shakeDuration += 0.2f;
         CameraShake.instance.shakeAmount = 0.5f;
     }
+
+	protected override void Reset()
+	{
+		base.Reset ();
+		updatedDefaultHealth = defaultHealth;
+		lives = defaultLives;
+	}
 }

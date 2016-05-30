@@ -1,33 +1,45 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public struct ProjectileData
+{
+	public Sprite projSprite;
+	[HideInInspector] public float projDamage;
+	public float defaultProjDamage;
+	public float aliveTime;
+	public float speed;
+	[HideInInspector] public Actor owner;
+	[HideInInspector] public string parentTag;
+}
+
 public class Projectile : MonoBehaviour
 {
-    int damage;
-    float maxAlive;
-    float aliveTime = 1.5f;
-    float speed;
-    Vector2 direction;
-    Rigidbody2D body;
-    string ignoreActor;
+	private ProjectileData projData = new ProjectileData ();
+
+	[SerializeField] private Rigidbody2D rig = null;
+	[SerializeField] private SpriteRenderer spriteRenderer = null;
+	[SerializeField] private RadiusObjectFinder finder = null;
+   
+	float aliveCooldown = 0.0f;
+    Vector2 direction; 
     public TrailRenderer trail;
     public ParticleSystem ps;
     Vector3 screenBottom,screenTop;
     bool homing;
-    GameObject target;
+
 
     // Use this for initialization
-    public virtual void Start()
+    protected virtual void Start()
     {
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f ,-.5f, .3f));
         screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
-        body = GetComponent<Rigidbody2D>();
     }
   
     void Alive()
     {
-        aliveTime -= Time.deltaTime;
-        if (aliveTime <= 0)
+		aliveCooldown += Time.deltaTime;
+		if (aliveCooldown >= projData.aliveTime)
         {
             DeactivateProj();
         }
@@ -38,26 +50,27 @@ public class Projectile : MonoBehaviour
 
     public virtual void Update()
     {
-        if (homing && target)
+		GameObject _target = finder.GetClosestObject ();
+        if (homing && _target)
         {
-            if (target.activeSelf)
-            {
+            //if (target.activeSelf)
+            //{
                 //Turn z axis
                 Quaternion rot = new Quaternion();
-                float z = Mathf.Atan2((target.transform.position.x - transform.position.x), (target.transform.position.y - transform.position.y)) * Mathf.Rad2Deg;
+			float z = Mathf.Atan2((_target.transform.position.x - transform.position.x), (_target.transform.position.y - transform.position.y)) * Mathf.Rad2Deg;
                 rot.eulerAngles = new Vector3(0, 0, z);
 
                 rot.eulerAngles = new Vector3(0, 0, -z);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation, rot,Time.deltaTime*10);
-                body.velocity = transform.up * speed;
-            }
-            else
-                body.velocity = transform.up * speed;
+                transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1/projData.aliveTime) *Time.deltaTime*200);
+				rig.velocity = transform.up * projData.speed;
+            //}
+            //else
+			//	rig.velocity = transform.up * projData.speed;
         }
         else
         {
-            body.velocity = transform.up * speed;
+			rig.velocity = transform.up * projData.speed;
                 //direction * (speed);// * Time.deltaTime);
         }
 
@@ -65,9 +78,9 @@ public class Projectile : MonoBehaviour
         OffScreen();
     }
 
-    public virtual void OnTriggerEnter2D(Collider2D col)
+    protected virtual void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag != ignoreActor && col.gameObject.tag != "TargetFinder")
+        /*if (col.gameObject.tag != ignoreActor && col.gameObject.tag != "TargetFinder")
         {
             if (col.gameObject.GetComponent<Actor>())
             {
@@ -75,7 +88,15 @@ public class Projectile : MonoBehaviour
                 col.gameObject.GetComponent<Actor>().TakeDamage(damage);
                 DeactivateProj();
             }
-        }
+        }*/
+		if (col.gameObject.tag != projData.parentTag)
+		{
+			if(col.gameObject.GetComponent<Actor>())
+			{
+				col.gameObject.GetComponent<Actor>().TakeDamage(projData.projDamage);
+				DeactivateProj();
+			}
+		}
     }
 
     void OffScreen()
@@ -88,27 +109,34 @@ public class Projectile : MonoBehaviour
 
     void DeactivateProj()
     {
-        target = null;
+        //target = null;
+		finder.Reset ();
         trail.time = 0.00001f;
         trail.enabled = false;
-        aliveTime = maxAlive;
+		aliveCooldown = 0.0f;
         gameObject.SetActive(false);
-        gameObject.GetComponent<Projectile>().enabled = false;        
+        enabled = false;        
     }
 
-    public void SetProjectile(int _damage, Vector2 _direction,string _ignoreActor,bool _homing,Actor _owner, float _speed = 50
-        , float _aliveTime = 2, float trailRendTime = .05f)
+    public void SetProjectile(ProjectileData _data, Vector2 _direction, bool _homing, float trailRendTime = 0.05f)
     {
+		projData = _data;
+		spriteRenderer.sprite = projData.projSprite;
+
         homing = _homing;
-        if (_owner.GetComponent<playerMovement>())
-            target = _owner.GetComponent<playerMovement>().target;;
+		if(homing)
+		{
+			finder.ActivateFinder("Enemy");
+		}
+        //if (_owner.GetComponent<playerMovement>())
+        //    target = _owner.GetComponent<playerMovement>().target;;
         trail.probeAnchor = transform;
-        damage = _damage;
+        //damage = _damage;
         direction = _direction;
-        maxAlive = _aliveTime;
-        speed = _speed;
+        //maxAlive = _aliveTime;
+        //speed = _speed;
         transform.up = _direction;
-        ignoreActor = _ignoreActor;
+        //ignoreActor = _ignoreActor;
 
         trail.enabled = false;
         trail.time = trailRendTime;

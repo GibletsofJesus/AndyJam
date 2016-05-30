@@ -3,81 +3,108 @@ using System.Collections;
 
 public class Actor : MonoBehaviour
 {
-    public float health;
-    private float damage;
-    public Projectile projectile;
-    private float speed;
-    public GameObject[] shootTransform;
-    public float shotCooldown;
-    public float maxShotCooldown;
+	[SerializeField] protected float defaultHealth = 100.0f;
+	protected float health;
+	//[SerializeField] protected float defaultProjDamage = 20.0f;
+	//protected float projDamage;
+	[SerializeField] protected float defaultShootRate = 0.1f;
+	protected float shootRate;
+	protected float shootCooldown = 0.0f;
+	[SerializeField] protected float defaultSpeed = 5.0f;
+	protected float speed;
 
-    void Awake()
-    {
-        shotCooldown = maxShotCooldown;
-    }
+	[SerializeField] protected ProjectileData projData;
+
+	[SerializeField] protected GameObject[] shootTransform;
+
+	public Rigidbody2D rig = null;
    
+	protected virtual void Awake()
+	{
+		health = defaultHealth;
+		projData.projDamage = projData.defaultProjDamage;
+		shootRate = defaultShootRate;
+		speed = defaultSpeed;
+		projData.owner = this;
+		projData.parentTag = tag;
+	}
+
 	// Update is called once per frame
-	public virtual void Update ()
+	protected virtual void Update ()
     {
-        Death();
+        //Death();
         CoolDown();
 	}
    
-    public virtual void Shoot(Vector2 _direction,GameObject[] _shootTransform, string _ignore,bool _homing)
+    protected virtual void Shoot(ProjectileData _projData, Vector2 _direction,GameObject[] _shootTransform, bool _homing)
     {
-        for (int i = 0; i < _shootTransform.Length; i++)
-        {
-            Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
-            p.SetProjectile(10, _direction, _ignore,_homing,this);
-            p.transform.position = _shootTransform[i].transform.position;
-            p.gameObject.SetActive(true);
-            shotCooldown = 0;
-        }
+		if(shootCooldown >= shootRate)
+		{
+	        for (int i = 0; i < _shootTransform.Length; i++)
+	        {
+	            Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
+				p.SetProjectile(_projData, _direction,_homing);
+	            p.transform.position = _shootTransform[i].transform.position;
+	            p.gameObject.SetActive(true);
+				shootCooldown = 0;
+	        }
+		}
     }
-    public bool ShotCoolDown()
+    /*public bool ShotCoolDown()
     {
         return shotCooldown >= maxShotCooldown ? true : false;
-    }
+    }*/
     void CoolDown()
     {
-       if (shotCooldown<maxShotCooldown)
-       {
-           shotCooldown += Time.deltaTime;
-       }
+		shootCooldown = (shootCooldown + Time.deltaTime) > shootRate ? shootRate : (shootCooldown + Time.deltaTime);
     }
+
     public virtual void TakeDamage(float _damage)
     {
         health -= _damage;
+		if(health <= 0)
+		{
+			Death ();
+		}
     }
    
-    void Death()
+    protected virtual void Death()
     {
-        if (health <= 0)
-        {
-            gameObject.SetActive(false);
-        }
+		Reset ();
+        gameObject.SetActive(false);
     }
-    public float GetSpeed()
+    /*public float GetSpeed()
     {
         return speed * Time.deltaTime; ;
     }
-   public float GetHealth()
+    public float GetHealth()
     {
         return health;
     }
     public float GetDamage()
     {
         return damage;
-    }
-    public void SetActor(float _health,float _damage, float _speed,float _maxShotCooldown)
+    }*/
+
+    /*public void SetActor(float _health,float _damage, float _speed,float _maxShotCooldown)
     {
         speed = _speed;
         health = _health;
         damage = _damage;
         maxShotCooldown = _maxShotCooldown;
-    }
-    public void ResetHealth(float _health)
+    }*/
+
+    /*public void SetHealth(float _health)
     {
         health = _health;
-    }
+    }*/
+
+	protected virtual void Reset()
+	{
+		shootCooldown = 0.0f;
+		health = defaultHealth;
+		projData.projDamage = projData.defaultProjDamage;
+		shootRate = defaultShootRate;
+		speed = defaultSpeed;
+	}
 }

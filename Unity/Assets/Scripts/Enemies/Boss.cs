@@ -13,16 +13,22 @@ public class Boss : Enemy
     int dosCount = 0;
     bool move = false;
 	// Use this for initialization
+
+	protected override void Awake()
+	{
+		base.Awake ();
+		cool = maxCool;
+	}
+
 	void Start ()
     {
-        SetActor(5000000, 1, 1, 0.8f);
-        cool = maxCool;
-        safeHealth = health;
-	
+        //SetActor(5000000, 1, 1, 0.8f);
+        //cool = maxCool;
+        //safeHealth = health;
 	}
 	
 	// Update is called once per frame
-	public override void Update () 
+	protected override void Update () 
     {
         
         MiniCool();
@@ -47,14 +53,14 @@ public class Boss : Enemy
             
             cool = 0;
         }
-        base.Update();
+		base.Update ();
 	}
-    public override void Movement()
+    protected override void Movement()
     {
 
         if (!move)
         {
-            transform.Translate(-transform.up, Space.World);
+			transform.Translate(-transform.up * Time.deltaTime, Space.World);
         }
         if (transform.position.y >= Camera.main.ViewportToWorldPoint(new Vector2(0, 0.6f)).y)
         {
