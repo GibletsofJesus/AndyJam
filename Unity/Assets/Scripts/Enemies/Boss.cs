@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Boss : Enemy 
 {
     public Transform mouthShot;
+	public Vector2 bossTarget = new Vector2(0,9.3f);
     public Transform[] eyeShot;
     public Enemy littleBastards;
+	public Enemy rareBastards;
     float maxCool = 5;
     float minicool = 0.8f;
     float minicooler = 0.8f;
@@ -30,54 +32,49 @@ public class Boss : Enemy
 	// Update is called once per frame
 	protected override void Update () 
     {
-        
         MiniCool();
         if (cool<=maxCool)
         {
             cool += Time.deltaTime;
         }
-        else if (cool>=maxCool)
-        {
-            dosCount = 0;
-          
-
-        }
-        if (dosCount<10)
-        {
-            if (MiniCool())
-            MouthShooting();
-          
-        }
-        else
-        {
-            
-            cool = 0;
-        }
+      
+		if(move)
+		{
+			EyeShooting();
+		}
 		base.Update ();
 	}
+
     protected override void Movement()
     {
-
-        if (!move)
-        {
-			transform.Translate(-transform.up * Time.deltaTime, Space.World);
-        }
-        if (transform.position.y >= Camera.main.ViewportToWorldPoint(new Vector2(0, 0.6f)).y)
+		transform.position = Vector2.MoveTowards(transform.position, bossTarget,speed*2);
+		if (Vector2.Distance(transform.position,bossTarget)<1)
         {
             move = true;
-            // body.AddForce(new Vector2(-80, 0));
         }
+    }
 
-        //base.Movement();
-    }
-    void MouthShooting()
-    {
-        EnemyManager.instance.SpawnBossEnemies(mouthShot.transform.position,littleBastards);
-        minicooler = 0;
-            dosCount++;   
-    }
-   
-  
+	void EyeShooting()
+	{
+		if (dosCount<10&&cool>=maxCool)
+		{
+			if (MiniCool())
+			{
+				EnemyManager.instance.SpawnBossEnemies(eyeShot[Random.Range(0,2)].position, littleBastards);
+				minicooler = 0;
+				dosCount++;
+			}
+		}
+		else
+		{
+			dosCount = 0;
+		}
+		if (dosCount >= 10 && cool >= maxCool)
+		{
+			cool = 0;
+		}
+	}
+	 
 
    bool MiniCool()
     {

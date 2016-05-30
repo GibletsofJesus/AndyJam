@@ -128,7 +128,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public GameObject FindClosestEnemyToPlayer(float maxDistance, Transform origin)
+    /*public GameObject FindClosestEnemyToPlayer(float maxDistance, Transform origin)
     {
         GameObject target = this.gameObject;
         float lowestDistance = 999;
@@ -153,7 +153,7 @@ public class EnemyManager : MonoBehaviour
         }
         else
             return null;
-    }
+    }*/
 
     void SpawnEnemies()
     {
