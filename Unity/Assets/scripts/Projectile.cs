@@ -5,7 +5,7 @@ public class Projectile : MonoBehaviour
 {
     int damage;
     float maxAlive;
-    float aliveTime = 1.5f;
+    float aliveTime = 1f;
     float speed;
     Vector2 direction;
     Rigidbody2D body;
@@ -49,7 +49,7 @@ public class Projectile : MonoBehaviour
 
                 rot.eulerAngles = new Vector3(0, 0, -z);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation, rot,Time.deltaTime*10);
+                transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / aliveTime) * Time.deltaTime * 5);
                 body.velocity = transform.up * speed;
             }
             else
