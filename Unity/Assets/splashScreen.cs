@@ -4,12 +4,11 @@ using System.Collections;
 public class splashScreen : MonoBehaviour {
 
     public Animator anim;
+    public SpriteRenderer ship;
+    public Sprite ShipA, ShipB;
     public bool allowStart;
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
+    public AudioSource swapShipSound;
+    public AudioClip[] swapSounds;
 	// Update is called once per frame
 	void Update ()
     {
@@ -18,6 +17,18 @@ public class splashScreen : MonoBehaviour {
             anim.StopPlayback();
             anim.Play("splash_out");
             allowStart = false;
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            swapShipSound.PlayOneShot(swapSounds[(ship.sprite == ShipA) ? 0 : 1]);
+            if (ship.sprite == ShipA)
+            {
+                ship.sprite =ShipB;
+            }
+            else
+            {
+                ship.sprite = ShipA;
+            }
         }
 	}
 
