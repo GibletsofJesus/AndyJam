@@ -4,6 +4,7 @@ using System.Collections;
 public class Boss : Enemy 
 {
     public Transform mouthShot;
+    public Vector2 bossTarget = new Vector2(0,9.3f);
     public Transform[] eyeShot;
     public Enemy littleBastards;
     float maxCool = 5;
@@ -15,7 +16,7 @@ public class Boss : Enemy
 	// Use this for initialization
 	void Start ()
     {
-        SetActor(5000000, 1, 1, 0.8f);
+        SetActor(50, 1, 1, 0.8f);
         cool = maxCool;
         safeHealth = health;
 	
@@ -26,49 +27,43 @@ public class Boss : Enemy
     {
         
         MiniCool();
-        if (cool<=maxCool)
+        if (cool<maxCool)
         {
             cool += Time.deltaTime;
         }
-        else if (cool>=maxCool)
+        else// if (cool>=maxCool)
         {
             dosCount = 0;
-          
-
         }
         if (dosCount<10)
         {
-            if (MiniCool())
-            MouthShooting();
-          
+            if (MiniCool()&&move)
+            {
+                MouthShooting();
+                dosCount++;
+            }
         }
         else
         {
-            
+            Debug.Log("count " + dosCount + " cool " + cool);
             cool = 0;
         }
         base.Update();
 	}
     public override void Movement()
     {
-
-        if (!move)
-        {
-            transform.Translate(-transform.up, Space.World);
-        }
-        if (transform.position.y >= Camera.main.ViewportToWorldPoint(new Vector2(0, 0.6f)).y)
+        transform.position = Vector2.MoveTowards(transform.position, bossTarget,GetSpeed()*2);
+        if (Vector2.Distance(transform.position,bossTarget)<1)
         {
             move = true;
-            // body.AddForce(new Vector2(-80, 0));
         }
-
-        //base.Movement();
     }
     void MouthShooting()
     {
+        Debug.Log("doscount " + dosCount);
         EnemyManager.instance.SpawnBossEnemies(mouthShot.transform.position,littleBastards);
         minicooler = 0;
-            dosCount++;   
+        cool = 0;
     }
    
   

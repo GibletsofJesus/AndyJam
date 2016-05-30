@@ -11,7 +11,7 @@ public class Enemy_Circle : Enemy
 	void Start () 
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        SetActor(10, 0, 5, 1);
+        SetActor(1, 0, 5, 1);
         safeHealth = GetHealth();
 	}
 	

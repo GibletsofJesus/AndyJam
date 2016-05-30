@@ -8,7 +8,7 @@ public class Enemy_Diagonal : Enemy
     // Use this for initialization
     void Start()
     {
-        SetActor(10, 1, 5, 1f);
+        SetActor(1, 1, 5, 1f);
         moveToDir = new Vector2(15, 0);
         safeHealth = GetHealth();
     }
