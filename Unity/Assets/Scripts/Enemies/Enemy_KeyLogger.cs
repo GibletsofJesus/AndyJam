@@ -23,7 +23,7 @@ public class Enemy_KeyLogger : Enemy
     {
         target = player.transform.position;
 
-        Vector2 lerp = Vector2.MoveTowards(transform.position, new Vector2(target.x, target.y), speed*10);
+		Vector2 lerp = Vector2.MoveTowards(transform.position, new Vector2(target.x, target.y), speed*10* Time.deltaTime);
 
         if (lerp.y < target.y + 8)
         {
@@ -35,7 +35,7 @@ public class Enemy_KeyLogger : Enemy
             lerp.x = target.x;
         }
 
-        transform.position = Vector2.MoveTowards(transform.position,lerp,speed*10);
+		transform.position = Vector2.MoveTowards(transform.position,lerp,speed*10* Time.deltaTime);
     }
     protected override void Reset()
     {

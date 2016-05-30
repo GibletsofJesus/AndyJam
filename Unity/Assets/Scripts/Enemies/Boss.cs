@@ -17,14 +17,14 @@ public class Boss : Enemy
 	// Use this for initialization
 	void Start ()
     {
-        SetActor(100, 1, 1, 0.8f);
+        //SetActor(100, 1, 1, 0.8f);
         cool = maxCool;
-        safeHealth = health;
+        //safeHealth = health;
 	
 	}
 	
 	// Update is called once per frame
-	public override void Update () 
+	protected override void Update () 
     {
         
         MiniCool();
@@ -40,25 +40,27 @@ public class Boss : Enemy
        }
       
       
-        Debug.Log("count " + dosCount + " cool " + cool);
+        //Debug.Log("count " + dosCount + " cool " + cool);
 
         base.Update();
 	}
-    public override void Movement()
+
+    protected override void Movement()
     {
-        transform.position = Vector2.MoveTowards(transform.position, bossTarget,GetSpeed()*2);
-        if (Vector2.Distance(transform.position,bossTarget)<1)
+		transform.position = Vector2.MoveTowards(transform.position, bossTarget,speed*2* Time.deltaTime);
+		if (Vector2.Distance(transform.position,bossTarget)<1)
         {
             move = true;
         }
     }
+
     void EyeShooting()
     {
         if (dosCount<10&&cool>=maxCool)
         {
             if (MiniCool())
             {
-              EnemyManager.instance.SpawnBossEnemies(eyeShot[Random.Range(0,4)].position, littleBastards);
+              EnemyManager.instance.SpawnBossEnemies(eyeShot[Random.Range(0,eyeShot.Length - 1)].position, littleBastards);
                 minicooler = 0;
                 dosCount++;
             }

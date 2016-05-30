@@ -32,7 +32,7 @@ public class Enemy_Circle : Enemy
         {
             if (distance > 7)
             {
-				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2);
+				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2 * Time.deltaTime);
             }
             else
             {
@@ -45,11 +45,11 @@ public class Enemy_Circle : Enemy
             
             if (distance<=6)
             {
-				transform.position = Vector2.MoveTowards(transform.position, (pos + moveTarget), speed * 2);
+				transform.position = Vector2.MoveTowards(transform.position, (pos + moveTarget), speed * 2 * Time.deltaTime);
             }
             else if (distance>7)
             {
-				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2);
+				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2 * Time.deltaTime);
             }
         }
     }

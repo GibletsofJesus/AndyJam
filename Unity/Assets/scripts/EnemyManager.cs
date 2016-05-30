@@ -27,7 +27,10 @@ public class EnemyManager : MonoBehaviour
     int prevTrans = 4;
     int climbList = 1;
     int climbListMultiplier = 10;
-    int totalEnemyCount = 0;
+
+    private int totalEnemyCount = 0;
+	[SerializeField] private int maxEnemies = 50;
+
     int circleSpawnCount = 0;
     int maxCircleSpawn = 10;
     bool boss = false;
@@ -60,8 +63,8 @@ public class EnemyManager : MonoBehaviour
           SpawnBoss();
         }
         CircleSwarm();
-        Debug.Log("total spawned "+totalEnemyCount + " climbListMultiplier "+climbListMultiplier+ "  climbList "+climbList );
-        Debug.Log("current Enemies " + CurrentlyActiveEnemies());
+        //Debug.Log("total spawned "+totalEnemyCount + " climbListMultiplier "+climbListMultiplier+ "  climbList "+climbList );
+        //Debug.Log("current Enemies " + CurrentlyActiveEnemies());
         SpawnEnemies();
         RandomizeEnemies();
     }
@@ -103,22 +106,23 @@ public class EnemyManager : MonoBehaviour
 
                         if (Vector2.Distance(iPos,jPos)<2)
                         {
-                            enemyList[i].body.AddForce(iPos - jPos);
+                            enemyList[i].rig.AddForce(iPos - jPos);
                         }
                     }
                 }
             }
-            foreach (Enemy e in swarmEnemy)
+			for (int i = 0; i < swarmEnemy.Count; ++i)
             {
-                if (!e.isActiveAndEnabled)
+				if (!swarmEnemy[i].isActiveAndEnabled)
                 {
-                    swarmEnemy.Remove(e);
+					swarmEnemy.RemoveAt(i);
+					--i;
                 }
             }
         }
     }
 
-    public GameObject FindClosestEnemyToPlayer(float maxDistance, Transform origin)
+    /*public GameObject FindClosestEnemyToPlayer(float maxDistance, Transform origin)
     {
         GameObject target = this.gameObject;
         float lowestDistance = 999;
@@ -143,11 +147,11 @@ public class EnemyManager : MonoBehaviour
         }
         else
             return null;
-    }
+    }*/
 
     void SpawnEnemies()
     {
-        int currentTrans = Random.Range(0, 3);
+        int currentTrans = Random.Range(0, transformList.Count - 1);
         formation = transformList[currentTrans];
         if (currentTrans != prevTrans)
         {
@@ -159,7 +163,7 @@ public class EnemyManager : MonoBehaviour
                     {
                     Enemy e = EnemyPooling();
                     e.transform.position = t.position;
-                    e.ResetEnemy();
+                    //e.ResetEnemy();
                     e.gameObject.SetActive(true);
                     totalEnemyCount++;
                      }
@@ -171,8 +175,8 @@ public class EnemyManager : MonoBehaviour
                         foreach (Transform t in formation)
                         {
                             Enemy e = EnemyPooling();
-                            e.transform.position = t.position*=i+1;
-                            e.ResetEnemy();
+							e.transform.position = t.position;// *= (i+1); //This was *= but it cause the formations to exponetially move upwards over time
+                            //e.ResetEnemy();
                             e.gameObject.SetActive(true);
                             totalEnemyCount++;
                         }
@@ -181,10 +185,10 @@ public class EnemyManager : MonoBehaviour
                     
                 else if (currentType == keyLogger)
                 {
-                    Debug.Log("keylogger");
+                    //Debug.Log("keylogger");
                      Enemy e = EnemyPooling();
-                    e.transform.position = formation[Random.Range(0,formation.Length)].position;
-                    e.ResetEnemy();
+                    e.transform.position = formation[Random.Range(0,formation.Length - 1)].position;
+                    //e.ResetEnemy();
                     e.gameObject.SetActive(true);
                     totalEnemyCount++;
                 }
@@ -210,7 +214,7 @@ public class EnemyManager : MonoBehaviour
         currentType = _enemy;
         Enemy e = EnemyPooling();
         e.transform.position = _spawnPoint;
-        e.ResetEnemy();
+        //e.ResetEnemy();
         e.gameObject.SetActive(true);
         
     }
@@ -221,20 +225,22 @@ public class EnemyManager : MonoBehaviour
         {
             Enemy e = EnemyPooling();
             e.transform.position = formation3[0].position;
-            e.ResetEnemy();
+            //e.ResetEnemy();
             e.gameObject.SetActive(true);
+			Debug.Log ("Hey I just broke");
             circleCooldown = 0;
             circleSpawnCount++;
         }
     }
     void RandomizeEnemies()
     {
-        currentType = enemyTypeList[Random.Range(0, climbList+1)];
+		currentType = enemyTypeList[Random.Range(0, Mathf.Min (enemyTypeList.Count - 1, climbList))];
       
-        if (climbList < enemyTypeList.Count+1)
+        if (climbList < enemyTypeList.Count)
         {
             if (totalEnemyCount >= climbListMultiplier)
             {
+
                 climbList++;
                 climbListMultiplier += 10;
                 coolDown -= 0.5f;

@@ -27,6 +27,6 @@ public class Enemy_Diagonal : Enemy
             moveToDir *= -1;
         }
 
-        transform.Translate(new Vector2(moveToDir.x / 10, -transform.up.y) * speed, Space.World);
+		transform.Translate(new Vector2(moveToDir.x / 10, -transform.up.y) * speed* Time.deltaTime, Space.World);
     }
 }
