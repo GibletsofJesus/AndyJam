@@ -20,13 +20,18 @@ public class EnemyManager : MonoBehaviour
    // bool boss = false;
     Transform[] formation;
     List<Transform[]> transformList = new List<Transform[]>();
+    List<Enemy> enemyTypeList = new List<Enemy>();
     float coolDown = 3;
     float currentCooldown;
     float circleCooldown = 1;
     int prevTrans = 4;
+    int climbList = 1;
+    int climbListMultiplier = 10;
     int totalEnemyCount = 0;
+    int circleSpawnCount = 0;
     int maxCircleSpawn = 10;
     bool boss = false;
+    bool bossSpawned = false;
 	// Use this for initialization
 	void Awake() 
     {
@@ -39,42 +44,27 @@ public class EnemyManager : MonoBehaviour
         transformList.Add(formation1);
         transformList.Add(formation2);
         transformList.Add(formation3);
+        enemyTypeList.Add(currentType);
+        enemyTypeList.Add(diagonal);
+        enemyTypeList.Add(circle);
+        enemyTypeList.Add(keyLogger);
 	}
 
     // Update is called once per frame
     void Update()
     {
         Cooldown();
-        if (totalEnemyCount <= 10)
+       
+        if (boss&&!bossSpawned)
         {
-       //     SpawnEnemies();
-        }
-
-       // else if (CurrentlyActiveEnemies()<1)
-        if (!boss)
-        {
-            currentType = bigBoss;
-            SpawnBoss();
-            boss = true;
+          SpawnBoss();
         }
         CircleSwarm();
-
- 
-        //if (CurrentlyActiveEnemies() <=10)
-        //{
-        //    for (int i = 0; i < maxCircleSpawn; i++)
-        //    {
-        //        Cooldown();
-        //        if (circleCooldown >= 1)
-        //        {
-        //            currentType = circle;
-        //        ///    SpawnCircling();
-        //        }
-        //    }
-        //}
+        Debug.Log("total spawned "+totalEnemyCount + " climbListMultiplier "+climbListMultiplier+ "  climbList "+climbList );
+        Debug.Log("current Enemies " + CurrentlyActiveEnemies());
+        SpawnEnemies();
+        RandomizeEnemies();
     }
-
-
 
     public Enemy EnemyPooling()
     {
@@ -113,7 +103,7 @@ public class EnemyManager : MonoBehaviour
 
                         if (Vector2.Distance(iPos,jPos)<2)
                         {
-                            enemyList[i].rig.AddForce(iPos - jPos);
+                            enemyList[i].body.AddForce(iPos - jPos);
                         }
                     }
                 }
@@ -128,7 +118,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    /*public GameObject FindClosestEnemyToPlayer(float maxDistance, Transform origin)
+    public GameObject FindClosestEnemyToPlayer(float maxDistance, Transform origin)
     {
         GameObject target = this.gameObject;
         float lowestDistance = 999;
@@ -153,7 +143,7 @@ public class EnemyManager : MonoBehaviour
         }
         else
             return null;
-    }*/
+    }
 
     void SpawnEnemies()
     {
@@ -163,11 +153,38 @@ public class EnemyManager : MonoBehaviour
         {
             if (currentCooldown >= coolDown)
             {
-                foreach (Transform t in formation)
+                if (currentType!=keyLogger&&currentType!=circle)
                 {
+                     foreach (Transform t in formation)
+                    {
                     Enemy e = EnemyPooling();
                     e.transform.position = t.position;
-                    //e.ResetEnemy();
+                    e.ResetEnemy();
+                    e.gameObject.SetActive(true);
+                    totalEnemyCount++;
+                     }
+                }
+                else if (currentType == circle)
+                {
+                    for (int i=0;i<2;i++)
+                    {
+                        foreach (Transform t in formation)
+                        {
+                            Enemy e = EnemyPooling();
+                            e.transform.position = t.position*=i+1;
+                            e.ResetEnemy();
+                            e.gameObject.SetActive(true);
+                            totalEnemyCount++;
+                        }
+                    }
+                }
+                    
+                else if (currentType == keyLogger)
+                {
+                    Debug.Log("keylogger");
+                     Enemy e = EnemyPooling();
+                    e.transform.position = formation[Random.Range(0,formation.Length)].position;
+                    e.ResetEnemy();
                     e.gameObject.SetActive(true);
                     totalEnemyCount++;
                 }
@@ -176,6 +193,7 @@ public class EnemyManager : MonoBehaviour
             }
         }
     }
+
     void SpawnBoss()
     {
         currentType = bigBoss;
@@ -184,8 +202,7 @@ public class EnemyManager : MonoBehaviour
         spawnPos.z=0;
         b.transform.position = spawnPos;
         b.gameObject.SetActive(true);
-       // boss = true;
-              
+        bossSpawned = true;
     }
 
     public void SpawnBossEnemies(Vector2 _spawnPoint,Enemy _enemy)
@@ -193,30 +210,42 @@ public class EnemyManager : MonoBehaviour
         currentType = _enemy;
         Enemy e = EnemyPooling();
         e.transform.position = _spawnPoint;
-        //e.ResetEnemy();
+        e.ResetEnemy();
         e.gameObject.SetActive(true);
         
     }
     void SpawnCircling()
     {
-       
-       
-       //     for (int i = 0; i < maxCircleSpawn; i++)
-       //     {
-       //         if (circleCooldown >= 1)
-       //         {
-       // currentType = circle;
-       //// if (currentCooldown >= coolDown)
+        currentType = circle;
+        if (circleCooldown >= 0.5f && circleSpawnCount < maxCircleSpawn)
         {
             Enemy e = EnemyPooling();
             e.transform.position = formation3[0].position;
-            //e.ResetEnemy();
+            e.ResetEnemy();
             e.gameObject.SetActive(true);
             circleCooldown = 0;
-        //}
-        //currentCooldown = 0;
-        //    }
+            circleSpawnCount++;
         }
+    }
+    void RandomizeEnemies()
+    {
+        currentType = enemyTypeList[Random.Range(0, climbList+1)];
+      
+        if (climbList < enemyTypeList.Count+1)
+        {
+            if (totalEnemyCount >= climbListMultiplier)
+            {
+                climbList++;
+                climbListMultiplier += 10;
+                coolDown -= 0.5f;
+            }
+        }
+        else if (totalEnemyCount >= 20)
+        {
+            boss = true;
+        }
+        
+        
     }
     int CurrentlyActiveEnemies()
     {
@@ -227,10 +256,7 @@ public class EnemyManager : MonoBehaviour
             {
                 enemies++;
             }
-            else
-            {
-                continue;
-            }
+          
         }
         return enemies;
     }
@@ -243,4 +269,5 @@ public class EnemyManager : MonoBehaviour
         }
         circleCooldown += Time.deltaTime;
     }
+   
 }

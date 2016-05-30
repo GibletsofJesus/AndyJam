@@ -1,13 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class Boss : Enemy 
 {
     public Transform mouthShot;
-	public Vector2 bossTarget = new Vector2(0,9.3f);
+    public Vector2 bossTarget = new Vector2(0,9.3f);
     public Transform[] eyeShot;
     public Enemy littleBastards;
-	public Enemy rareBastards;
+    public Enemy rareBastards;
     float maxCool = 5;
     float minicool = 0.8f;
     float minicooler = 0.8f;
@@ -15,67 +15,65 @@ public class Boss : Enemy
     int dosCount = 0;
     bool move = false;
 	// Use this for initialization
-
-	protected override void Awake()
-	{
-		base.Awake ();
-		cool = maxCool;
-	}
-
 	void Start ()
     {
-        //SetActor(5000000, 1, 1, 0.8f);
-        //cool = maxCool;
-        //safeHealth = health;
+        SetActor(100, 1, 1, 0.8f);
+        cool = maxCool;
+        safeHealth = health;
+	
 	}
 	
 	// Update is called once per frame
-	protected override void Update () 
+	public override void Update () 
     {
+        
         MiniCool();
+
         if (cool<=maxCool)
         {
             cool += Time.deltaTime;
         }
+              
+       if(move)
+       {
+          EyeShooting();
+       }
       
-		if(move)
-		{
-			EyeShooting();
-		}
-		base.Update ();
-	}
+      
+        Debug.Log("count " + dosCount + " cool " + cool);
 
-    protected override void Movement()
+        base.Update();
+	}
+    public override void Movement()
     {
-		transform.position = Vector2.MoveTowards(transform.position, bossTarget,speed*2);
-		if (Vector2.Distance(transform.position,bossTarget)<1)
+        transform.position = Vector2.MoveTowards(transform.position, bossTarget,GetSpeed()*2);
+        if (Vector2.Distance(transform.position,bossTarget)<1)
         {
             move = true;
         }
     }
-
-	void EyeShooting()
-	{
-		if (dosCount<10&&cool>=maxCool)
-		{
-			if (MiniCool())
-			{
-				EnemyManager.instance.SpawnBossEnemies(eyeShot[Random.Range(0,2)].position, littleBastards);
-				minicooler = 0;
-				dosCount++;
-			}
-		}
-		else
-		{
-			dosCount = 0;
-		}
-		if (dosCount >= 10 && cool >= maxCool)
-		{
-			cool = 0;
-		}
-	}
-	 
-
+    void EyeShooting()
+    {
+        if (dosCount<10&&cool>=maxCool)
+        {
+            if (MiniCool())
+            {
+              EnemyManager.instance.SpawnBossEnemies(eyeShot[Random.Range(0,4)].position, littleBastards);
+                minicooler = 0;
+                dosCount++;
+            }
+        }
+        else
+        {
+            dosCount = 0;
+        }
+        if (dosCount >= 10 && cool >= maxCool)
+        {
+            cool = 0;
+        }
+    }
+   
+  
    bool MiniCool()
     {
         if (minicooler <= minicool)
