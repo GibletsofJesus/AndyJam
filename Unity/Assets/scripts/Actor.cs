@@ -63,6 +63,7 @@ public class Actor : MonoBehaviour
 
     public virtual void TakeDamage(float _damage)
     {
+        soundManager.instance.playSound(0);
         if (GetComponent<SpriteRenderer>() && tag == "Enemy")
         {
             GetComponent<SpriteRenderer>().color = Color.red;
@@ -70,7 +71,7 @@ public class Actor : MonoBehaviour
         }
         health -= _damage;
 		if(health <= 0)
-		{
+        {
 			Death ();
 		}
     }
@@ -79,12 +80,12 @@ public class Actor : MonoBehaviour
     {
         GetComponent<SpriteRenderer>().color = Color.white;
     }
-   
+
     protected virtual void Death()
     {
-        Explosion ex =  ExplosionManager.instance.PoolingExplosion(transform);
+        Explosion ex = ExplosionManager.instance.PoolingExplosion(transform);
         ex.transform.position = transform.position;
-		Reset ();
+        Reset();
         gameObject.SetActive(false);
         ex.gameObject.SetActive(true);
         ex.explode();

@@ -10,6 +10,7 @@ public class Explosion : MonoBehaviour
         foreach (ParticleSystem p in particles)
         {
             p.Play();
+            soundManager.instance.playSound(1);
 
             if (CameraShake.instance.shakeDuration < 0.2f)
             {

@@ -125,7 +125,6 @@ public class Player : Actor
                 {
                     ps.Emit(1);
                 }
-                Debug.Log("Play sound");
 
                 soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
 
@@ -144,6 +143,7 @@ public class Player : Actor
 		//Do not call base as players have lives
 		health -= _damage;
         PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
+        soundManager.instance.playSound(0);
 		if(health <= 0)
 		{
 			//Out of lives then kill player
@@ -158,13 +158,13 @@ public class Player : Actor
                 --lives;
                 PlayerHUD.instance.UpdateLives(lives);
             }
-		}
+        }
         if (CameraShake.instance.shakeDuration < 0.2f)
             CameraShake.instance.shakeDuration += 0.2f;
         CameraShake.instance.shakeAmount = 0.5f;
 
-            GetComponent<SpriteRenderer>().color = Color.red;
-            Invoke("revertColour", .1f);
+        GetComponent<SpriteRenderer>().color = Color.red;
+        Invoke("revertColour", .1f);
     }
 
     void revertColour()
