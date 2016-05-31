@@ -86,7 +86,6 @@ public class Player : Actor
 
     private void inputThings()
     {
-        Debug.Log(Input.GetAxis("Horizontal"));
         #region move
         if (Input.GetAxis("Horizontal") < -0.1f)
         {

@@ -60,7 +60,7 @@ public class VisualCommandPanel : MonoBehaviour
 					TextGenerator generator = new TextGenerator();
 					generator.Populate(textField.text, settings);
 
-					if(generator.lineCount > 19)//should find the realtime amount of possible lines
+					if(generator.lineCount > 20)//should find the realtime amount of possible lines
 					{
 						textField.text = textField.text.Substring (textField.cachedTextGenerator.GetLinesArray () [1].startCharIdx);
 					}

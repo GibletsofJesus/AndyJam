@@ -16,6 +16,10 @@ public class GameStateManager : MonoBehaviour {
 	
 	void Update ()
     {
+        if (!instance)
+        {
+            instance = this;
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (state != GameState.Paused)

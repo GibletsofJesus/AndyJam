@@ -35,7 +35,7 @@ public class Enemy : Actor
     {
         if (_col.gameObject.tag == "Player")
         {
-            _col.gameObject.GetComponent<Player>().TakeDamage(contactHitDamage);
+            _col.gameObject.GetComponent<Actor>().TakeDamage(contactHitDamage);
             Death();
            // gameObject.SetActive(false);
         }
