@@ -18,7 +18,6 @@ public class Player : Actor
     Vector3 rotLerp;
     //public GameObject target;
     Vector3 screenBottom, screenTop;
-    public bool homingBullets;
 
 	protected override void Awake()
 	{
@@ -140,7 +139,7 @@ public class Player : Actor
         #region shoot
         if (Mathf.Abs(Input.GetAxis("Fire1")) > 0.1f)
         {
-            if (Shoot(projData, transform.up, shootTransform, homingBullets))
+            if (Shoot(projData, transform.up, shootTransform))
             {
                 foreach (ParticleSystem ps in muzzleflash)
                 {
@@ -163,7 +162,6 @@ public class Player : Actor
     {
 		//Do not call base as players have lives
 		health -= _damage;
-        PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
         soundManager.instance.playSound(0);
 		if(health <= 0)
 		{
@@ -180,6 +178,8 @@ public class Player : Actor
                 PlayerHUD.instance.UpdateLives(lives);
             }
         }
+		PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
+
         if (CameraShake.instance.shakeDuration < 0.2f)
             CameraShake.instance.shakeDuration += 0.2f;
         CameraShake.instance.shakeAmount = 0.5f;
@@ -214,4 +214,9 @@ public class Player : Actor
         PlayerHUD.instance.UpdateScore(score);
     }
 
+	public void HomingProjectiles(bool _homing, float _radius)
+	{
+		projData.homingBullets = _homing;
+		projData.homingRadius = _radius;
+	}
 }

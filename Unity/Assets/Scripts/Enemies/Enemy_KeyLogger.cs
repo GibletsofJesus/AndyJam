@@ -58,11 +58,11 @@ public class Enemy_KeyLogger : Enemy
         base.Reset();
         withinDist = false;
     }
-    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform, bool _homing)
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
     {
         if (Input.inputString!=string.Empty)
         {
-            return base.Shoot(_projData, _direction, _shootTransform, _homing);
+            return base.Shoot(_projData, _direction, _shootTransform);
         }
         else
             return false;

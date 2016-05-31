@@ -9,6 +9,8 @@ public struct ProjectileData
 	public float defaultProjDamage;
 	public float aliveTime;
 	public float speed;
+	public bool homingBullets;
+	public float homingRadius;
 	[HideInInspector] public Actor owner;
 	[HideInInspector] public string parentTag;
 }
@@ -26,7 +28,6 @@ public class Projectile : MonoBehaviour
     public TrailRenderer trail;
     public ParticleSystem ps;
     Vector3 screenBottom,screenTop;
-    bool homing;
 
 
     // Use this for initialization
@@ -57,7 +58,7 @@ public class Projectile : MonoBehaviour
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             GameObject _target = finder.GetClosestObject();
-            if (homing && _target)
+            if (projData.homingBullets && _target)
             {
                 //if (target.activeSelf)
                 //{
@@ -125,15 +126,14 @@ public class Projectile : MonoBehaviour
         enabled = false;        
     }
 
-    public void SetProjectile(ProjectileData _data, Vector2 _direction, bool _homing, float trailRendTime = 0.05f)
+    public void SetProjectile(ProjectileData _data, Vector2 _direction, float trailRendTime = 0.05f)
     {
 		projData = _data;
 		spriteRenderer.sprite = projData.projSprite;
-
-        homing = _homing;
-		if(homing)
+		
+		if(_data.homingBullets)
 		{
-			finder.ActivateFinder("Enemy");
+			finder.ActivateFinder("Enemy", _data.homingRadius);
 		}
         //if (_owner.GetComponent<playerMovement>())
         //    target = _owner.GetComponent<playerMovement>().target;;

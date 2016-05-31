@@ -5,6 +5,7 @@ public abstract class AbilityWord : Word
 {
 	protected string[] wordTiers;
 	protected int currentTier = 0;
+	protected int updatedTier = 0;
 
 	[Range(0.0f, 300.0f)]public float wordCooldown = 10.0f;
 	private float currentCooldown;
@@ -13,6 +14,8 @@ public abstract class AbilityWord : Word
 
 	private const int pixels = 32;
 	protected float pixelCooldown;
+
+
 
 	protected override void Start ()
 	{
@@ -47,6 +50,7 @@ public abstract class AbilityWord : Word
 		//Activate behavior
 		if(!behaviorActive)
 		{
+			currentTier = updatedTier;
 			currentCooldown = 0.0f;
 			wordHUD.TriggerSuccess();
 			VisualCommandPanel.instance.AddMessage("Running " + wordTiers[currentTier]);
@@ -65,18 +69,19 @@ public abstract class AbilityWord : Word
 
 	protected override void EndBehavior()
 	{
+		currentTier = updatedTier;
 		base.EndBehavior ();
 	}
 
 	public void SetTier(int _tier)
 	{
-		currentTier = _tier;
-		if(currentTier == 0)
+		updatedTier = _tier;
+		if(updatedTier == 0)
 		{
 			wordActive = true;
 			wordHUD.Activate();
 		}
-		thisWord = wordTiers [currentTier];
+		thisWord = wordTiers [updatedTier];
 		wordHUD.UpdateWord (thisWord);
 	}
 

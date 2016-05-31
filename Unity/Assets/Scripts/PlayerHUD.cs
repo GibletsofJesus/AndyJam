@@ -18,14 +18,18 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField]
     private Sprite notLiveSprite = null;
 
+	private const int pixels = 100;
+	private float pixelCooldown;
+
     private void Awake()
     {
         staticInstance = this;
+		pixelCooldown =(1.0f / (float)pixels) * 1000.0f;
     }
 
     public void UpdateHealth(float _healthPercent)
     {
-        healthBar.fillAmount = _healthPercent;
+		healthBar.fillAmount = (((_healthPercent * 1000.0f) - ((_healthPercent * 1000.0f) % pixelCooldown)) / 1000.0f);
     }
 
     public void UpdateLives(int _lives)

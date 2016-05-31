@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Scan : AbilityWord
 {
+	[SerializeField] private float[] homingRadius = null;
+	[SerializeField] private float[] scanDuration = null;
+	private float scanCooldown = 0.0f;
+
 	protected override void Start ()
 	{
 		wordTiers = new string[] {"quickscan.exe", "systemscan.exe", "fullscan.exe"};
@@ -12,23 +16,22 @@ public class Scan : AbilityWord
 	protected override void TriggerBehavior ()
 	{
 		base.TriggerBehavior ();
+		scanCooldown = 0.0f;
+		Player.instance.HomingProjectiles (true, homingRadius [currentTier]);
 	}
 	
 	protected override void Behavior ()
 	{
-		switch (currentTier) 
+		scanCooldown += Time.deltaTime;
+		if(scanCooldown >= scanDuration[currentTier])
 		{
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
+			EndBehavior();
 		}
 	}
 	
 	protected override void EndBehavior()
 	{
 		base.EndBehavior ();
+		Player.instance.HomingProjectiles (false, homingRadius [currentTier]);
 	}
 }

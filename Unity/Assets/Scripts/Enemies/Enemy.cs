@@ -12,7 +12,6 @@ public class Enemy : Actor
 		base.Awake ();
 	}
 
-   
     protected override void Update()
     {
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
@@ -22,14 +21,13 @@ public class Enemy : Actor
             transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
 
 
-            Shoot(projData, -transform.up.normalized, shootTransform, false);
+            Shoot(projData, -transform.up.normalized, shootTransform);
 
             Movement();
             
             KillEnemy();
         }
     }
-
 
    protected virtual void OnTriggerEnter2D(Collider2D _col)
     {
@@ -65,6 +63,7 @@ public class Enemy : Actor
         base.Death();
         Player.instance.IncreaseScore(score);
     }
+
     public override void TakeDamage(float _damage)
     {
         base.TakeDamage(_damage);
