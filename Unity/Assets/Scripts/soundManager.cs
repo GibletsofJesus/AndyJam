@@ -20,8 +20,9 @@ public class soundManager : MonoBehaviour {
         instance = this;
 	}
 
-    public void changeVolume()
+    public void changeVolume(float newVol)
     {
+        volumeMultiplayer = newVol;
         //nothing atm
     }
 
@@ -33,6 +34,7 @@ public class soundManager : MonoBehaviour {
             if (!audioSrcs[c].isPlaying)
             {
                 audioSrcs[c].PlayOneShot(sound);
+                audioSrcs[c].volume = volumeMultiplayer * .6f;
                 break;
             }
             else
@@ -53,9 +55,11 @@ public class soundManager : MonoBehaviour {
                 {
                     case 0:
                         audioSrcs[c].PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length - 1)]);
+                audioSrcs[c].volume = volumeMultiplayer * .4f;
                         break;
                     case 1:
                         audioSrcs[c].PlayOneShot(explosionSounds[Random.Range(0,explosionSounds.Length-1)]);
+                audioSrcs[c].volume = volumeMultiplayer * .8f;
                         break;
                 }
                 break;

@@ -21,8 +21,10 @@ public class Explosion : MonoBehaviour
         Invoke("turnOff", 1f);
     }
 
-    void turnOff() { 
-        gameObject.SetActive(false);}
+    void turnOff()
+    {
+        gameObject.SetActive(false);
+    }
 }
 
 [CustomEditor(typeof(Explosion))]

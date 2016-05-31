@@ -86,6 +86,7 @@ public class Player : Actor
 
     private void inputThings()
     {
+        Debug.Log(Input.GetAxis("Horizontal"));
         #region move
         if (Input.GetAxis("Horizontal") < -0.1f)
         {
@@ -99,6 +100,27 @@ public class Player : Actor
             rig.AddForce(-Vector2.right * speed, ForceMode2D.Impulse);
         }
         else if (Input.GetAxis("Horizontal") > 0.1f)
+        {
+            if (!rolling)
+            {
+                if (transform.rotation.eulerAngles.y > 42 && transform.rotation.eulerAngles.y < 45)
+                    StartCoroutine(doABarrrelRoll(1));
+                rotLerp = new Vector3(0, -45, 0);
+            }
+            rig.AddForce(Vector2.right * speed, ForceMode2D.Impulse);
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            if (!rolling)
+            {
+                if (transform.rotation.eulerAngles.y > 314 && transform.rotation.eulerAngles.y < 317)
+                    StartCoroutine(doABarrrelRoll(-1));
+
+                rotLerp = new Vector3(0, 45, 0);
+            }
+            rig.AddForce(-Vector2.right * speed, ForceMode2D.Impulse);
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
         {
             if (!rolling)
             {
