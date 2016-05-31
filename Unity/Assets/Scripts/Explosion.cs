@@ -5,11 +5,14 @@ using UnityEditor;
 public class Explosion : MonoBehaviour
 {
     public ParticleSystem[] particles;
-    public void explode()
+
+    public void explode(float _size = 1)
     {
         foreach (ParticleSystem p in particles)
         {
+			p.startSize = _size;
             p.Play();
+
             soundManager.instance.playSound(1);
 
             if (CameraShake.instance.shakeDuration < 0.2f)

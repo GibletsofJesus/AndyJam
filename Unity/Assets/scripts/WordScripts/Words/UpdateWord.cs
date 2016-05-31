@@ -30,10 +30,17 @@ public class UpdateWord : AbilityWord
 
 	protected override void TriggerBehavior ()
 	{
-		base.TriggerBehavior ();
 		numUpdates = UpdateBehavior.instance.PrepareUpdates ();
-		updateTextCooldown = 0.0f;
-		wordHUD.UpdateWord (updateText[updateTextIndex]);
+		if(numUpdates == 0)
+		{
+			UpdateBehavior.instance.UnneccessaryUpdate();
+		}
+		else
+		{
+			base.TriggerBehavior ();
+			updateTextCooldown = 0.0f;
+			wordHUD.UpdateWord (updateText[updateTextIndex]);
+		}
 	}
 	
 	protected override void Behavior ()
