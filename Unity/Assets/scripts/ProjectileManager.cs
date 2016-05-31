@@ -29,6 +29,7 @@ public class ProjectileManager : MonoBehaviour
         }
 
         GameObject newProj = Instantiate(projectile,t.position,t.rotation) as GameObject;
+        newProj.transform.parent = transform;
         //newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;
         Projectile p =newProj.GetComponent<Projectile>();
         projList.Add(p);

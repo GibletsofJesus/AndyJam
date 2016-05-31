@@ -10,8 +10,18 @@ public class Explosion : MonoBehaviour
         foreach (ParticleSystem p in particles)
         {
             p.Play();
+
+            if (CameraShake.instance.shakeDuration < 0.2f)
+            {
+                CameraShake.instance.shakeDuration = 0.2f;
+                CameraShake.instance.shakeAmount = 0.5f;
+            }
         }
+        Invoke("turnOff", 1f);
     }
+
+    void turnOff() { 
+        gameObject.SetActive(false);}
 }
 
 [CustomEditor(typeof(Explosion))]

@@ -80,6 +80,7 @@ public class EnemyManager : MonoBehaviour
             }
         }
         Enemy e = Instantiate(currentType);
+        e.transform.parent = transform;
         enemyList.Add(e);
         return e;
     }

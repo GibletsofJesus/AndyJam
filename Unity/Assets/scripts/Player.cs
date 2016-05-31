@@ -87,18 +87,18 @@ public class Player : Actor
     private void inputThings()
     {
         #region move
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetAxis("Horizontal") < -0.1f)
         {
-                if (!rolling)
-                {
-                    if (transform.rotation.eulerAngles.y > 314 && transform.rotation.eulerAngles.y < 317)
-                        StartCoroutine(doABarrrelRoll(-1));
+            if (!rolling)
+            {
+                if (transform.rotation.eulerAngles.y > 314 && transform.rotation.eulerAngles.y < 317)
+                    StartCoroutine(doABarrrelRoll(-1));
 
-                    rotLerp = new Vector3(0, 45, 0);
-                }
-                rig.AddForce(-Vector2.right * speed, ForceMode2D.Impulse);
+                rotLerp = new Vector3(0, 45, 0);
+            }
+            rig.AddForce(-Vector2.right * speed, ForceMode2D.Impulse);
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetAxis("Horizontal") > 0.1f)
         {
             if (!rolling)
             {
@@ -106,29 +106,20 @@ public class Player : Actor
                     StartCoroutine(doABarrrelRoll(1));
                 rotLerp = new Vector3(0, -45, 0);
             }
-
             rig.AddForce(Vector2.right * speed, ForceMode2D.Impulse);
         }
-
         else
         {
             rotLerp = Vector3.zero;
         }
-        /*
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            rig.AddForce(Vector2.up * moveSpeed, ForceMode2D.Impulse);
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            rig.AddForce(-Vector2.up * moveSpeed, ForceMode2D.Impulse);
-        }*/
+
+
         #endregion
 
         #region shoot
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Mathf.Abs(Input.GetAxis("Fire1")) > 0.1f)
         {
-            if (Shoot(projData, transform.up, shootTransform,homingBullets))
+            if (Shoot(projData, transform.up, shootTransform, homingBullets))
             {
                 foreach (ParticleSystem ps in muzzleflash)
                 {
@@ -139,9 +130,11 @@ public class Player : Actor
                 soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
 
                 if (CameraShake.instance.shakeDuration < 0.2f)
+                {
                     CameraShake.instance.shakeDuration = 0.2f;
-                CameraShake.instance.shakeAmount = 0.15f;
-            } 
+                    CameraShake.instance.shakeAmount = 0.15f;
+                }
+            }
         }
         #endregion
     }
@@ -169,8 +162,15 @@ public class Player : Actor
         if (CameraShake.instance.shakeDuration < 0.2f)
             CameraShake.instance.shakeDuration += 0.2f;
         CameraShake.instance.shakeAmount = 0.5f;
+
+            GetComponent<SpriteRenderer>().color = Color.red;
+            Invoke("revertColour", .1f);
     }
 
+    void revertColour()
+    {
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
 	protected override void Reset()
 	{
 		base.Reset ();
