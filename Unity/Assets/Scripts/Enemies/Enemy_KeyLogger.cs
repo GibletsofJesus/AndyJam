@@ -29,11 +29,11 @@ public class Enemy_KeyLogger : Enemy
     protected override void Movement()
     {
 
-        if (Vector2.Distance(transform.position,new Vector2(screenSide,transform.position.y))<5)
+        if (Vector2.Distance(transform.position,new Vector2(screenSide,transform.position.y))<2)
         {
             moveHere =new Vector2(-screenSide, transform.position.y);//,speed*Time.deltaTime);
         }
-        else if (Vector2.Distance(transform.position,new Vector2(-screenSide,transform.position.y))<5)
+        else if (Vector2.Distance(transform.position,new Vector2(-screenSide,transform.position.y))<2)
         {
             moveHere =  new Vector2(screenSide, transform.position.y);//, speed * Time.deltaTime);
         }

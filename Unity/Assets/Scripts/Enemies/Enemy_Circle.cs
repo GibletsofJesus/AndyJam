@@ -6,6 +6,7 @@ public class Enemy_Circle : Enemy
     GameObject player;
     Vector2 moveTarget;
     bool circleJerks = false;
+    int rotWay = 20;
  
     // Use this for initialization
     void Start()
@@ -42,7 +43,15 @@ public class Enemy_Circle : Enemy
         }
         if (circleJerks)
         {
-              transform.RotateAround(moveTarget, transform.forward, -20* (speed*Time.deltaTime));
+            if (Camera.main.WorldToViewportPoint(player.transform.position).x>0.5f)
+            {
+                rotWay = 20;
+            }
+            else
+            {
+                rotWay = -20;
+            }
+              transform.RotateAround(moveTarget, transform.forward, rotWay* (speed*Time.deltaTime));
             
             if (distance<=6.5)
             {
