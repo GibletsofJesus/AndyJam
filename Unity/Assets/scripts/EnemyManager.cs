@@ -126,12 +126,12 @@ public class EnemyManager : MonoBehaviour
     {
         for (int i = 0; i < waves.Count; i++)
         {
-            if (waves[i].eTypes == EnemyTypes.DOS)
+            if (enemyList[i].gameObject.name == "DOS" && enemyList[i].isActiveAndEnabled)  // if (waves[i].eTypes == EnemyTypes.DOS)
             {
                 for (int j = 0; j < enemyList.Count; j++)
                 {
                     
-                    if (enemyList[j].gameObject.name == "DOS"||enemyList[j].isActiveAndEnabled && !swarmEnemy.Contains(enemyList[j]))
+                    if (enemyList[j].isActiveAndEnabled && !swarmEnemy.Contains(enemyList[j]))
                     {
                         swarmEnemy.Add(enemyList[j]);
                     }

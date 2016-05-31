@@ -43,15 +43,11 @@ public class Enemy_Circle : Enemy
         }
         if (circleJerks)
         {
-            if (Camera.main.WorldToViewportPoint(player.transform.position).x>0.5f)
+            if (player != null)
             {
-                rotWay = 20;
+                rotWay = Camera.main.WorldToViewportPoint(player.transform.position).x > 0.5f ? 20 : -20;
             }
-            else
-            {
-                rotWay = -20;
-            }
-              transform.RotateAround(moveTarget, transform.forward, rotWay* (speed*Time.deltaTime));
+            transform.RotateAround(moveTarget, transform.forward, rotWay* (speed*Time.deltaTime));
             
             if (distance<=6.5)
             {
@@ -72,6 +68,11 @@ public class Enemy_Circle : Enemy
     {
         base.Reset();
         circleJerks = false;
+    }
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
+    {
+        return false;
+        //return base.Shoot(_projData, _direction, _shootTransform);
     }
    
 }
