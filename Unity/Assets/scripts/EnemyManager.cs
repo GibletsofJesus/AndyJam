@@ -118,7 +118,6 @@ public class EnemyManager : MonoBehaviour
         }
 
         Enemy e = Instantiate(en);
-        Debug.Log(e.transform.position);
         e.transform.parent = transform;
         enemyList.Add(e);
         return e;
