@@ -22,7 +22,14 @@ public class Boss : Enemy
         //safeHealth = health;
 	
 	}
-	
+
+    void SpawnBossEnemies(Vector2 _spawnPoint, Enemy _enemy)
+    {
+        Enemy e = EnemyManager.instance.EnemyPooling(_enemy);
+        e.transform.position = _spawnPoint;
+        e.gameObject.SetActive(true);
+
+    }
 	// Update is called once per frame
 	protected override void Update () 
     {
@@ -62,7 +69,7 @@ public class Boss : Enemy
         {
             if (MiniCool())
             {
-              EnemyManager.instance.SpawnBossEnemies(eyeShot[Random.Range(0,eyeShot.Length - 1)].position, littleBastards);
+              SpawnBossEnemies(eyeShot[Random.Range(0,eyeShot.Length - 1)].position, littleBastards);
                 minicooler = 0;
                 dosCount++;
             }
