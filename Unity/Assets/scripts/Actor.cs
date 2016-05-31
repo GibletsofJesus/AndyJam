@@ -36,14 +36,14 @@ public class Actor : MonoBehaviour
         CoolDown();
 	}
    
-    protected virtual bool Shoot(ProjectileData _projData, Vector2 _direction,GameObject[] _shootTransform, bool _homing)
+    protected virtual bool Shoot(ProjectileData _projData, Vector2 _direction,GameObject[] _shootTransform)
     {
 		if(shootCooldown >= shootRate)
 		{
 	        for (int i = 0; i < _shootTransform.Length; i++)
 	        {
 	            Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
-				p.SetProjectile(_projData, _direction,_homing);
+				p.SetProjectile(_projData, _direction);
 	            p.transform.position = _shootTransform[i].transform.position;
 	            p.gameObject.SetActive(true);
 				shootCooldown = 0;
