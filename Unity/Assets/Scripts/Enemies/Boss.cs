@@ -33,23 +33,25 @@ public class Boss : Enemy
 	// Update is called once per frame
 	protected override void Update () 
     {
-        
-        MiniCool();
-
-        if (cool<=maxCool)
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
-            cool += Time.deltaTime;
-        }
-              
-       if(move)
-       {
-          EyeShooting();
-       }
-      
-      
-        //Debug.Log("count " + dosCount + " cool " + cool);
+            MiniCool();
 
-        base.Update();
+            if (cool <= maxCool)
+            {
+                cool += Time.deltaTime;
+            }
+
+            if (move)
+            {
+                EyeShooting();
+            }
+
+
+            //Debug.Log("count " + dosCount + " cool " + cool);
+
+            base.Update();
+        }
 	}
 
     protected override void Movement()

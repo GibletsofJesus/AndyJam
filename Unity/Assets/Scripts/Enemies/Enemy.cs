@@ -22,16 +22,18 @@ public class Enemy : Actor
 
     protected override void Update()
     {
-        base.Update();
-   
-        transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
-       
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            base.Update();
 
-        Shoot(projData,-transform.up.normalized, shootTransform,false);
-       
-        Movement();
-        KillEnemy();
-             
+            transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
+
+
+            Shoot(projData, -transform.up.normalized, shootTransform, false);
+
+            Movement();
+            KillEnemy();
+        }
     }
 
 

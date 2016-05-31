@@ -22,12 +22,15 @@ public class CameraScreenGrab : MonoBehaviour {
 	
     void Update()
     {
-        if (oldPixelSize != pixelSize &&pixelSize > 0)
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
-            GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
-            for (int i = 0; i < otherCameras.Length; i++)
-                otherCameras[i].pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
-            oldPixelSize = pixelSize;
+            if (oldPixelSize != pixelSize && pixelSize > 0)
+            {
+                GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
+                for (int i = 0; i < otherCameras.Length; i++)
+                    otherCameras[i].pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
+                oldPixelSize = pixelSize;
+            }
         }
     }
 

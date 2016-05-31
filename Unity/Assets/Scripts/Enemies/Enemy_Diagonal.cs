@@ -16,7 +16,10 @@ public class Enemy_Diagonal : Enemy
     // Update is called once per frame
     protected override void Update()
     {
-        base.Update();
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            base.Update();
+        }
     }
 
     protected override void Movement()

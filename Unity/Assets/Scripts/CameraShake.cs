@@ -31,22 +31,25 @@ public class CameraShake : MonoBehaviour
 
 	void Update()
 	{
-		if (shakeDuration > 0)
-		{
-            for (int i=0; i < camTransforms.Length;i++)
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            if (shakeDuration > 0)
             {
-                camTransforms[i].localPosition = originalPos[i] + Random.insideUnitSphere * shakeAmount;
+                for (int i = 0; i < camTransforms.Length; i++)
+                {
+                    camTransforms[i].localPosition = originalPos[i] + Random.insideUnitSphere * shakeAmount;
+                }
+                shakeDuration -= Time.deltaTime * decreaseFactor;
             }
-            shakeDuration -= Time.deltaTime * decreaseFactor;
-		}
-		else
-		{
-			shakeDuration = 0f;
+            else
+            {
+                shakeDuration = 0f;
 
-            for (int i = 0; i < camTransforms.Length; i++)
-            {
-                camTransforms[i].localPosition = originalPos[i];
+                for (int i = 0; i < camTransforms.Length; i++)
+                {
+                    camTransforms[i].localPosition = originalPos[i];
+                }
             }
-		}
+        }
 	}
 }

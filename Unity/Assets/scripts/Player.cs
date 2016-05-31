@@ -12,7 +12,6 @@ public class Player : Actor
 
     private int score = 0;
 
-  
     //public float moveSpeed;
     public AudioClip[] shootSounds;
     public ParticleSystem[] muzzleflash;
@@ -39,44 +38,29 @@ public class Player : Actor
 	// Update is called once per frame
     protected void FixedUpdate()
     {
-        base.Update();
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            base.Update();
 
-
-        //Whoever did this, you are scum.
-       // if (transform.position.x <= -11f)
-       /* if (homingBullets)
-       {
-            if (!target || !target.activeSelf)
+            if (transform.position.x <= -screenBottom.x - 1f)
             {
-                target = EnemyManager.instance.FindClosestEnemyToPlayer(50, transform);
+                rig.AddForce(Vector2.right * 2, ForceMode2D.Impulse);
             }
-        }*/
+            if (transform.position.x >= screenBottom.x + 1f)
+            {
+                rig.AddForce(-Vector2.right * 2, ForceMode2D.Impulse);
+            }
 
-        //if (transform.position.x >=11f)
-        //{
-        //    rig.AddForce(-Vector2.right, ForceMode2D.Impulse);
-        //}
+            inputThings();
 
+            Quaternion q = Quaternion.Euler(rotLerp);
+            float angle = 0;
 
-        if (transform.position.x <= -screenBottom.x-1f)
-        {
-            rig.AddForce(Vector2.right*2, ForceMode2D.Impulse);
+            if (!rolling)
+                angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotLerp.y, Time.deltaTime * 5);
+
+            transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
         }
-        if (transform.position.x >= screenBottom.x+1f)
-        {
-            rig.AddForce(-Vector2.right*2, ForceMode2D.Impulse);
-        }
-
-
-        inputThings();
-
-        Quaternion q = Quaternion.Euler(rotLerp);
-        float angle=0;
-        
-        if (!rolling)
-            angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotLerp.y, Time.deltaTime * 5);
-        
-        transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
     }
 
     bool rolling;
@@ -103,18 +87,18 @@ public class Player : Actor
     private void inputThings()
     {
         #region move
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetAxis("Horizontal") < -0.1f)
         {
-                if (!rolling)
-                {
-                    if (transform.rotation.eulerAngles.y > 314 && transform.rotation.eulerAngles.y < 317)
-                        StartCoroutine(doABarrrelRoll(-1));
+            if (!rolling)
+            {
+                if (transform.rotation.eulerAngles.y > 314 && transform.rotation.eulerAngles.y < 317)
+                    StartCoroutine(doABarrrelRoll(-1));
 
-                    rotLerp = new Vector3(0, 45, 0);
-                }
-                rig.AddForce(-Vector2.right * speed, ForceMode2D.Impulse);
+                rotLerp = new Vector3(0, 45, 0);
+            }
+            rig.AddForce(-Vector2.right * speed, ForceMode2D.Impulse);
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetAxis("Horizontal") > 0.1f)
         {
             if (!rolling)
             {
@@ -122,29 +106,20 @@ public class Player : Actor
                     StartCoroutine(doABarrrelRoll(1));
                 rotLerp = new Vector3(0, -45, 0);
             }
-
             rig.AddForce(Vector2.right * speed, ForceMode2D.Impulse);
         }
-
         else
         {
             rotLerp = Vector3.zero;
         }
-        /*
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            rig.AddForce(Vector2.up * moveSpeed, ForceMode2D.Impulse);
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            rig.AddForce(-Vector2.up * moveSpeed, ForceMode2D.Impulse);
-        }*/
+
+
         #endregion
 
         #region shoot
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Mathf.Abs(Input.GetAxis("Fire1")) > 0.1f)
         {
-            if (Shoot(projData, transform.up, shootTransform,homingBullets))
+            if (Shoot(projData, transform.up, shootTransform, homingBullets))
             {
                 foreach (ParticleSystem ps in muzzleflash)
                 {
@@ -155,9 +130,11 @@ public class Player : Actor
                 soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
 
                 if (CameraShake.instance.shakeDuration < 0.2f)
+                {
                     CameraShake.instance.shakeDuration = 0.2f;
-                CameraShake.instance.shakeAmount = 0.15f;
-            } 
+                    CameraShake.instance.shakeAmount = 0.15f;
+                }
+            }
         }
         #endregion
     }
@@ -185,8 +162,15 @@ public class Player : Actor
         if (CameraShake.instance.shakeDuration < 0.2f)
             CameraShake.instance.shakeDuration += 0.2f;
         CameraShake.instance.shakeAmount = 0.5f;
+
+            GetComponent<SpriteRenderer>().color = Color.red;
+            Invoke("revertColour", .1f);
     }
 
+    void revertColour()
+    {
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
 	protected override void Reset()
 	{
 		base.Reset ();

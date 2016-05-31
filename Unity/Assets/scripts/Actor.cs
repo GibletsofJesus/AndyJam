@@ -63,17 +63,31 @@ public class Actor : MonoBehaviour
 
     public virtual void TakeDamage(float _damage)
     {
+        if (GetComponent<SpriteRenderer>() && tag == "Enemy")
+        {
+            GetComponent<SpriteRenderer>().color = Color.red;
+            Invoke("revertColour", .1f);
+        }
         health -= _damage;
 		if(health <= 0)
 		{
 			Death ();
 		}
     }
+
+    void revertColour()
+    {
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
    
     protected virtual void Death()
     {
+        Explosion ex =  ExplosionManager.instance.PoolingExplosion(transform);
+        ex.transform.position = transform.position;
 		Reset ();
         gameObject.SetActive(false);
+        ex.gameObject.SetActive(true);
+        ex.explode();
     }
     /*public float GetSpeed()
     {
