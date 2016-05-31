@@ -6,6 +6,8 @@ public class Enemy : Actor
     Ray2D rayCast;
     RaycastHit2D hit;
     public Vector2 target;
+
+	[SerializeField] private int score = 100;
       
 	protected override void Awake()
 	{
@@ -65,6 +67,12 @@ public class Enemy : Actor
 	protected override void Reset()
 	{
 		base.Reset ();
+	}
+
+	protected override void Death()
+	{
+		base.Death ();
+		Player.instance.IncreaseScore (score);
 	}
    
 }

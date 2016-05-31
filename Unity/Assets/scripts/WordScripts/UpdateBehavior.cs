@@ -41,7 +41,6 @@ public class UpdateBehavior : MonoBehaviour
 	[SerializeField] private UpdateLog[] updateLog = null;
 	private bool updating = false;
 
-	private int tempScore = 0;
 	/// <summary>
 	/// Temp
 	/// </summary>
@@ -53,14 +52,13 @@ public class UpdateBehavior : MonoBehaviour
 
 	private void Update()
 	{
-		tempScore += 15;///temp///
 		//If not currently updating, determine if there are any further updates
 		if(!updating)
 		{
 			if((nextUpdate + numUpdates) < updateLog.Length)
 			{
 				int _prevUpdates = numUpdates;
-				while(updateLog[nextUpdate + numUpdates].scoreRequirement <= (tempScore - startingScore))
+				while(updateLog[nextUpdate + numUpdates].scoreRequirement <= (Player.instance.GetScore() - startingScore))
 				{
 					++numUpdates;
 					if((nextUpdate + numUpdates) >= updateLog.Length)
@@ -78,7 +76,7 @@ public class UpdateBehavior : MonoBehaviour
 
 	public void FactoryReset()
 	{
-		startingScore = tempScore;///TEMPORARY VARIABLE HERE///
+		startingScore = Player.instance.GetScore();///TEMPORARY VARIABLE HERE///
 		nextUpdate = 0;
 		numUpdates = 0;
 	}
