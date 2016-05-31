@@ -96,6 +96,7 @@ public class UpdateBehavior : MonoBehaviour
 		//Else if in case more update types
 		else if (updateLog[nextUpdate].type < UpdateTypes.MAX_UPDATES)
 		{
+            Player.instance.ImproveStat(updateLog[nextUpdate].type, (int)updateLog[nextUpdate].updateIncrement);
 			//Improve player stats
 		}
 

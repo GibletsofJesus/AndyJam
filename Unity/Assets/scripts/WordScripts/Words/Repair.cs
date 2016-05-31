@@ -3,7 +3,11 @@ using System.Collections;
 
 public class Repair : AbilityWord
 {
-	protected override void Start ()
+    [SerializeField] private float[] totalHeal = null;
+    [SerializeField] private float[] healSpeed = null;
+    private float totalHealAmount;
+
+    protected override void Start ()
 	{
 		wordTiers = new string[] {"repair.exe", "restore.exe", "systemrestore.exe"};
 		base.Start ();
@@ -12,19 +16,22 @@ public class Repair : AbilityWord
 	protected override void TriggerBehavior ()
 	{
 		base.TriggerBehavior ();
+        totalHealAmount = totalHeal[currentTier];
 	}
 	
 	protected override void Behavior ()
 	{
-		switch (currentTier) 
-		{
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		}
+        float _healAmount = Time.deltaTime * healSpeed[currentTier];
+        totalHealAmount -= _healAmount;
+        if(totalHealAmount < 0)
+        {
+            _healAmount += totalHealAmount;
+            EndBehavior();
+        }
+        if(Player.instance.Heal(_healAmount))
+        {
+            EndBehavior();
+        }
 	}
 	
 	protected override void EndBehavior()

@@ -188,6 +188,17 @@ public class Player : Actor
         Invoke("revertColour", .1f);
     }
 
+    public virtual bool Heal(float _heal)
+    {
+        health = Mathf.Min(health + _heal, updatedDefaultHealth);
+        PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
+        if(health == updatedDefaultHealth)
+        {
+            return true;
+        }
+        return false;
+    }
+
     void revertColour()
     {
         GetComponent<SpriteRenderer>().color = Color.white;
@@ -226,4 +237,26 @@ public class Player : Actor
 		projData.explosionDamage = _damage;
 		projData.explosionRadius = _radius;
 	}
+
+    public void ImproveStat(UpdateTypes _type, float _improve)
+    {
+        switch (_type)
+        {
+            case UpdateTypes.HEALTH:
+                float _percent = health / updatedDefaultHealth;
+                updatedDefaultHealth += _improve;
+                health = updatedDefaultHealth * _percent;
+                break;
+            case UpdateTypes.FIRERATE:
+                shootRate -= _improve;
+                break;
+            case UpdateTypes.SPEED:
+                speed += _improve;
+                break;
+            case UpdateTypes.DAMAGE:
+                projData.projDamage += _improve;
+                break;
+
+        }
+    }
 }
