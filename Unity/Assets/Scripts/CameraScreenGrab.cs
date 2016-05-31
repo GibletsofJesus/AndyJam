@@ -22,8 +22,8 @@ public class CameraScreenGrab : MonoBehaviour {
 	
     void Update()
     {
-        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
-        {
+        //if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        //{
             if (oldPixelSize != pixelSize && pixelSize > 0)
             {
                 GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
@@ -31,7 +31,13 @@ public class CameraScreenGrab : MonoBehaviour {
                     otherCameras[i].pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
                 oldPixelSize = pixelSize;
             }
-        }
+        //}
+    }
+
+    public void setPixelScale(float f)
+    {
+        pixelSize = (int)f;
+        oldPixelSize = (int)f;
     }
 
 	void OnGUI()
@@ -70,5 +76,4 @@ public class CameraScreenGrab : MonoBehaviour {
             tex.Apply();
         }
     }
-
 }
