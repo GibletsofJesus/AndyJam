@@ -109,4 +109,11 @@ public class UpdateBehavior : MonoBehaviour
 		VisualCommandPanel.instance.AddMessage(numUpdates.ToString() + "/" + numUpdates.ToString() + " Updates installed");
 		numUpdates = 0;
 	}
+
+	public void UnneccessaryUpdate()
+	{
+		updating = false;
+		VisualCommandPanel.instance.AddMessage("Up to date");
+		numUpdates = 0;
+	}
 }

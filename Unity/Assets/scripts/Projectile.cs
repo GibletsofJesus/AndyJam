@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 [System.Serializable]
@@ -11,6 +11,9 @@ public struct ProjectileData
 	public float speed;
 	public bool homingBullets;
 	public float homingRadius;
+	public bool explodingBullets;
+	public float explosionRadius;
+	public float explosionDamage;
 	[HideInInspector] public Actor owner;
 	[HideInInspector] public string parentTag;
 }
@@ -22,6 +25,7 @@ public class Projectile : MonoBehaviour
 	[SerializeField] private Rigidbody2D rig = null;
 	[SerializeField] private SpriteRenderer spriteRenderer = null;
 	[SerializeField] private RadiusObjectFinder finder = null;
+	[SerializeField] private ExplosionAoe aoe = null;
    
 	float aliveCooldown = 0.0f;
     Vector2 direction; 
@@ -33,6 +37,7 @@ public class Projectile : MonoBehaviour
     // Use this for initialization
     protected virtual void Start()
     {
+		aoe.deactivateProj = DeactivateProj;
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f ,-.5f, .3f));
         screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
     }
@@ -101,8 +106,20 @@ public class Projectile : MonoBehaviour
 		{
 			if(col.gameObject.GetComponent<Actor>())
 			{
-				col.gameObject.GetComponent<Actor>().TakeDamage(projData.projDamage);
-				DeactivateProj();
+				if(projData.explodingBullets)
+				{
+					aoe.ActivateExplosion("Enemy", projData.explosionDamage, projData.explosionRadius);
+					Explosion ex = ExplosionManager.instance.PoolingExplosion(aoe.transform);
+					ex.transform.position = transform.position;
+					ex.gameObject.SetActive(true);
+					//ex.
+					ex.explode(projData.explosionRadius * 2);
+				}
+				else
+				{
+					col.gameObject.GetComponent<Actor>().TakeDamage(projData.projDamage);
+					DeactivateProj();
+				}
 			}
 		}
     }

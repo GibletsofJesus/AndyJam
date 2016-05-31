@@ -4,8 +4,10 @@ using System.Collections;
 public class Antivirus : AbilityWord
 {
 	//Rockets to spawn tiers
-	[SerializeField] private int[] numRockets;
-	[SerializeField] private float[] rocketAOE;
+	[SerializeField] private float[] rocketDamage = null;
+	[SerializeField] private float[] rocketRadius = null;
+	[SerializeField] private float[] antivirusDuration = null;
+	private float antivirusCooldown = 0.0f;
 
 	protected override void Start ()
 	{
@@ -16,23 +18,22 @@ public class Antivirus : AbilityWord
 	protected override void TriggerBehavior ()
 	{
 		base.TriggerBehavior ();
+		antivirusCooldown = 0.0f;
+		Player.instance.ExplodingProjectiles(true, rocketDamage[currentTier], rocketRadius [currentTier]);
 	}
 	
 	protected override void Behavior ()
 	{
-		switch (currentTier) 
+		antivirusCooldown += Time.deltaTime;
+		if(antivirusCooldown >= antivirusDuration[currentTier])
 		{
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
+			EndBehavior();
 		}
 	}
 
 	protected override void EndBehavior()
 	{
 		base.EndBehavior ();
+		Player.instance.ExplodingProjectiles (false, rocketDamage[currentTier], rocketRadius [currentTier]);
 	}
 }

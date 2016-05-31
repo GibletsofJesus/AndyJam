@@ -8,22 +8,13 @@ public class RadiusObjectFinder : MonoBehaviour
 
 	private bool finderActive = false;
 	private string findTag = string.Empty;
-	private float defaultRadius = 10.0f;
 
 	private GameObject closestObject = null;
-
-	//private float pingRate = 1.0f;
-	//private float pingCooldown = 0.0f;
 
 	private bool targetAcquired = false;
 
 	private void Update()
 	{
-		/*if(pingCooldown > pingRate)
-		{
-			pingCooldown = 0.0f;
-		}
-		pingCooldown += Time.deltaTime;*/
 		if (closestObject)
 		{
 			targetAcquired = (transform.position - closestObject.transform.position).sqrMagnitude <= (col.radius * col.radius);
@@ -70,7 +61,6 @@ public class RadiusObjectFinder : MonoBehaviour
 		finderActive = true;
 		findTag = _find;
 		col.radius = _radius;
-		//pingCooldown = pingRate;
 	}
 
 	public void Reset()
@@ -80,7 +70,6 @@ public class RadiusObjectFinder : MonoBehaviour
 		findTag = string.Empty;
 		closestObject = null;
 		targetAcquired = false;
-		col.radius = defaultRadius;
 	}
 
 	public GameObject GetClosestObject()
