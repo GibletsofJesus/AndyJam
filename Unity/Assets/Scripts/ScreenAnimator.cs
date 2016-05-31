@@ -8,13 +8,21 @@ public class ScreenAnimator : MonoBehaviour {
     void Start()
     {
         screenEffect = Camera.main.GetComponent<CameraScreenGrab>();
+        once = true;
     }
-
+    bool once;
     void FixedUpdate()
     {
-        if (screenEffect.pixelSize > 1)
+        if (once)
         {
-            screenEffect.pixelSize = (int)Mathf.Lerp(screenEffect.pixelSize, 1, Time.fixedDeltaTime);
+            if (screenEffect.pixelSize > 1)
+            {
+                screenEffect.pixelSize = (int)Mathf.Lerp(screenEffect.pixelSize, 1, Time.fixedDeltaTime);
+            }
+            else
+            {
+                once = false;
+            }
         }
     }
 

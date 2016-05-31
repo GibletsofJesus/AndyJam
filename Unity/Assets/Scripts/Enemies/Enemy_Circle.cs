@@ -6,6 +6,7 @@ public class Enemy_Circle : Enemy
     GameObject player;
     Vector2 moveTarget;
     bool circleJerks = false;
+    int rotWay = 20;
  
     // Use this for initialization
     void Start()
@@ -33,7 +34,7 @@ public class Enemy_Circle : Enemy
         {
             if (distance > 7)
             {
-				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2 );//* Time.deltaTime);
+				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed*Time.deltaTime);
             }
             else
             {
@@ -42,17 +43,29 @@ public class Enemy_Circle : Enemy
         }
         if (circleJerks)
         {
-              transform.RotateAround(moveTarget, transform.forward, 45 * speed);
-            
-            if (distance<=6)
+            if (Camera.main.WorldToViewportPoint(player.transform.position).x>0.5f)
             {
-				transform.position = Vector2.MoveTowards(transform.position, (pos + moveTarget), speed * 2);// * Time.deltaTime);
+                rotWay = 20;
+            }
+            else
+            {
+                rotWay = -20;
+            }
+              transform.RotateAround(moveTarget, transform.forward, rotWay* (speed*Time.deltaTime));
+            
+            if (distance<=6.5)
+            {
+				transform.position = Vector2.MoveTowards(transform.position, (pos + moveTarget), speed*Time.deltaTime);
             }
             else if (distance>7)
             {
-				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2 );//* Time.deltaTime);
+				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed*Time.deltaTime);
             }
         }
+        float lookAngle = Mathf.Atan2(transform.position.x - moveTarget.x, transform.position.y - moveTarget.y) * Mathf.Rad2Deg;
+        Quaternion newRot = new Quaternion(0, 0, 0, 0);
+        newRot.eulerAngles = new Vector3(0, 0, -lookAngle);
+        transform.rotation = Quaternion.Lerp(transform.rotation, newRot, 20*(speed * Time.deltaTime));
     }
 
     protected override void Reset()
@@ -60,11 +73,5 @@ public class Enemy_Circle : Enemy
         base.Reset();
         circleJerks = false;
     }
-    //public override void Shoot(Vector2 _direction, GameObject[] _shootTransform, string _ignore)
-    //{
-    //    if (transform.position.y > player.transform.position.y)
-    //    {
-    //        base.Shoot(_direction, _shootTransform, _ignore);
-    //    }
-    //}
+   
 }

@@ -12,7 +12,6 @@ public class Enemy : Actor
 		base.Awake ();
 	}
 
-   
     protected override void Update()
     {
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
@@ -29,7 +28,6 @@ public class Enemy : Actor
             KillEnemy();
         }
     }
-
 
    protected virtual void OnTriggerEnter2D(Collider2D _col)
     {

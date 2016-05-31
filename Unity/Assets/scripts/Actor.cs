@@ -52,10 +52,7 @@ public class Actor : MonoBehaviour
         }
         return false;
     }
-    /*public bool ShotCoolDown()
-    {
-        return shotCooldown >= maxShotCooldown ? true : false;
-    }*/
+   
     void CoolDown()
     {
 		shootCooldown = (shootCooldown + Time.deltaTime) > shootRate ? shootRate : (shootCooldown + Time.deltaTime);
