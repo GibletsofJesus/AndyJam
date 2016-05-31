@@ -42,11 +42,22 @@ public class Actor : MonoBehaviour
 		{
 	        for (int i = 0; i < _shootTransform.Length; i++)
 	        {
-	            Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
-				p.SetProjectile(_projData, _direction);
-	            p.transform.position = _shootTransform[i].transform.position;
-	            p.gameObject.SetActive(true);
-				shootCooldown = 0;
+                if (!GetComponent<Enemy_Trojan>())
+                {
+                    Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
+                    p.SetProjectile(_projData, _direction);
+                    p.transform.position = _shootTransform[i].transform.position;
+                    p.gameObject.SetActive(true);
+                    shootCooldown = 0;
+                }
+                else
+                {
+                    Projectile p = ProjectileManager.instance.PoolingEnemyProjectile(_shootTransform[i].transform);
+                    p.SetProjectile(_projData, _direction);
+                    p.transform.position = _shootTransform[i].transform.position;
+                    p.gameObject.SetActive(true);
+                    shootCooldown = 0;
+                }
             }
             return true;
         }

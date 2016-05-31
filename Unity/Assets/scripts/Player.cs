@@ -18,8 +18,9 @@ public class Player : Actor
     Vector3 rotLerp;
     //public GameObject target;
     Vector3 screenBottom, screenTop;
+    Vector2 verticalBoundsBot, verticalBoundsTop;
 
-	protected override void Awake()
+    protected override void Awake()
 	{
 		staticInstance = this;
 		base.Awake ();
@@ -32,7 +33,9 @@ public class Player : Actor
     {
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f, -.5f, .3f));
         screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
-	}
+        verticalBoundsBot = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 0f));
+        verticalBoundsTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, .5f));
+    }
 	
 	// Update is called once per frame
     protected void FixedUpdate()
@@ -48,6 +51,14 @@ public class Player : Actor
             if (transform.position.x >= screenBottom.x + 1f)
             {
                 rig.AddForce(-Vector2.right * 2, ForceMode2D.Impulse);
+            }
+            if (transform.position.y >= verticalBoundsTop.y/2 - 1f)
+            {
+                rig.AddForce(-Vector2.up * 2, ForceMode2D.Impulse);
+            }
+            if (transform.position.y <= verticalBoundsBot.y + 5f)
+            {
+                rig.AddForce(Vector2.up * 2, ForceMode2D.Impulse);
             }
 
             inputThings();
@@ -133,6 +144,14 @@ public class Player : Actor
             rotLerp = Vector3.zero;
         }
 
+        if (Input.GetAxis("Vertical") > 0.1f)
+        {
+            rig.AddForce(Vector2.up * speed, ForceMode2D.Impulse);
+        }
+        else if (Input.GetAxis("Vertical") < -0.1f)
+        {
+            rig.AddForce(-Vector2.up * speed, ForceMode2D.Impulse);
+        }
 
         #endregion
 

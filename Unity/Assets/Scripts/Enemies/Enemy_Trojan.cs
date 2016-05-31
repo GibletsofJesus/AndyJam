@@ -13,7 +13,6 @@ public class Enemy_Trojan : Enemy
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             base.Update();
-
         }
     }
     protected override void Movement()

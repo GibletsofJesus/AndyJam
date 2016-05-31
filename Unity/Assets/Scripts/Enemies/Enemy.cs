@@ -6,11 +6,13 @@ public class Enemy : Actor
  
     public float contactHitDamage = 5;
 	[SerializeField] private int score = 100;
-      
-	protected override void Awake()
+    Vector3 screenBottom;
+
+    protected override void Awake()
 	{
 		base.Awake ();
-	}
+        screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 0f));
+    }
 
     protected override void Update()
     {
@@ -20,8 +22,15 @@ public class Enemy : Actor
 
             transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
 
-
-            Shoot(projData, -transform.up.normalized, shootTransform);
+            if (transform.position.y > screenBottom.y + 2)
+            {
+                if (!GetComponent<Enemy_Trojan>())
+                    Shoot(projData, -transform.up.normalized, shootTransform);
+                else
+                {
+                    Shoot(projData, -(transform.position - new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y)), shootTransform);
+                }
+            }
 
             Movement();
             
