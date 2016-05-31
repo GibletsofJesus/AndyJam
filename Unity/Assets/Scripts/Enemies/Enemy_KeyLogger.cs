@@ -5,6 +5,7 @@ public class Enemy_KeyLogger : Enemy
 {
     GameObject player;
     bool withinDist = false;
+    Vector2 target;
 	// Use this for initialization
 	void Start () 
     {

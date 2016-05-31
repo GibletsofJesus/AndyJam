@@ -89,32 +89,9 @@ public class Actor : MonoBehaviour
         gameObject.SetActive(false);
         ex.gameObject.SetActive(true);
         ex.explode();
+     
     }
-    /*public float GetSpeed()
-    {
-        return speed * Time.deltaTime; ;
-    }
-    public float GetHealth()
-    {
-        return health;
-    }
-    public float GetDamage()
-    {
-        return damage;
-    }*/
-
-    /*public void SetActor(float _health,float _damage, float _speed,float _maxShotCooldown)
-    {
-        speed = _speed;
-        health = _health;
-        damage = _damage;
-        maxShotCooldown = _maxShotCooldown;
-    }*/
-
-    /*public void SetHealth(float _health)
-    {
-        health = _health;
-    }*/
+ 
 
 	protected virtual void Reset()
 	{

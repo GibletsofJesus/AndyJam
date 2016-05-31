@@ -10,7 +10,7 @@ public struct EnemyPatterns
     public int maxSpawn;
     public float spawnRate;
     public Transform[] spawnLocations;
-        
+
 }
 
 public class TheWave
@@ -18,7 +18,7 @@ public class TheWave
     public EnemyTypes eTypes;
     public int spawnAmount;
     public float currentSpawnCool;
-    
+
 }
 public enum EnemyTypes
 {
@@ -31,7 +31,7 @@ public enum EnemyTypes
     SPAM,
     ADWARE,
 }
-public class EnemyManager : MonoBehaviour 
+public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance = null;
 
@@ -40,66 +40,70 @@ public class EnemyManager : MonoBehaviour
     Enemy currentType;
     List<Enemy> enemyList = new List<Enemy>();
     List<Enemy> swarmEnemy = new List<Enemy>();
- 
+
     float waveCoolDown = 10;
-    float currentWaveCooldown =0;
+    float currentWaveCooldown = 0;
     int prevSpawnPos = 19;
     int climbList = 0;
-    [SerializeField] private EnemyPatterns[] enemyPatterns = null;
+    [SerializeField]
+    private EnemyPatterns[] enemyPatterns = null;
 
     bool boss = false;
     bool bossSpawned = false;
-	
+
     // Use this for initialization
-	void Awake() 
+    void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
-       
-	}
+
+    }
 
     // Update is called once per frame
     void Update()
     {
-       if (WaveCooldown())
-       {
-          TheWave wave = new TheWave();
-          wave.eTypes = PickRandomEnemy();
-          wave.spawnAmount = Random.Range(enemyPatterns[(int)wave.eTypes].minSpawn, enemyPatterns[(int)wave.eTypes].maxSpawn);
-          wave.currentSpawnCool = enemyPatterns[(int)wave.eTypes].spawnRate;
-          waves.Add(wave);
-
-       }
-       for (int i = 0; i < waves.Count;i++ )
-       {
-           if (SpawnRateCoolDown(waves[i]))
-           {
-               Enemy e = EnemyPooling(enemyPatterns[(int)waves[i].eTypes].enemy);
-               int spawnPos = Random.Range(0, enemyPatterns[(int)waves[i].eTypes].spawnLocations.Length - 1);
-               if (spawnPos != prevSpawnPos)
-               {
-                   e.transform.position = enemyPatterns[(int)waves[i].eTypes].spawnLocations[spawnPos].position;
-                   e.gameObject.SetActive(true);
-                   waves[i].spawnAmount--;
-                   prevSpawnPos = spawnPos;
-               }
-               if (waves[i].spawnAmount ==0)
-               {
-                   waves.RemoveAt(i);
-                   --i;
-               }
-           }
-       }
-        if (waves.Count==0&&!bossSpawned)
+        if (WaveCooldown())
         {
-          //  SpawnBoss();
+            TheWave wave = new TheWave();
+            wave.eTypes = PickRandomEnemy();
+            wave.spawnAmount = Random.Range(enemyPatterns[(int)wave.eTypes].minSpawn, enemyPatterns[(int)wave.eTypes].maxSpawn);
+            wave.currentSpawnCool = enemyPatterns[(int)wave.eTypes].spawnRate;
+            waves.Add(wave);
+
         }
-          
+        for (int i = 0; i < waves.Count; i++)
+        {
+            if (SpawnRateCoolDown(waves[i]))
+            {
+                Enemy e = EnemyPooling(enemyPatterns[(int)waves[i].eTypes].enemy);
+                int spawnPos = Random.Range(0, enemyPatterns[(int)waves[i].eTypes].spawnLocations.Length - 1);
+                while (spawnPos == prevSpawnPos)
+                {
+                    spawnPos = Random.Range(0, enemyPatterns[(int)waves[i].eTypes].spawnLocations.Length - 1);
+
+                }
+                        prevSpawnPos = spawnPos;
+
+                e.transform.position = enemyPatterns[(int)waves[i].eTypes].spawnLocations[spawnPos].position;
+                e.gameObject.SetActive(true);
+                waves[i].spawnAmount--;
+                if (waves[i].spawnAmount == 0)
+                {
+                    waves.RemoveAt(i);
+                    --i;
+                }
+            }
+        }
+        if (waves.Count == 0 && !bossSpawned)
+        {
+         
+        }
+
         CircleSwarm();
-        SpawnEnemies();
-       
+     
+
     }
 
     public Enemy EnemyPooling(Enemy en)
@@ -112,7 +116,10 @@ public class EnemyManager : MonoBehaviour
                 return enemyList[i];
             }
         }
+
         Enemy e = Instantiate(en);
+        Debug.Log(e.transform.position);
+        e.transform.parent = transform;
         enemyList.Add(e);
         return e;
     }
@@ -214,7 +221,7 @@ public class EnemyManager : MonoBehaviour
         //                }
         //            }
         //        }
-                    
+
         //        else if (currentType == keyLogger)
         //        {
         //            //Debug.Log("keylogger");
@@ -232,7 +239,7 @@ public class EnemyManager : MonoBehaviour
 
     void SpawnBoss()
     {
-        
+
         Enemy b = EnemyPooling(bigBoss);
         Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 1.2f));
         spawnPos.z = 0;
@@ -262,7 +269,7 @@ public class EnemyManager : MonoBehaviour
         et = (EnemyTypes)Random.Range(0, climbList);
 
         climbList = Mathf.Min(climbList + 1, enemyPatterns.Length - 1);
-       
+
         return et;
     }
 
@@ -275,7 +282,7 @@ public class EnemyManager : MonoBehaviour
             {
                 enemies++;
             }
-          
+
         }
         return enemies;
     }
@@ -290,15 +297,15 @@ public class EnemyManager : MonoBehaviour
         currentWaveCooldown = 0;
         return true;
     }
-   bool SpawnRateCoolDown(TheWave w)
+    bool SpawnRateCoolDown(TheWave w)
     {
 
-       if (w.currentSpawnCool<enemyPatterns[(int)w.eTypes].spawnRate)
-       {
-           w.currentSpawnCool += Time.deltaTime;
-           return false;
-       }
-       w.currentSpawnCool = 0;
-       return true;
+        if (w.currentSpawnCool < enemyPatterns[(int)w.eTypes].spawnRate)
+        {
+            w.currentSpawnCool += Time.deltaTime;
+            return false;
+        }
+        w.currentSpawnCool = 0;
+        return true;
     }
 }
