@@ -6,12 +6,15 @@ public class Enemy_KeyLogger : Enemy
     GameObject player;
     bool withinDist = false;
     Vector2 target;
+    float screenSide;
+    //float screenBottom;
 	// Use this for initialization
+    Vector2 moveHere = Vector2.zero;
+
 	void Start () 
     {
+       screenSide = Camera.main.ViewportToWorldPoint(new Vector3(.3f, -.5f, .3f)).x;
         player = GameObject.FindGameObjectWithTag("Player");
-	    //SetActor(20, 1, 1, 0.8f);
-       // safeHealth = GetHealth();
 	}
 	
 	// Update is called once per frame
@@ -25,25 +28,43 @@ public class Enemy_KeyLogger : Enemy
 
     protected override void Movement()
     {
-        target = player.transform.position;
 
-		Vector2 lerp = Vector2.MoveTowards(transform.position, new Vector2(target.x, target.y), speed*10* Time.deltaTime);
-
-        if (lerp.y < target.y + 8)
+        if (Vector2.Distance(transform.position,new Vector2(screenSide,transform.position.y))<5)
         {
-            withinDist = true;
+            moveHere =new Vector2(-screenSide, transform.position.y);//,speed*Time.deltaTime);
         }
-        if (withinDist)
+        else if (Vector2.Distance(transform.position,new Vector2(-screenSide,transform.position.y))<5)
         {
-            lerp.y = target.y + 8;
-            lerp.x = target.x;
+            moveHere =  new Vector2(screenSide, transform.position.y);//, speed * Time.deltaTime);
         }
+        transform.position = Vector2.MoveTowards(transform.position,moveHere,speed*Time.deltaTime);
+        //target = player.transform.position;
 
-		transform.position = Vector2.MoveTowards(transform.position,lerp,speed*10* Time.deltaTime);
+        //Vector2 lerp = Vector2.MoveTowards(transform.position, new Vector2(target.x, target.y), speed*10* Time.deltaTime);
+
+        //if (lerp.y < target.y + 8)
+        //{
+        //    withinDist = true;
+        //}
+        //if (withinDist)
+        //{
+        //    lerp.y = target.y + 8;
+        //    lerp.x = target.x;
+        //}
+        //transform.position = Vector2.MoveTowards(transform.position,lerp,speed*10* Time.deltaTime);
     }
     protected override void Reset()
     {
         base.Reset();
         withinDist = false;
+    }
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform, bool _homing)
+    {
+        if (Input.inputString!=string.Empty)
+        {
+            return base.Shoot(_projData, _direction, _shootTransform, _homing);
+        }
+        else
+            return false;
     }
 }

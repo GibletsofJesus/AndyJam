@@ -58,7 +58,7 @@ public class EnemyManager : MonoBehaviour
         {
             instance = this;
         }
-
+        climbList = enemyPatterns.Length - 1;
     }
 
     // Update is called once per frame
@@ -130,7 +130,8 @@ public class EnemyManager : MonoBehaviour
             {
                 for (int j = 0; j < enemyList.Count; j++)
                 {
-                    if (enemyList[j].isActiveAndEnabled && !swarmEnemy.Contains(enemyList[j]))
+                    
+                    if (enemyList[j].gameObject.name == "DOS"||enemyList[j].isActiveAndEnabled && !swarmEnemy.Contains(enemyList[j]))
                     {
                         swarmEnemy.Add(enemyList[j]);
                     }
@@ -145,7 +146,7 @@ public class EnemyManager : MonoBehaviour
                             Vector2 jPos = enemyList[i].transform.position;
 
 
-                            if (Vector2.Distance(kPos, jPos) < 2)
+                            if (Vector2.Distance(kPos, jPos) < 3)
                             {
                                 enemyList[k].rig.AddForce(kPos - jPos);
                             }
@@ -248,20 +249,7 @@ public class EnemyManager : MonoBehaviour
     }
 
 
-    void SpawnCircling()
-    {
-        //currentType = circle;
-        //if (circleCooldown >= 0.5f && circleSpawnCount < maxCircleSpawn)
-        //{
-        //    Enemy e = EnemyPooling();
-        //    e.transform.position = formation3[0].position;
-        //    e.ResetEnemy();
-        //    e.gameObject.SetActive(true);
-        //    Debug.Log("Hey I just broke");
-        //    circleCooldown = 0;
-        //    circleSpawnCount++;
-        //}
-    }
+    
     EnemyTypes PickRandomEnemy()
     {
         EnemyTypes et;
