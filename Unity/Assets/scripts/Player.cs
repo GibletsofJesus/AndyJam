@@ -12,7 +12,6 @@ public class Player : Actor
 
     private int score = 0;
 
-  
     //public float moveSpeed;
     public AudioClip[] shootSounds;
     public ParticleSystem[] muzzleflash;
@@ -39,44 +38,29 @@ public class Player : Actor
 	// Update is called once per frame
     protected void FixedUpdate()
     {
-        base.Update();
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            base.Update();
 
-
-        //Whoever did this, you are scum.
-       // if (transform.position.x <= -11f)
-       /* if (homingBullets)
-       {
-            if (!target || !target.activeSelf)
+            if (transform.position.x <= -screenBottom.x - 1f)
             {
-                target = EnemyManager.instance.FindClosestEnemyToPlayer(50, transform);
+                rig.AddForce(Vector2.right * 2, ForceMode2D.Impulse);
             }
-        }*/
+            if (transform.position.x >= screenBottom.x + 1f)
+            {
+                rig.AddForce(-Vector2.right * 2, ForceMode2D.Impulse);
+            }
 
-        //if (transform.position.x >=11f)
-        //{
-        //    rig.AddForce(-Vector2.right, ForceMode2D.Impulse);
-        //}
+            inputThings();
 
+            Quaternion q = Quaternion.Euler(rotLerp);
+            float angle = 0;
 
-        if (transform.position.x <= -screenBottom.x-1f)
-        {
-            rig.AddForce(Vector2.right*2, ForceMode2D.Impulse);
+            if (!rolling)
+                angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotLerp.y, Time.deltaTime * 5);
+
+            transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
         }
-        if (transform.position.x >= screenBottom.x+1f)
-        {
-            rig.AddForce(-Vector2.right*2, ForceMode2D.Impulse);
-        }
-
-
-        inputThings();
-
-        Quaternion q = Quaternion.Euler(rotLerp);
-        float angle=0;
-        
-        if (!rolling)
-            angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotLerp.y, Time.deltaTime * 5);
-        
-        transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
     }
 
     bool rolling;

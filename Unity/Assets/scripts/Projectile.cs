@@ -44,41 +44,45 @@ public class Projectile : MonoBehaviour
             DeactivateProj();
         }
 
-        /*
-            if (transform.position != Vector3.zero)
-                ps.Play();
-*/
+
+        if (transform.position != Vector3.zero)
+        {
+         //   ps.Play();
+        }
 
     }
 
     public virtual void Update()
     {
-		GameObject _target = finder.GetClosestObject ();
-        if (homing && _target)
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
-            //if (target.activeSelf)
-            //{
+            GameObject _target = finder.GetClosestObject();
+            if (homing && _target)
+            {
+                //if (target.activeSelf)
+                //{
                 //Turn z axis
                 Quaternion rot = new Quaternion();
-			float z = Mathf.Atan2((_target.transform.position.x - transform.position.x), (_target.transform.position.y - transform.position.y)) * Mathf.Rad2Deg;
+                float z = Mathf.Atan2((_target.transform.position.x - transform.position.x), (_target.transform.position.y - transform.position.y)) * Mathf.Rad2Deg;
                 rot.eulerAngles = new Vector3(0, 0, z);
 
                 rot.eulerAngles = new Vector3(0, 0, -z);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1/projData.aliveTime) *Time.deltaTime*200);
-				rig.velocity = transform.up * projData.speed;
-            //}
-            //else
-			//	rig.velocity = transform.up * projData.speed;
-        }
-        else
-        {
-			rig.velocity = transform.up * projData.speed;
+                transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / projData.aliveTime) * Time.deltaTime * 200);
+                rig.velocity = transform.up * projData.speed;
+                //}
+                //else
+                //	rig.velocity = transform.up * projData.speed;
+            }
+            else
+            {
+                rig.velocity = transform.up * projData.speed;
                 //direction * (speed);// * Time.deltaTime);
-        }
+            }
 
-        Alive();
-        OffScreen();
+            Alive();
+            OffScreen();
+        }
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D col)

@@ -18,7 +18,10 @@ public class Enemy_Circle : Enemy
 	// Update is called once per frame
 	protected override void Update () 
     {
-       base.Update();
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            base.Update();
+        }
 	}
 	protected override void Movement()
     {
