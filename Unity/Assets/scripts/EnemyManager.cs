@@ -2,121 +2,157 @@
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
+public struct EnemyPatterns
+{
+    public Enemy enemy;
+    public int minSpawn;
+    public int maxSpawn;
+    public float spawnRate;
+    public Transform[] spawnLocations;
+        
+}
+
+public class TheWave
+{
+    public EnemyTypes eTypes;
+    public int spawnAmount;
+    public float currentSpawnCool;
+    
+}
+public enum EnemyTypes
+{
+    TROJAN,
+    DOS,
+    KEYLOGGER,
+    SPYWARE,
+    WORM,
+    MALWARE,
+    SPAM,
+    ADWARE,
+}
 public class EnemyManager : MonoBehaviour 
 {
     public static EnemyManager instance = null;
-    public Enemy enemy;
-    public Enemy_Circle circle;
-    public Enemy_Diagonal diagonal;
-    public Enemy_KeyLogger keyLogger;
+
+    List<TheWave> waves = new List<TheWave>();
     public Boss bigBoss;
     Enemy currentType;
     List<Enemy> enemyList = new List<Enemy>();
     List<Enemy> swarmEnemy = new List<Enemy>();
-    public Transform[] formation1;
-    public Transform[] formation2;
-    public Transform[] formation3;
-    
-   // bool boss = false;
-    Transform[] formation;
-    List<Transform[]> transformList = new List<Transform[]>();
-    List<Enemy> enemyTypeList = new List<Enemy>();
-    float coolDown = 3;
-    float currentCooldown;
-    float circleCooldown = 1;
-    int prevTrans = 4;
-    int climbList = 1;
-    int climbListMultiplier = 10;
+ 
+    float waveCoolDown = 10;
+    float currentWaveCooldown =0;
+    int prevSpawnPos = 19;
+    int climbList = 0;
+    [SerializeField] private EnemyPatterns[] enemyPatterns = null;
 
-    private int totalEnemyCount = 0;
-	[SerializeField] private int maxEnemies = 50;
-
-    int circleSpawnCount = 0;
-    int maxCircleSpawn = 10;
     bool boss = false;
     bool bossSpawned = false;
-	// Use this for initialization
+	
+    // Use this for initialization
 	void Awake() 
     {
-        currentType = enemy;
         if (instance == null)
         {
             instance = this;
         }
-        currentCooldown = coolDown;
-        transformList.Add(formation1);
-        transformList.Add(formation2);
-        transformList.Add(formation3);
-        enemyTypeList.Add(currentType);
-        enemyTypeList.Add(diagonal);
-        enemyTypeList.Add(circle);
-        enemyTypeList.Add(keyLogger);
+       
 	}
 
     // Update is called once per frame
     void Update()
     {
-        Cooldown();
-       
-        if (boss&&!bossSpawned)
+       if (WaveCooldown())
+       {
+          TheWave wave = new TheWave();
+          wave.eTypes = PickRandomEnemy();
+          wave.spawnAmount = Random.Range(enemyPatterns[(int)wave.eTypes].minSpawn, enemyPatterns[(int)wave.eTypes].maxSpawn);
+          wave.currentSpawnCool = enemyPatterns[(int)wave.eTypes].spawnRate;
+          waves.Add(wave);
+
+       }
+       for (int i = 0; i < waves.Count;i++ )
+       {
+           if (SpawnRateCoolDown(waves[i]))
+           {
+               Enemy e = EnemyPooling(enemyPatterns[(int)waves[i].eTypes].enemy);
+               int spawnPos = Random.Range(0, enemyPatterns[(int)waves[i].eTypes].spawnLocations.Length - 1);
+               if (spawnPos != prevSpawnPos)
+               {
+                   e.transform.position = enemyPatterns[(int)waves[i].eTypes].spawnLocations[spawnPos].position;
+                   e.gameObject.SetActive(true);
+                   waves[i].spawnAmount--;
+                   prevSpawnPos = spawnPos;
+               }
+               if (waves[i].spawnAmount ==0)
+               {
+                   waves.RemoveAt(i);
+                   --i;
+               }
+           }
+       }
+        if (waves.Count==0&&!bossSpawned)
         {
-          SpawnBoss();
+          //  SpawnBoss();
         }
+          
         CircleSwarm();
-        //Debug.Log("total spawned "+totalEnemyCount + " climbListMultiplier "+climbListMultiplier+ "  climbList "+climbList );
-        //Debug.Log("current Enemies " + CurrentlyActiveEnemies());
         SpawnEnemies();
-        RandomizeEnemies();
+       
     }
 
-    public Enemy EnemyPooling()
+    public Enemy EnemyPooling(Enemy en)
     {
         for (int i = 0; i < enemyList.Count; i++)
         {
-            if (!enemyList[i].isActiveAndEnabled&&enemyList[i].tag == currentType.tag)
+            if (!enemyList[i].isActiveAndEnabled&&enemyList[i].name == en.name)
             {
                 enemyList[i].enabled = true;
                 return enemyList[i];
             }
         }
-        Enemy e = Instantiate(currentType);
+        Enemy e = Instantiate(en);
         enemyList.Add(e);
         return e;
     }
     void CircleSwarm()
     {
-        if (currentType.name == "DOS")
+        for (int i = 0; i < waves.Count; i++)
         {
-            for (int i = 0; i < enemyList.Count; i++)
+            if (waves[i].eTypes == EnemyTypes.DOS)
             {
-                if (enemyList[i].isActiveAndEnabled&&!swarmEnemy.Contains(enemyList[i]))
+                for (int j = 0; j < enemyList.Count; j++)
                 {
-                    swarmEnemy.Add(enemyList[i]);
-                }
-            }
-            for (int i=0;i<swarmEnemy.Count;i++)
-            {
-                for (int j=0;j<enemyList.Count;j++)
-                {
-                    if (i!=j)
+                    if (enemyList[j].isActiveAndEnabled && !swarmEnemy.Contains(enemyList[j]))
                     {
-                        Vector2 iPos = enemyList[i].transform.position;
-                        Vector2 jPos = enemyList[j].transform.position;
-
-
-                        if (Vector2.Distance(iPos,jPos)<2)
+                        swarmEnemy.Add(enemyList[j]);
+                    }
+                }
+                for (int k = 0; k < swarmEnemy.Count; k++)
+                {
+                    for (int j = 0; j < enemyList.Count; j++)
+                    {
+                        if (k != j)
                         {
-                            enemyList[i].rig.AddForce(iPos - jPos);
+                            Vector2 kPos = enemyList[k].transform.position;
+                            Vector2 jPos = enemyList[i].transform.position;
+
+
+                            if (Vector2.Distance(kPos, jPos) < 2)
+                            {
+                                enemyList[k].rig.AddForce(kPos - jPos);
+                            }
                         }
                     }
                 }
-            }
-			for (int i = 0; i < swarmEnemy.Count; ++i)
-            {
-				if (!swarmEnemy[i].isActiveAndEnabled)
+                for (int j = 0; j < swarmEnemy.Count; ++j)
                 {
-					swarmEnemy.RemoveAt(i);
-					--i;
+                    if (!swarmEnemy[j].isActiveAndEnabled)
+                    {
+                        swarmEnemy.RemoveAt(j);
+                        --j;
+                    }
                 }
             }
         }
@@ -151,108 +187,85 @@ public class EnemyManager : MonoBehaviour
 
     void SpawnEnemies()
     {
-        int currentTrans = Random.Range(0, transformList.Count - 1);
-        formation = transformList[currentTrans];
-        if (currentTrans != prevTrans)
-        {
-            if (currentCooldown >= coolDown)
-            {
-                if (currentType!=keyLogger&&currentType!=circle)
-                {
-                     foreach (Transform t in formation)
-                    {
-                    Enemy e = EnemyPooling();
-                    e.transform.position = t.position;
-                    //e.ResetEnemy();
-                    e.gameObject.SetActive(true);
-                    totalEnemyCount++;
-                     }
-                }
-                else if (currentType == circle)
-                {
-                    for (int i=0;i<2;i++)
-                    {
-                        foreach (Transform t in formation)
-                        {
-                            Enemy e = EnemyPooling();
-							e.transform.position = t.position;// *= (i+1); //This was *= but it cause the formations to exponetially move upwards over time
-                            //e.ResetEnemy();
-                            e.gameObject.SetActive(true);
-                            totalEnemyCount++;
-                        }
-                    }
-                }
+        //int currentTrans = Random.Range(0, transformList.Count - 1);
+        //formation = transformList[currentTrans];
+        //if (currentTrans != prevTrans)
+        //{
+        //    if (currentCooldown >= coolDown)
+        //    {
+        //        if (currentType!=keyLogger&&currentType!=circle)
+        //        {
+        //             foreach (Transform t in formation)
+        //            {
+        //    
+        //             }
+        //        }
+        //        else if (currentType == circle)
+        //        {
+        //            for (int i=0;i<2;i++)
+        //            {
+        //                foreach (Transform t in formation)
+        //                {
+        //                    Enemy e = EnemyPooling();
+        //                    e.transform.position = t.position;// *= (i+1); //This was *= but it cause the formations to exponetially move upwards over time
+        //                    //e.ResetEnemy();
+        //                    e.gameObject.SetActive(true);
+        //                    totalEnemyCount++;
+        //                }
+        //            }
+        //        }
                     
-                else if (currentType == keyLogger)
-                {
-                    //Debug.Log("keylogger");
-                     Enemy e = EnemyPooling();
-                    e.transform.position = formation[Random.Range(0,formation.Length - 1)].position;
-                    //e.ResetEnemy();
-                    e.gameObject.SetActive(true);
-                    totalEnemyCount++;
-                }
-                currentCooldown = 0;
-                prevTrans = currentTrans;
-            }
-        }
+        //        else if (currentType == keyLogger)
+        //        {
+        //            //Debug.Log("keylogger");
+        //             Enemy e = EnemyPooling();
+        //            e.transform.position = formation[Random.Range(0,formation.Length - 1)].position;
+        //            //e.ResetEnemy();
+        //            e.gameObject.SetActive(true);
+        //            totalEnemyCount++;
+        //        }
+        //        currentCooldown = 0;
+        //        prevTrans = currentTrans;
+        //    }
+        //}
     }
 
     void SpawnBoss()
     {
-        currentType = bigBoss;
-            Enemy b = EnemyPooling();
-            Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f,1.2f));
-        spawnPos.z=0;
+        
+        Enemy b = EnemyPooling(bigBoss);
+        Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 1.2f));
+        spawnPos.z = 0;
         b.transform.position = spawnPos;
         b.gameObject.SetActive(true);
         bossSpawned = true;
     }
 
-    public void SpawnBossEnemies(Vector2 _spawnPoint,Enemy _enemy)
-    {
-        currentType = _enemy;
-        Enemy e = EnemyPooling();
-        e.transform.position = _spawnPoint;
-        //e.ResetEnemy();
-        e.gameObject.SetActive(true);
-        
-    }
+
     void SpawnCircling()
     {
-        currentType = circle;
-        if (circleCooldown >= 0.5f && circleSpawnCount < maxCircleSpawn)
-        {
-            Enemy e = EnemyPooling();
-            e.transform.position = formation3[0].position;
-            //e.ResetEnemy();
-            e.gameObject.SetActive(true);
-			Debug.Log ("Hey I just broke");
-            circleCooldown = 0;
-            circleSpawnCount++;
-        }
+        //currentType = circle;
+        //if (circleCooldown >= 0.5f && circleSpawnCount < maxCircleSpawn)
+        //{
+        //    Enemy e = EnemyPooling();
+        //    e.transform.position = formation3[0].position;
+        //    e.ResetEnemy();
+        //    e.gameObject.SetActive(true);
+        //    Debug.Log("Hey I just broke");
+        //    circleCooldown = 0;
+        //    circleSpawnCount++;
+        //}
     }
-    void RandomizeEnemies()
+    EnemyTypes PickRandomEnemy()
     {
-		currentType = enemyTypeList[Random.Range(0, Mathf.Min (enemyTypeList.Count - 1, climbList))];
-      
-        if (climbList < enemyTypeList.Count)
-        {
-            if (totalEnemyCount >= climbListMultiplier)
-            {
+        EnemyTypes et;
+        et = (EnemyTypes)Random.Range(0, climbList);
 
-                climbList++;
-                climbListMultiplier += 10;
-                coolDown -= 0.5f;
-            }
-        }
-        else if (totalEnemyCount >= 20)
-        {
-            boss = true;
-        }
-        
-        
+        climbList = Mathf.Min(climbList + 1, enemyPatterns.Length - 1);
+       
+        return et;
     }
+
     int CurrentlyActiveEnemies()
     {
         int enemies = 0;
@@ -266,14 +279,26 @@ public class EnemyManager : MonoBehaviour
         }
         return enemies;
     }
-    
-    void Cooldown()
+
+    bool WaveCooldown()
     {
-        if (currentCooldown <= coolDown)
+        if (currentWaveCooldown < waveCoolDown)
         {
-            currentCooldown += Time.deltaTime;
+            currentWaveCooldown += Time.deltaTime;
+            return false;
         }
-        circleCooldown += Time.deltaTime;
+        currentWaveCooldown = 0;
+        return true;
     }
-   
+   bool SpawnRateCoolDown(TheWave w)
+    {
+
+       if (w.currentSpawnCool<enemyPatterns[(int)w.eTypes].spawnRate)
+       {
+           w.currentSpawnCool += Time.deltaTime;
+           return false;
+       }
+       w.currentSpawnCool = 0;
+       return true;
+    }
 }

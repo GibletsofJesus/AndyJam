@@ -8,12 +8,10 @@ public class Enemy_Circle : Enemy
     bool circleJerks = false;
  
     // Use this for initialization
-	void Start () 
+    void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        //SetActor(10, 0, 5, 1);
-        //safeHealth = GetHealth();
-	}
+    }
 	
 	// Update is called once per frame
 	protected override void Update () 
@@ -32,7 +30,7 @@ public class Enemy_Circle : Enemy
         {
             if (distance > 7)
             {
-				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2 * Time.deltaTime);
+				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2 );//* Time.deltaTime);
             }
             else
             {
@@ -45,11 +43,11 @@ public class Enemy_Circle : Enemy
             
             if (distance<=6)
             {
-				transform.position = Vector2.MoveTowards(transform.position, (pos + moveTarget), speed * 2 * Time.deltaTime);
+				transform.position = Vector2.MoveTowards(transform.position, (pos + moveTarget), speed * 2);// * Time.deltaTime);
             }
             else if (distance>7)
             {
-				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2 * Time.deltaTime);
+				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * 2 );//* Time.deltaTime);
             }
         }
     }

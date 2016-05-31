@@ -6,7 +6,7 @@ public class Enemy : Actor
     Ray2D rayCast;
     RaycastHit2D hit;
     public Vector2 target;
-
+    public float contactHitDamage = 5;
 	[SerializeField] private int score = 100;
       
 	protected override void Awake()
@@ -33,21 +33,21 @@ public class Enemy : Actor
         KillEnemy();
              
     }
-   
-  
-    /*protected virtual void OnCollisionEnter2D(Collision2D _col)
+
+
+   protected virtual void OnTriggerEnter2D(Collider2D _col)
     {
-        if (col.gameObject.tag == gameObject.tag)
+        if (_col.gameObject.tag == gameObject.tag)
         {
-            Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
-            Debug.Log("enemy hit " + col.gameObject.name);
+            Physics2D.IgnoreCollision(_col.gameObject.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
+         //   Debug.Log("enemy hit " + _col.gameObject.name);
         }
-        else if (col.gameObject.tag = "Player")
+        if (_col.gameObject.tag == "Player")
         {
-            col.gameObject.GetComponent<playerMovement>().TakeDamage(GetDamage());
+            _col.gameObject.GetComponent<Player>().TakeDamage(contactHitDamage);
             gameObject.SetActive(false);
         }
-    }*/
+    }
 
     protected virtual void Movement()
     {
