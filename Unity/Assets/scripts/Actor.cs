@@ -106,9 +106,7 @@ public class Actor : MonoBehaviour
         gameObject.SetActive(false);
         ex.gameObject.SetActive(true);
         ex.explode();
-     
-    }
- 
+    } 
 
 	protected virtual void Reset()
 	{

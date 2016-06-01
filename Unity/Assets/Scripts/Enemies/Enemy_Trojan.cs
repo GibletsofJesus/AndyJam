@@ -20,11 +20,7 @@ public class Enemy_Trojan : Enemy
         Vector2 movement = -transform.up * speed * Time.deltaTime;
         transform.Translate(movement, Space.World);
     }
-<<<<<<< HEAD
-   
-}
-=======
->>>>>>> f5d2e9f4c02af966d0834d4bb1ce50e154b18a25
+
 
     protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
     {

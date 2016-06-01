@@ -20,7 +20,8 @@ public class GameStateManager : MonoBehaviour {
         {
             instance = this;
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Joystick1Button7))
         {
             if (state != GameState.Paused)
             {
