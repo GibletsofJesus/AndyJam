@@ -22,14 +22,14 @@ public class TheWave
 }
 public enum EnemyTypes
 {
+	KEYLOGGER,
+	DOS,
     TROJAN,
-    DOS,
-    KEYLOGGER,
     SPYWARE,
-    WORM,
-    MALWARE,
-    SPAM,
-    ADWARE,
+	SPAM,
+	MALWARE,
+	WORM,
+	ADWARE 
 }
 
 public class EnemyManager : MonoBehaviour
@@ -69,42 +69,40 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (WaveCooldown())
-        {
-            TheWave wave = new TheWave();
-            wave.eTypes = PickRandomEnemy();
-            wave.spawnAmount = Random.Range(enemyPatterns[(int)wave.eTypes].minSpawn, enemyPatterns[(int)wave.eTypes].maxSpawn);
-            wave.currentSpawnCool = enemyPatterns[(int)wave.eTypes].spawnRate;
-            waves.Add(wave);
+		if (counting < 10) 
+		{
+			if (WaveCooldown ()) {
+				TheWave wave = new TheWave ();
+				wave.eTypes = PickRandomEnemy ();
+				wave.spawnAmount = Random.Range (enemyPatterns [(int)wave.eTypes].minSpawn, enemyPatterns [(int)wave.eTypes].maxSpawn);
+				wave.currentSpawnCool = enemyPatterns [(int)wave.eTypes].spawnRate;
+				waves.Add (wave);
 
-        }
-        for (int i = 0; i < waves.Count; i++)
-        {
-            if (SpawnRateCoolDown(waves[i]))
-            {
-                Enemy e = EnemyPooling(enemyPatterns[(int)waves[i].eTypes].enemy);
+			}
+			for (int i = 0; i < waves.Count; i++) {
+				if (SpawnRateCoolDown (waves [i])) {
+					Enemy e = EnemyPooling (enemyPatterns [(int)waves [i].eTypes].enemy);
                
-                int spawnPos = Random.Range(0, enemyPatterns[(int)waves[i].eTypes].spawnLocations.Length - 1);
-                while (spawnPos == prevSpawnPos)
-                {
-                    spawnPos = Random.Range(0, enemyPatterns[(int)waves[i].eTypes].spawnLocations.Length - 1);
+					int spawnPos = Random.Range (0, enemyPatterns [(int)waves [i].eTypes].spawnLocations.Length - 1);
+					while (spawnPos == prevSpawnPos) {
+						spawnPos = Random.Range (0, enemyPatterns [(int)waves [i].eTypes].spawnLocations.Length - 1);
 
-                }
-                        prevSpawnPos = spawnPos;
-
-                e.transform.position = enemyPatterns[(int)waves[i].eTypes].spawnLocations[spawnPos].position;
-                e.OnSpawn();
-                e.gameObject.SetActive(true);
-                waves[i].spawnAmount--;
-                if (waves[i].spawnAmount == 0)
-                {
-                    waves.RemoveAt(i);
-                    counting++;
-                    --i;
-                }
-            }
-        }
-        if (counting == 7 && !bossSpawned)
+					}
+					prevSpawnPos = spawnPos;
+					EnemyPatterns _pat = enemyPatterns [(int)waves [i].eTypes];
+					e.transform.position = _pat.spawnLocations [spawnPos].position;
+					e.OnSpawn ();
+					e.gameObject.SetActive (true);
+					waves [i].spawnAmount--;
+					if (waves [i].spawnAmount == 0) {
+						waves.RemoveAt (i);
+						counting++;
+						--i;
+					}
+				}
+			}
+		}
+        if (counting == 10 && !bossSpawned)
         {
             Invoke("SpawnBoss", 3);
             bossSpawned = true;

@@ -36,4 +36,16 @@ public class Enemy_Spam : Enemy
     {
        startX = transform.position.x;
     }
+
+	protected virtual void OnTriggerEnter2D(Collider2D _col)
+	{
+		if (_col.gameObject.tag == "Player")
+		{
+			_col.gameObject.GetComponent<Actor>().TakeDamage(contactHitDamage);
+			AdManager.instance.TryGenerateAd (new Vector3 (25,25, 0));
+			Death();
+			// gameObject.SetActive(false);
+		}
+	}
+
 }

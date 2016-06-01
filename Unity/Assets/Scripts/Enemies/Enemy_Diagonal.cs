@@ -6,11 +6,9 @@ public class Enemy_Diagonal : Enemy
     Vector2 moveToDir;
     Vector2 target;
     float edgeWeight = 5f;
-    GameObject player;
     // Use this for initialization
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
         moveToDir = new Vector2(15, 0);
     }
 
@@ -20,7 +18,7 @@ public class Enemy_Diagonal : Enemy
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             base.Update();
-            target = player.transform.position;
+            target = Player.instance.transform.position;
 
         }
     }

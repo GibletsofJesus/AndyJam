@@ -11,8 +11,8 @@ public class Boss : Enemy
     public Enemy littleBastards;
     public Enemy rareBastards;
     float maxCool = 5;
-    float minicool = 0.8f;
-    float minicooler = 0.8f;
+    float minicool = 0.5f;
+    float minicooler = 0.5f;
     float cool;
     int dosCount = 0;
     bool move = false;
@@ -57,7 +57,7 @@ public class Boss : Enemy
                 p.transform.position = _shootTransform[i].transform.position;
                 p.gameObject.SetActive(true);
                 shootCooldown = 0;
-                p.GetComponentInChildren<ParticleSystem>().startLifetime = .35f;
+                p.GetComponentInChildren<ParticleSystem>().startLifetime = .1f;
             }
             return true;
         }
@@ -156,6 +156,7 @@ public class Boss : Enemy
         //do explosions
         StartCoroutine(bossDeath());
         Player.instance.IncreaseScore(base.score);
+
     }
 
     IEnumerator bossDeath()
@@ -217,9 +218,11 @@ public class Boss : Enemy
         ex = ExplosionManager.instance.PoolingExplosion(mouthShot, 2);
         ex.transform.position = transform.position;
         ex.gameObject.SetActive(true);
-        ex.explode();
-
-    }
+		ex.explode();
+		yield return new WaitForSeconds(.7f);
+		base.Death ();
+		GameStateManager.instance.WinState ();
+	}
 
     protected override void Movement()
     {
@@ -232,7 +235,7 @@ public class Boss : Enemy
 
     void EyeShooting()
     {
-        if (dosCount < 10 && cool >= maxCool)
+        if (dosCount < 30 && cool >= maxCool)
         {
             if (MiniCool())
             {

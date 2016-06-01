@@ -52,7 +52,7 @@ public class Actor : MonoBehaviour
                     shootCooldown = 0;
                     if (tag == "Enemy")
                     {
-                        p.GetComponentInChildren<ParticleSystem>().startLifetime = .35f;
+                        p.GetComponentInChildren<ParticleSystem>().startLifetime = .15f;
                     }
                     else
                     {

@@ -110,7 +110,19 @@ public class Projectile : MonoBehaviour
 				if(projData.explodingBullets)
 				{
 					aoe.ActivateExplosion("Enemy", projData.explosionDamage, projData.explosionRadius);
-					Explosion ex = ExplosionManager.instance.PoolingExplosion(aoe.transform,(int)projData.explosionRadius * 1);
+
+					//I hate myself
+					int radius = 2;
+					if(projData.explosionRadius < 2)
+					{
+						radius = 0;
+					}
+					else if(projData.explosionRadius < 3)
+					{
+						radius = 1;
+					}
+
+					Explosion ex = ExplosionManager.instance.PoolingExplosion(aoe.transform, radius);
 					ex.transform.position = transform.position;
 					ex.gameObject.SetActive(true);
 					ex.explode();
