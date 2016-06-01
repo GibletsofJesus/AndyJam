@@ -11,7 +11,7 @@ public class WordBuffer : MonoBehaviour
 	private string currentWord = string.Empty;
 	private const int MaxCharacters = 20;
 
-	[SerializeField] private List<AbilityWord> abilityWords = new List<AbilityWord>();
+	[SerializeField] private List<Word> words = new List<Word>();
 
 	private float submitCooldown = 1.0f;
 	private float currentSubmitCooldown = 0.0f;
@@ -49,7 +49,7 @@ public class WordBuffer : MonoBehaviour
 					underscoreVisible = InputHUD.instance.UpdateUnderscore(false);
 					bool _match = false;
 					//Test to see if any words match
-					foreach (AbilityWord _w in abilityWords) 
+					foreach (Word _w in words) 
 					{
 						if(_w.Match(currentWord))
 						{
@@ -112,7 +112,7 @@ public class WordBuffer : MonoBehaviour
 
 	public void AbilityWordUpdate(int _index, int _tier)
 	{
-		abilityWords [_index].SetTier (_tier);
+		(words [_index] as AbilityWord).SetTier (_tier);
 	}
 
 

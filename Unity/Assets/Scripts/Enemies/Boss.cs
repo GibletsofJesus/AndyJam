@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Boss : Enemy 
 {
@@ -14,6 +15,13 @@ public class Boss : Enemy
     float cool;
     int dosCount = 0;
     bool move = false;
+
+	[SerializeField] private Text passwordText = null;
+	private string password;
+	private string currentPassword;
+	[SerializeField] private string[] passwordSelections = null;
+	private int charactersHidden;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -52,6 +60,69 @@ public class Boss : Enemy
 
             base.Update();
         }
+	}
+
+	public override void TakeDamage(float _damage)
+	{
+		soundManager.instance.playSound(0);
+		if (GetComponent<SpriteRenderer>() && tag == "Enemy")
+		{
+			GetComponent<SpriteRenderer>().color = Color.red;
+			Invoke("revertColour", .1f);
+		}
+		health = Mathf.Max(0.0f, health - _damage);
+		RevealWord ();
+	} 
+
+	private void RevealWord()
+	{
+		while((health / defaultHealth) < ((float)charactersHidden / (float)password.Length))
+		{
+			int i = 0;
+			while(true)
+			{
+				if(currentPassword[i] == '_')
+				{
+					if(Random.Range(0, 3) == 0)
+					{
+						--charactersHidden;
+						char[] array = currentPassword.ToCharArray();
+						array[i] = password[i];
+						currentPassword = new string(array);
+						passwordText.text = currentPassword;
+						return;
+					}
+				}
+				++i;
+				if(i == currentPassword.Length)
+				{
+					i = 0;
+				}
+			}
+		}
+	}
+
+	public override void OnSpawn()
+	{
+		password = passwordSelections [Random.Range (0, passwordSelections.Length - 1)];
+		charactersHidden = password.Length;
+		for(int i = 0; i < password.Length; ++i)
+		{
+			currentPassword += '_';
+		}
+		passwordText.text = currentPassword;
+		BossWord.instance.BossActive (this, password);
+	}
+
+	public void PasswordEntered()
+	{
+		Death ();
+	}
+
+	protected override void Reset()
+	{
+		currentPassword = string.Empty;
+		base.Reset ();
 	}
 
     protected override void Movement()
