@@ -7,13 +7,7 @@ public class Enemy_Circle : Enemy
     Vector2 moveTarget;
     bool circleJerks = false;
     int rotWay = 20;
- 
-    // Use this for initialization
-    void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-    }
-	
+ 	
 	// Update is called once per frame
 	protected override void Update () 
     {
@@ -21,31 +15,31 @@ public class Enemy_Circle : Enemy
         {
             base.Update();
         }
+        if (Player.instance)
+        {
+            moveTarget = Player.instance.transform.position;
+        }
 	}
 	protected override void Movement()
     {
-        if (player != null)
-        {
-            moveTarget = player.transform.position;
-        }
         Vector2 pos = transform.position;
         float distance = Vector2.Distance(transform.position, moveTarget);
         if (!circleJerks)
         {
             if (distance > 7)
             {
-				transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed*Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * Time.deltaTime);
             }
             else
             {
-                    circleJerks = true;
+                circleJerks = true;
             }
         }
         if (circleJerks)
         {
             if (player != null)
             {
-                rotWay = Camera.main.WorldToViewportPoint(player.transform.position).x > 0.5f ? 20 : -20;
+                rotWay = Camera.main.WorldToViewportPoint(Player.instance.transform.position).x > 0.5f ? 20 : -20;
             }
             transform.RotateAround(moveTarget, transform.forward, rotWay* (speed*Time.deltaTime));
             

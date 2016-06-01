@@ -38,8 +38,33 @@ public class Boss : Enemy
         e.gameObject.SetActive(true);
 
     }
-	// Update is called once per frame
-	protected override void Update () 
+
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
+    {
+        if (shootCooldown >= shootRate)
+        {
+            for (int i = 0; i < _shootTransform.Length; i++)
+            {
+                Vector3 shootDir = new Vector3(Player.instance.transform.position.x,  Player.instance.transform.position.y )- _shootTransform[i].transform.position;
+                if (shootDir.x > 0)
+                    shootDir.x = Mathf.Clamp(shootDir.x, 0, 7.5f);
+                else
+                    shootDir.x = Mathf.Clamp(shootDir.x, -7.5f, 0);
+
+                Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
+                p.SetProjectile(_projData, shootDir);
+                p.transform.position = _shootTransform[i].transform.position;
+                p.gameObject.SetActive(true);
+                shootCooldown = 0;
+                p.GetComponentInChildren<ParticleSystem>().startLifetime = .35f;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    // Update is called once per frame
+    protected override void Update() 
     {
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {

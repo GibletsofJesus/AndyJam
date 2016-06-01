@@ -112,7 +112,6 @@ public class Projectile : MonoBehaviour
 					Explosion ex = ExplosionManager.instance.PoolingExplosion(aoe.transform);
 					ex.transform.position = transform.position;
 					ex.gameObject.SetActive(true);
-					//ex.
 					ex.explode(projData.explosionRadius * 2);
 				}
 				else
