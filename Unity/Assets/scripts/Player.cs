@@ -26,17 +26,12 @@ public class Player : Actor
 		base.Awake ();
 		updatedDefaultHealth = defaultHealth;
 		lives = defaultLives;
-	}
-
-    // Use this for initialization
-    protected virtual void Start()
-    {
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f, -.5f, .3f));
         screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
-        verticalBoundsBot = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 0f));
-        verticalBoundsTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, .5f));
-    }
-	
+        verticalBoundsBot = Camera.main.ViewportToWorldPoint(new Vector3(.5f, 0f));
+        verticalBoundsTop = Camera.main.ViewportToWorldPoint(new Vector3(.5f, .5f));
+	}
+
 	// Update is called once per frame
     protected void FixedUpdate()
     {
@@ -63,7 +58,6 @@ public class Player : Actor
 
             inputThings();
 
-            Quaternion q = Quaternion.Euler(rotLerp);
             float angle = 0;
 
             if (!rolling)
@@ -78,7 +72,6 @@ public class Player : Actor
     {
         rolling = true;
         Vector3 initialRot = transform.rotation.eulerAngles;
-        Vector3 goalRot = rotLerp;
         float t=0;
 
         Vector3 currentRot = initialRot;
@@ -186,12 +179,20 @@ public class Player : Actor
 		{
 			//Out of lives then kill player
 			if(lives == 0)
-			{
-				Death ();
+            {
+                Death();
 			}
 			//If not dead then reset health to the current upgraded amount
 			else
 			{
+                Explosion ex = ExplosionManager.instance.PoolingExplosion(transform);
+                ex.transform.position = transform.position;
+                gameObject.SetActive(false);
+                ex.gameObject.SetActive(true);
+                ex.explode();
+                Reset();
+                Invoke("Respawn", 2);
+
 				health = updatedDefaultHealth;
                 --lives;
                 PlayerHUD.instance.UpdateLives(lives);
@@ -205,6 +206,12 @@ public class Player : Actor
 
         GetComponent<SpriteRenderer>().color = Color.red;
         Invoke("revertColour", .1f);
+    }
+
+    void Respawn()
+    {
+        transform.position = verticalBoundsBot + Vector2.up;
+        gameObject.SetActive(true);
     }
 
     public virtual bool Heal(float _heal)
@@ -222,6 +229,7 @@ public class Player : Actor
     {
         GetComponent<SpriteRenderer>().color = Color.white;
     }
+
 	protected override void Reset()
 	{
 		base.Reset ();
