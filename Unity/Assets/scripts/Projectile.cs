@@ -102,7 +102,6 @@ public class Projectile : MonoBehaviour
                 DeactivateProj();
             }
         }*/
-
 		if (col.gameObject.tag != projData.parentTag)
 		{
 			if(col.gameObject.GetComponent<Actor>())
@@ -110,10 +109,10 @@ public class Projectile : MonoBehaviour
 				if(projData.explodingBullets)
 				{
 					aoe.ActivateExplosion("Enemy", projData.explosionDamage, projData.explosionRadius);
-					Explosion ex = ExplosionManager.instance.PoolingExplosion(aoe.transform,(int)projData.explosionRadius * 1);
+					Explosion ex = ExplosionManager.instance.PoolingExplosion(aoe.transform);
 					ex.transform.position = transform.position;
 					ex.gameObject.SetActive(true);
-					ex.explode();
+					ex.explode(projData.explosionRadius * 2);
 				}
 				else
 				{
