@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
 
 public class Explosion : MonoBehaviour
 {
@@ -27,20 +26,5 @@ public class Explosion : MonoBehaviour
     void turnOff()
     {
         gameObject.SetActive(false);
-    }
-}
-
-[CustomEditor(typeof(Explosion))]
-public class ObjectBuilderEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        Explosion obj = (Explosion)target;
-        if (GUILayout.Button("Explode"))
-        {
-            obj.explode();
-        }
     }
 }

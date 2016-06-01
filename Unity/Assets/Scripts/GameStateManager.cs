@@ -1,10 +1,15 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class GameStateManager : MonoBehaviour {
 
-    public enum GameState { Paused,Gameplay,Misc};
-    public GameObject pauseUI;
+    public enum GameState { Paused,Gameplay};
+    public GameObject pauseUI, GameOverUI,buttons;
+
+    public Text youScored,gameOverText;
+    public AudioClip gameOverSounds;
+
     public static GameStateManager instance;
     public GameState state;
 
@@ -12,9 +17,42 @@ public class GameStateManager : MonoBehaviour {
     {
         instance = this;
         state = GameState.Gameplay;
-	}
-	
-	void Update ()
+    }
+
+    public void GameOver()
+    {
+        StartCoroutine(gameOveranims());
+    }
+
+    public void WinState()
+    {
+        gameOverText.text = "You won!";
+        StartCoroutine(gameOveranims());
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+    public void Loadlevel(int l)
+    {
+        Application.LoadLevel(l);
+    }
+
+    IEnumerator gameOveranims()
+    {
+        yield return new WaitForSeconds(2);
+        GameOverUI.SetActive(true);
+
+        yield return new WaitForSeconds(1.5f);
+        soundManager.instance.playSound(gameOverSounds);
+        youScored.text = "You scored <color=red> "+ Player.instance.score + "</color>";
+        yield return new WaitForSeconds(2);
+
+        buttons.SetActive(true);
+    }
+
+    void Update()
     {
         if (!instance)
         {
