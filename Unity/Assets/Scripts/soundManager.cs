@@ -7,6 +7,7 @@ public class soundManager : MonoBehaviour {
     public static soundManager instance;
     public int numberOfSources;
     public float volumeMultiplayer=1;
+    public AudioSource music;
     List<AudioSource> audioSrcs = new List<AudioSource>();
 
     public AudioClip[] explosionSounds,hitSounds;

@@ -40,11 +40,12 @@ public class Enemy_KeyLogger : Enemy
     {
         base.Reset();
     }
+
     protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
     {
         if (Input.inputString!=string.Empty)
         {
-            return base.Shoot(_projData, _direction, _shootTransform);
+            return base.Shoot(_projData, -(transform.position - new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y)), _shootTransform);
         }
         else
             return false;

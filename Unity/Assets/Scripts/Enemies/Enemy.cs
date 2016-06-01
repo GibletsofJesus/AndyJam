@@ -24,16 +24,11 @@ public class Enemy : Actor
 
             if (transform.position.y > screenBottom.y + 2)
             {
-                if (!GetComponent<Enemy_Trojan>())
-                    Shoot(projData, -transform.up.normalized, shootTransform);
-                else
-                {
-                    Shoot(projData, -(transform.position - new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y)), shootTransform);
-                }
+                Shoot(projData, -transform.up.normalized, shootTransform);
             }
 
             Movement();
-            
+
             KillEnemy();
         }
     }
