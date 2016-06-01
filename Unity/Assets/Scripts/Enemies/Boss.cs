@@ -38,7 +38,6 @@ public class Boss : Enemy
             for (int i = 0; i < _shootTransform.Length; i++)
             {
                 Vector3 shootDir = new Vector3(Player.instance.transform.position.x,  Player.instance.transform.position.y )- _shootTransform[i].transform.position;
-                Debug.Log(shootDir);
                 if (shootDir.x > 0)
                     shootDir.x = Mathf.Clamp(shootDir.x, 0, 7.5f);
                 else
