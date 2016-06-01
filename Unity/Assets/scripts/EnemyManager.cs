@@ -60,7 +60,10 @@ public class EnemyManager : MonoBehaviour
             instance = this;
         }
         climbList = enemyPatterns.Length - 1;
+<<<<<<< Updated upstream
       //  Invoke("SpawnBoss", 3);
+=======
+>>>>>>> Stashed changes
     }
 
     // Update is called once per frame

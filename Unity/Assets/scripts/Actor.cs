@@ -100,7 +100,7 @@ public class Actor : MonoBehaviour
 
     protected virtual void Death()
     {
-        Explosion ex = ExplosionManager.instance.PoolingExplosion(transform);
+        Explosion ex = ExplosionManager.instance.PoolingExplosion(transform,0);
         ex.transform.position = transform.position;
         Reset();
         gameObject.SetActive(false);
