@@ -20,6 +20,7 @@ public class Enemy_Trojan : Enemy
         Vector2 movement = -transform.up * speed * Time.deltaTime;
         transform.Translate(movement, Space.World);
     }
+   
 }
 
 

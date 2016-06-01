@@ -3,9 +3,14 @@ using System.Collections;
 
 public class Enemy_Spam : Enemy 
 {
-    float startX;
-    float sideStep = 3;
+    float startX;//=0;
+    float sideStep = 5;
+    float dist;
 	// Use this for initialization
+    void Start()
+    {
+      //  startX = transform.position.x;
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -15,18 +20,21 @@ public class Enemy_Spam : Enemy
 	protected override void Update () 
     {
         base.Update();
+        dist = Vector2.Distance(transform.position, new Vector2(startX + sideStep, transform.position.y));
+
 	}
     protected override void Movement()
     {
-        if (Vector2.Distance(transform.position, new Vector2(startX + sideStep, transform.position.y)) < 1.5f)
+        if (dist< 1.5f)//||dist>-0.5f)
         {
             sideStep *= -1;
+            Debug.Log("called " + sideStep);
         }
-        Vector2 movement = new Vector2(startX + sideStep, -transform.up.y) * speed * Time.deltaTime;
-        transform.Translate(movement, Space.World);
+        Vector2 movement = new Vector2((startX + sideStep), transform.position.y + -transform.up.y);// * speed * Time.deltaTime;
+        transform.position = Vector2.MoveTowards(transform.position,movement,speed*Time.deltaTime);
     }
     public override void OnSpawn()
     {
-        startX = transform.position.x;
+       startX = transform.position.x;
     }
 }
