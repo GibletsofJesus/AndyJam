@@ -84,4 +84,8 @@ public class Enemy : Actor
     {
         base.TakeDamage(_damage);
     } 
+    public virtual void OnSpawn()
+    {
+        
+    }
 }

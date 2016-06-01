@@ -6,11 +6,10 @@ public class Enemy_Spam : Enemy
     float startX;
     float sideStep = 3;
 	// Use this for initialization
-	protected override void Awake () 
+    protected override void Awake()
     {
         base.Awake();
-        startX = transform.position.x;
-	}
+    }
 	
 	// Update is called once per frame
 	protected override void Update () 
@@ -25,5 +24,9 @@ public class Enemy_Spam : Enemy
         }
         Vector2 movement = new Vector2(startX + sideStep, -transform.up.y) * speed * Time.deltaTime;
         transform.Translate(movement, Space.World);
+    }
+    public override void OnSpawn()
+    {
+        startX = transform.position.x;
     }
 }

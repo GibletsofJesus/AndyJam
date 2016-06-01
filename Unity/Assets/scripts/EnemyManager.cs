@@ -79,6 +79,7 @@ public class EnemyManager : MonoBehaviour
             if (SpawnRateCoolDown(waves[i]))
             {
                 Enemy e = EnemyPooling(enemyPatterns[(int)waves[i].eTypes].enemy);
+               
                 int spawnPos = Random.Range(0, enemyPatterns[(int)waves[i].eTypes].spawnLocations.Length - 1);
                 while (spawnPos == prevSpawnPos)
                 {
@@ -88,6 +89,7 @@ public class EnemyManager : MonoBehaviour
                         prevSpawnPos = spawnPos;
 
                 e.transform.position = enemyPatterns[(int)waves[i].eTypes].spawnLocations[spawnPos].position;
+                e.OnSpawn();
                 e.gameObject.SetActive(true);
                 waves[i].spawnAmount--;
                 if (waves[i].spawnAmount == 0)
@@ -247,6 +249,7 @@ public class EnemyManager : MonoBehaviour
         Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 1.2f));
         spawnPos.z = 0;
         b.transform.position = spawnPos;
+        b.OnSpawn();
         b.gameObject.SetActive(true);
         bossSpawned = true;
     }
