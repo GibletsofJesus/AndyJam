@@ -7,7 +7,7 @@ public class Enemy : Actor
     public float contactHitDamage = 5;
 	[SerializeField] private int defaultScore = 100;
     Vector3 screenBottom;
-    private int score;
+    public int score;
 
     protected override void Awake()
 	{

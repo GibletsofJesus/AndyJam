@@ -20,21 +20,21 @@ public class Explosion : MonoBehaviour
                 case ExploSize.small:
                     if (CameraShake.instance.shakeDuration < 0.2f)
                     {
-                        CameraShake.instance.shakeDuration = 0.2f;
+                        CameraShake.instance.shakeDuration += 0.2f;
                         CameraShake.instance.shakeAmount = 0.5f;
                     }
                     break;
                 case ExploSize.medium:
                     if (CameraShake.instance.shakeDuration < 0.3f)
                     {
-                        CameraShake.instance.shakeDuration = 0.3f;
+                        CameraShake.instance.shakeDuration += 0.3f;
                         CameraShake.instance.shakeAmount = .8f;
                     }
                     break;
                 case ExploSize.large:
                     if (CameraShake.instance.shakeDuration < 0.4f)
                     {
-                        CameraShake.instance.shakeDuration = 0.4f;
+                        CameraShake.instance.shakeDuration += 0.4f;
                         CameraShake.instance.shakeAmount = 1.2f;
                     }
                     break;

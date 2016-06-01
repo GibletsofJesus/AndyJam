@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class Boss : Enemy 
@@ -45,7 +46,7 @@ public class Boss : Enemy
         {
             for (int i = 0; i < _shootTransform.Length; i++)
             {
-                Vector3 shootDir = new Vector3(Player.instance.transform.position.x,  Player.instance.transform.position.y )- _shootTransform[i].transform.position;
+                Vector3 shootDir = new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y) - _shootTransform[i].transform.position;
                 if (shootDir.x > 0)
                     shootDir.x = Mathf.Clamp(shootDir.x, 0, 7.5f);
                 else
@@ -64,7 +65,7 @@ public class Boss : Enemy
     }
 
     // Update is called once per frame
-    protected override void Update() 
+    protected override void Update()
     {
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
@@ -85,75 +86,145 @@ public class Boss : Enemy
 
             base.Update();
         }
-	}
+    }
 
-	public override void TakeDamage(float _damage)
-	{
-		soundManager.instance.playSound(0);
-		if (GetComponent<SpriteRenderer>() && tag == "Enemy")
-		{
-			GetComponent<SpriteRenderer>().color = Color.red;
-			Invoke("revertColour", .1f);
-		}
-		health = Mathf.Max(0.0f, health - _damage);
-		RevealWord ();
-	} 
+    public override void TakeDamage(float _damage)
+    {
+        soundManager.instance.playSound(0);
+        if (GetComponent<SpriteRenderer>() && tag == "Enemy")
+        {
+            GetComponent<SpriteRenderer>().color = Color.red;
+            Invoke("revertColour", .1f);
+        }
+        health = Mathf.Max(0.0f, health - _damage);
+        RevealWord();
+    }
 
-	private void RevealWord()
-	{
-		while((health / defaultHealth) < ((float)charactersHidden / (float)password.Length))
-		{
-			int i = 0;
-			while(true)
-			{
-				if(currentPassword[i] == '_')
-				{
-					if(Random.Range(0, 3) == 0)
-					{
-						--charactersHidden;
-						char[] array = currentPassword.ToCharArray();
-						array[i] = password[i];
-						currentPassword = new string(array);
-						passwordText.text = currentPassword;
-						return;
-					}
-				}
-				++i;
-				if(i == currentPassword.Length)
-				{
-					i = 0;
-				}
-			}
-		}
-	}
+    private void RevealWord()
+    {
+        while ((health / defaultHealth) < ((float)charactersHidden / (float)password.Length))
+        {
+            int i = 0;
+            while (true)
+            {
+                if (currentPassword[i] == '_')
+                {
+                    if (Random.Range(0, 3) == 0)
+                    {
+                        --charactersHidden;
+                        char[] array = currentPassword.ToCharArray();
+                        array[i] = password[i];
+                        currentPassword = new string(array);
+                        passwordText.text = currentPassword;
+                        return;
+                    }
+                }
+                ++i;
+                if (i == currentPassword.Length)
+                {
+                    i = 0;
+                }
+            }
+        }
+    }
 
-	public override void OnSpawn()
-	{
-		password = passwordSelections [Random.Range (0, passwordSelections.Length - 1)];
-		charactersHidden = password.Length;
-		for(int i = 0; i < password.Length; ++i)
-		{
-			currentPassword += '_';
-		}
-		passwordText.text = currentPassword;
-		BossWord.instance.BossActive (this, password);
-	}
+    public override void OnSpawn()
+    {
+        password = passwordSelections[Random.Range(0, passwordSelections.Length - 1)];
+        charactersHidden = password.Length;
+        for (int i = 0; i < password.Length; ++i)
+        {
+            currentPassword += '_';
+        }
+        passwordText.text = currentPassword;
+        BossWord.instance.BossActive(this, password);
+    }
 
-	public void PasswordEntered()
-	{
-		Death ();
-	}
+    public void PasswordEntered()
+    {
+        Death();
+    }
 
-	protected override void Reset()
-	{
-		currentPassword = string.Empty;
-		base.Reset ();
-	}
+    protected override void Reset()
+    {
+        currentPassword = string.Empty;
+        base.Reset();
+    }
+
+    protected override void Death()
+    {
+        //do explosions
+        StartCoroutine(bossDeath());
+        Player.instance.IncreaseScore(base.score);
+    }
+
+    IEnumerator bossDeath()
+    {
+        Explosion ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[0].transform, 0);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.7f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[3].transform, 0);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.4f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(eyeShot[1], 1);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.2f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[1].transform, 0);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.35f);
+        
+        ex = ExplosionManager.instance.PoolingExplosion(eyeShot[2], 1);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.1f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[5].transform, 0);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.4f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[2].transform, 0);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.1f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[4].transform, 0);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.4f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(eyeShot[0], 1);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(2f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(mouthShot, 2);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+
+    }
 
     protected override void Movement()
     {
-		transform.position = Vector2.MoveTowards(transform.position, bossTarget,speed*2* Time.deltaTime);
-		if (Vector2.Distance(transform.position,bossTarget)<1)
+        transform.position = Vector2.MoveTowards(transform.position, bossTarget, speed * 2 * Time.deltaTime);
+        if (Vector2.Distance(transform.position, bossTarget) < 1)
         {
             move = true;
         }
@@ -161,11 +232,11 @@ public class Boss : Enemy
 
     void EyeShooting()
     {
-        if (dosCount<10&&cool>=maxCool)
+        if (dosCount < 10 && cool >= maxCool)
         {
             if (MiniCool())
             {
-              SpawnBossEnemies(eyeShot[Random.Range(0,eyeShot.Length - 1)].position, littleBastards);
+                SpawnBossEnemies(eyeShot[Random.Range(0, eyeShot.Length - 1)].position, littleBastards);
                 minicooler = 0;
                 dosCount++;
             }
@@ -179,9 +250,8 @@ public class Boss : Enemy
             cool = 0;
         }
     }
-   
-  
-   bool MiniCool()
+
+    bool MiniCool()
     {
         if (minicooler <= minicool)
         {
@@ -193,4 +263,5 @@ public class Boss : Enemy
             return true;
         }
     }
+
 }
