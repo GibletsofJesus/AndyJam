@@ -31,10 +31,11 @@ public enum EnemyTypes
     SPAM,
     ADWARE,
 }
+
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance = null;
-
+    public AudioClip bossMusic;
     List<TheWave> waves = new List<TheWave>();
     public Boss bigBoss;
     Enemy currentType;
@@ -239,7 +240,9 @@ public class EnemyManager : MonoBehaviour
 
     void SpawnBoss()
     {
-
+        soundManager.instance.music.clip = bossMusic;
+        soundManager.instance.music.enabled = false;
+        soundManager.instance.music.enabled = true;
         Enemy b = EnemyPooling(bigBoss);
         Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 1.2f));
         spawnPos.z = 0;
@@ -248,8 +251,6 @@ public class EnemyManager : MonoBehaviour
         bossSpawned = true;
     }
 
-
-    
     EnemyTypes PickRandomEnemy()
     {
         EnemyTypes et;

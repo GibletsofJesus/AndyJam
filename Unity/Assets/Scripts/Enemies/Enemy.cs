@@ -28,7 +28,14 @@ public class Enemy : Actor
                     Shoot(projData, -transform.up.normalized, shootTransform);
                 else
                 {
-                    Shoot(projData, -(transform.position - new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y)), shootTransform);
+                    Vector3 shootDir = -(transform.position - new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y));
+                    
+                    if (shootDir.x > 0)
+                    shootDir.x = Mathf.Clamp(shootDir.x, 0, 5);
+                    else
+                        shootDir.x = Mathf.Clamp(shootDir.x, -5, 0);
+
+                    Shoot(projData, shootDir, shootTransform);
                 }
             }
 
