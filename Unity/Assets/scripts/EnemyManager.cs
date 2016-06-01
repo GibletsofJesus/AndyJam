@@ -45,6 +45,7 @@ public class EnemyManager : MonoBehaviour
     float waveCoolDown = 10;
     float currentWaveCooldown = 0;
     int prevSpawnPos = 19;
+    int counting = 0;
     int climbList = 0;
     [SerializeField]
     private EnemyPatterns[] enemyPatterns = null;
@@ -60,7 +61,9 @@ public class EnemyManager : MonoBehaviour
             instance = this;
         }
         climbList = enemyPatterns.Length - 1;
-        Invoke("SpawnBoss", 3);
+
+      //  
+
     }
 
     // Update is called once per frame
@@ -96,13 +99,15 @@ public class EnemyManager : MonoBehaviour
                 if (waves[i].spawnAmount == 0)
                 {
                     waves.RemoveAt(i);
+                    counting++;
                     --i;
                 }
             }
         }
-        if (waves.Count == 0 && !bossSpawned)
+        if (counting == 7 && !bossSpawned)
         {
-         
+            Invoke("SpawnBoss", 3);
+            bossSpawned = true;
         }
 
         CircleSwarm();

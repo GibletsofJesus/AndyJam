@@ -3,10 +3,12 @@ using System.Collections;
 
 public class Enemy_Trojan : Enemy
 {
-    bool split = true;
+   public Enemy_TrojanMini miniMe;
+   
     protected override void Awake()
     {
         base.Awake();
+     
     }
 
     protected override void Update()
@@ -20,6 +22,7 @@ public class Enemy_Trojan : Enemy
     {
         Vector2 movement = -transform.up * speed * Time.deltaTime;
         transform.Translate(movement, Space.World);
+        transform.rotation = new Quaternion(0, 0, 0, 0);
     }
 
 
@@ -36,24 +39,16 @@ public class Enemy_Trojan : Enemy
     }
     protected override void Death()
     {
-       if (split)
-       {
-           for (int i = 0; i < 2; i++)
-           {
-               Enemy e = EnemyManager.instance.EnemyPooling(this);
-               e.GetComponent<Enemy_Trojan>().SetSplit(false);
-               e.transform.position = new Vector2(e.transform.position.x + (i*1.5f),e.transform.position.y);
-               e.transform.localScale = new Vector3(0.7f,0.7f,0.7f);
-           }
 
-       }
-       base.Death();
-
+       for (int i = 0; i < 2; i++)
+            {
+                Enemy e = EnemyManager.instance.EnemyPooling(miniMe); // Enemy.Instantiate(this);//
+                e.transform.position = new Vector2(transform.position.x + (i * 1.5f), transform.position.y);
+            }
+       
+     base.Death();
 
     }
-    void SetSplit(bool b)
-    {
-        split = b;
-    }
-
+    
+  
 }

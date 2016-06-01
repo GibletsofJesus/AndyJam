@@ -177,12 +177,7 @@ public class Player : Actor
         soundManager.instance.playSound(0);
         if (health <= 0)
         {
-            Explosion ex = ExplosionManager.instance.PoolingExplosion(transform);
-            ex.transform.position = transform.position;
-            gameObject.SetActive(false);
-            ex.gameObject.SetActive(true);
-            ex.explode();
-
+            
             health = updatedDefaultHealth;
             --lives;
             PlayerHUD.instance.UpdateLives(lives);
@@ -194,6 +189,12 @@ public class Player : Actor
             //If not dead then reset health to the current upgraded amount
             else
             {
+                Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+                ex.transform.position = transform.position;
+                gameObject.SetActive(false);
+                ex.gameObject.SetActive(true);
+                ex.explode();
+
                 Invoke("Respawn", 2);
             }
         }
@@ -209,6 +210,11 @@ public class Player : Actor
 
     protected override void Death()
     {
+        Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 2);
+        ex.transform.position = transform.position;
+        gameObject.SetActive(false);
+        ex.gameObject.SetActive(true);
+        ex.explode();
         soundManager.instance.music.Stop();
         GameStateManager.instance.GameOver();
     }
