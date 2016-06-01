@@ -10,7 +10,7 @@ public class Player : Actor
 	[SerializeField] private int defaultLives = 3;
 	private int lives;
 
-    private int score = 0;
+    public int score = 0;
 
     //public float moveSpeed;
     public AudioClip[] shootSounds;
@@ -175,30 +175,29 @@ public class Player : Actor
 		//Do not call base as players have lives
 		health -= _damage;
         soundManager.instance.playSound(0);
-		if(health <= 0)
-		{
-			//Out of lives then kill player
-			if(lives == 0)
+        if (health <= 0)
+        {
+            Explosion ex = ExplosionManager.instance.PoolingExplosion(transform);
+            ex.transform.position = transform.position;
+            gameObject.SetActive(false);
+            ex.gameObject.SetActive(true);
+            ex.explode();
+
+            health = updatedDefaultHealth;
+            --lives;
+            PlayerHUD.instance.UpdateLives(lives);
+            //Out of lives then kill player
+            if (lives == 0)
             {
                 Death();
-			}
-			//If not dead then reset health to the current upgraded amount
-			else
-			{
-                Explosion ex = ExplosionManager.instance.PoolingExplosion(transform);
-                ex.transform.position = transform.position;
-                gameObject.SetActive(false);
-                ex.gameObject.SetActive(true);
-                ex.explode();
-                Reset();
+            }
+            //If not dead then reset health to the current upgraded amount
+            else
+            {
                 Invoke("Respawn", 2);
-
-				health = updatedDefaultHealth;
-                --lives;
-                PlayerHUD.instance.UpdateLives(lives);
             }
         }
-		PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
+        PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
 
         if (CameraShake.instance.shakeDuration < 0.2f)
             CameraShake.instance.shakeDuration += 0.2f;
@@ -206,6 +205,12 @@ public class Player : Actor
 
         GetComponent<SpriteRenderer>().color = Color.red;
         Invoke("revertColour", .1f);
+    }
+
+    protected override void Death()
+    {
+        soundManager.instance.music.Stop();
+        GameStateManager.instance.GameOver();
     }
 
     void Respawn()
