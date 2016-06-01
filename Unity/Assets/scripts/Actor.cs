@@ -40,15 +40,16 @@ public class Actor : MonoBehaviour
     {
 		if(shootCooldown >= shootRate)
 		{
-	        for (int i = 0; i < _shootTransform.Length; i++)
+            for (int i = 0; i < _shootTransform.Length; i++)
             {
+
                 if (!GetComponent<Enemy_Trojan>())
                 {
                     Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
                     p.SetProjectile(_projData, _direction);
                     p.transform.position = _shootTransform[i].transform.position;
                     p.gameObject.SetActive(true);
-                    shootCooldown = 0; 
+                    shootCooldown = 0;
                     if (tag == "Enemy")
                     {
                         p.GetComponentInChildren<ParticleSystem>().startLifetime = .35f;

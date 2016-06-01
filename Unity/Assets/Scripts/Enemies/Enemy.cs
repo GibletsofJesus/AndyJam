@@ -24,23 +24,11 @@ public class Enemy : Actor
 
             if (transform.position.y > screenBottom.y + 2)
             {
-                if (!GetComponent<Enemy_Trojan>())
-                    Shoot(projData, -transform.up.normalized, shootTransform);
-                else
-                {
-                    Vector3 shootDir = -(transform.position - new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y));
-                    
-                    if (shootDir.x > 0)
-                    shootDir.x = Mathf.Clamp(shootDir.x, 0, 5);
-                    else
-                        shootDir.x = Mathf.Clamp(shootDir.x, -5, 0);
-
-                    Shoot(projData, shootDir, shootTransform);
-                }
+                Shoot(projData, -transform.up.normalized, shootTransform);
             }
 
             Movement();
-            
+
             KillEnemy();
         }
     }
