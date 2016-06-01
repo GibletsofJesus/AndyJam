@@ -25,12 +25,11 @@ public class Enemy_Spam : Enemy
 	}
     protected override void Movement()
     {
-        if (dist< 1.5f)//||dist>-0.5f)
+        if (dist< 1.5f)
         {
             sideStep *= -1;
-            Debug.Log("called " + sideStep);
         }
-        Vector2 movement = new Vector2((startX + sideStep), transform.position.y + -transform.up.y);// * speed * Time.deltaTime;
+        Vector2 movement = new Vector2((startX + sideStep), transform.position.y + -transform.up.y);
         transform.position = Vector2.MoveTowards(transform.position,movement,speed*Time.deltaTime);
     }
     public override void OnSpawn()
