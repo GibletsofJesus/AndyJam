@@ -5,12 +5,14 @@ public class Enemy : Actor
 {
  
     public float contactHitDamage = 5;
-	[SerializeField] private int score = 100;
+	[SerializeField] private int defaultScore = 100;
     Vector3 screenBottom;
+    private int score;
 
     protected override void Awake()
 	{
 		base.Awake ();
+        score = defaultScore;
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 0f));
     }
 
@@ -20,7 +22,7 @@ public class Enemy : Actor
         {
             base.Update();
 
-            transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
+//            transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
 
             if (transform.position.y > screenBottom.y + 2)
             {
@@ -60,6 +62,7 @@ public class Enemy : Actor
 	protected override void Reset()
 	{
 		base.Reset ();
+        score = defaultScore;
 	}
 
     protected override void Death()
@@ -75,5 +78,12 @@ public class Enemy : Actor
     public virtual void OnSpawn()
     {
         
+    }
+    protected void SetStat(float mod)
+    {
+        score *= (int)mod;
+        health *= mod;
+        projData.projDamage *= mod;
+
     }
 }

@@ -1,14 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy_Trojan : Enemy
+public class Enemy_TrojanMini : Enemy
 {
-   public Enemy_TrojanMini miniMe;
-   
     protected override void Awake()
     {
         base.Awake();
-     
     }
 
     protected override void Update()
@@ -36,18 +33,6 @@ public class Enemy_Trojan : Enemy
             shootDir.x = Mathf.Clamp(shootDir.x, -5, 0);
 
         return base.Shoot(_projData, shootDir, _shootTransform);
-    }
-    protected override void Death()
-    {
-
-       for (int i = 0; i < 2; i++)
-            {
-                Enemy e = EnemyManager.instance.EnemyPooling(miniMe); // Enemy.Instantiate(this);//
-                e.transform.position = new Vector2(transform.position.x + (i * 1.5f), transform.position.y);
-            }
-       
-     base.Death();
-
     }
     
   
