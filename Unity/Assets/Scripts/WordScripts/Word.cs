@@ -17,10 +17,13 @@ public abstract class Word : MonoBehaviour
 
 	protected virtual void Update()
 	{
-		if(behaviorActive)
-		{
-			Behavior ();
-		}
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            if (behaviorActive)
+            {
+                Behavior();
+            }
+        }
 	}
 
 	public bool Match(string _word)

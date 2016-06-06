@@ -12,22 +12,13 @@ public class BossWord : Word
 	{
 		staticInstance = this;
 	}
-
-	protected override void Start ()
-	{
-		base.Start ();
-	}
-	
-	protected override void Update()
-	{
-		base.Update ();
-	}
 	
 	protected override void TriggerBehavior ()
 	{
 		base.TriggerBehavior ();
 		wordActive = false;
 		boss.PasswordEntered ();
+        base.EndBehavior();
 	}
 	
 	protected override void Behavior ()

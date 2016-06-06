@@ -48,29 +48,32 @@ public class Ad : MonoBehaviour
 
 	public void Update()
 	{
-		if(move)
-		{
-			currentTime = Mathf.Min (currentTime + Time.deltaTime, moveTime);
-			RectTransform canvasRect = canvas.GetComponent<RectTransform>();
-			Vector2 _viewport = cam.WorldToViewportPoint(start + ((target - start) * (currentTime / moveTime)));
-			Vector2 _screenPos = new Vector2(((_viewport.x*canvasRect.sizeDelta.x)-(canvasRect.sizeDelta.x*0.5f)),
-			                                 ((_viewport.y*canvasRect.sizeDelta.y)-(canvasRect.sizeDelta.y*0.5f)));
-			rectTrans.anchoredPosition=_screenPos;
-			//rectTrans.anchorMin = _screenPos;
-			//rectTrans.anchorMax = _screenPos;
-			//Debug.Log (_screenPos);
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            if (move)
+            {
+                currentTime = Mathf.Min(currentTime + Time.deltaTime, moveTime);
+                RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+                Vector2 _viewport = cam.WorldToViewportPoint(start + ((target - start) * (currentTime / moveTime)));
+                Vector2 _screenPos = new Vector2(((_viewport.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f)),
+                                                 ((_viewport.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f)));
+                rectTrans.anchoredPosition = _screenPos;
+                //rectTrans.anchorMin = _screenPos;
+                //rectTrans.anchorMax = _screenPos;
+                //Debug.Log (_screenPos);
 
-			transform.localScale = Vector3.one * (startingScale + ((targetScale - startingScale) * (currentTime / moveTime)));
-			if(currentTime == moveTime)
-			{
-				move = false;
-				currentTime = 0.0f;
-				if(closing)
-				{
-					closing = false;
-					gameObject.SetActive(false);
-				}
-			}
-		}
+                transform.localScale = Vector3.one * (startingScale + ((targetScale - startingScale) * (currentTime / moveTime)));
+                if (currentTime == moveTime)
+                {
+                    move = false;
+                    currentTime = 0.0f;
+                    if (closing)
+                    {
+                        closing = false;
+                        gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
 	}
 }

@@ -15,20 +15,23 @@ public class RadiusObjectFinder : MonoBehaviour
 
 	private void Update()
 	{
-		if (closestObject)
-		{
-			targetAcquired = (transform.position - closestObject.transform.position).sqrMagnitude <= (col.radius * col.radius);
-			if(targetAcquired == false)
-			{
-				closestObject = null;
-				targetAcquired = false;
-			}
-			else if (!closestObject.activeSelf) 
-			{
-				closestObject = null;
-				targetAcquired = false;
-			}
-		}
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            if (closestObject)
+            {
+                targetAcquired = (transform.position - closestObject.transform.position).sqrMagnitude <= (col.radius * col.radius);
+                if (targetAcquired == false)
+                {
+                    closestObject = null;
+                    targetAcquired = false;
+                }
+                else if (!closestObject.activeSelf)
+                {
+                    closestObject = null;
+                    targetAcquired = false;
+                }
+            }
+        }
 	}
 
 	private void OnTriggerStay2D(Collider2D _col)

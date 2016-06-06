@@ -42,59 +42,62 @@ public class VisualCommandPanel : MonoBehaviour
 
 	private void Update()
 	{
-		//Determine if should be typing out current message
-		if(currentMessage != string.Empty)
-		{
-			typeCooldown += Time.deltaTime;
-			//Progressively type message
-			if(typeCooldown >= typeRate)
-			{
-				typeCooldown = 0.0f;
-				//Type message till message complete
-				if(currentMessage.Length > charReader)
-				{
-					textField.text += currentMessage[charReader];
-					++charReader;
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            //Determine if should be typing out current message
+            if (currentMessage != string.Empty)
+            {
+                typeCooldown += Time.deltaTime;
+                //Progressively type message
+                if (typeCooldown >= typeRate)
+                {
+                    typeCooldown = 0.0f;
+                    //Type message till message complete
+                    if (currentMessage.Length > charReader)
+                    {
+                        textField.text += currentMessage[charReader];
+                        ++charReader;
 
-					//To get the text to scroll need to force create new updated text generator
-					TextGenerator generator = new TextGenerator();
-					generator.Populate(textField.text, settings);
+                        //To get the text to scroll need to force create new updated text generator
+                        TextGenerator generator = new TextGenerator();
+                        generator.Populate(textField.text, settings);
 
-					if(generator.lineCount > 20)//should find the realtime amount of possible lines
-					{
-						textField.text = textField.text.Substring (textField.cachedTextGenerator.GetLinesArray () [1].startCharIdx);
-					}
-				}
-				//When complete reset
-				else
-				{
-					currentMessage = string.Empty;
-					charReader = 0;
-				}
-			}
-		}
-		//If no message to type out then determine if there is a new message
-		else if(messageBuffer.Count > 0)
-		{
-			underscoreAppearCooldown = 0.0f;
-			UpdateUnderscore(false);
-			currentMessage = messageBuffer[0];
-			messageBuffer.RemoveAt(0);
-		}
-		//No message so start flashing underscore
-		else
-		{
-			underscoreAppearCooldown += Time.deltaTime;
-			if(underscoreAppearCooldown >= underscoreAppearRate)
-			{
-				underscoreFlickerCooldown += Time.deltaTime;
-				if(underscoreFlickerCooldown >= underscoreFlickerRate)
-				{
-					underscoreFlickerCooldown = 0.0f;
-					UpdateUnderscore(!underscoreVisible);
-				}
-			}
-		}
+                        if (generator.lineCount > 20)//should find the realtime amount of possible lines
+                        {
+                            textField.text = textField.text.Substring(textField.cachedTextGenerator.GetLinesArray()[1].startCharIdx);
+                        }
+                    }
+                    //When complete reset
+                    else
+                    {
+                        currentMessage = string.Empty;
+                        charReader = 0;
+                    }
+                }
+            }
+            //If no message to type out then determine if there is a new message
+            else if (messageBuffer.Count > 0)
+            {
+                underscoreAppearCooldown = 0.0f;
+                UpdateUnderscore(false);
+                currentMessage = messageBuffer[0];
+                messageBuffer.RemoveAt(0);
+            }
+            //No message so start flashing underscore
+            else
+            {
+                underscoreAppearCooldown += Time.deltaTime;
+                if (underscoreAppearCooldown >= underscoreAppearRate)
+                {
+                    underscoreFlickerCooldown += Time.deltaTime;
+                    if (underscoreFlickerCooldown >= underscoreFlickerRate)
+                    {
+                        underscoreFlickerCooldown = 0.0f;
+                        UpdateUnderscore(!underscoreVisible);
+                    }
+                }
+            }
+        }
 	}
 
 	private void UpdateUnderscore(bool _underscore)

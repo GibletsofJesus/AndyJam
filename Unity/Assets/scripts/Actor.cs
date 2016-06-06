@@ -33,7 +33,10 @@ public class Actor : MonoBehaviour
 	protected virtual void Update ()
     {
         //Death();
-        CoolDown();
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            CoolDown();
+        }
 	}
    
     protected virtual bool Shoot(ProjectileData _projData, Vector2 _direction,GameObject[] _shootTransform)

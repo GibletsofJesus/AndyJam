@@ -41,6 +41,8 @@ public class UpdateBehavior : MonoBehaviour
 	[SerializeField] private UpdateLog[] updateLog = null;
 	private bool updating = false;
 
+    private bool everythingUpdated = false;
+
 	/// <summary>
 	/// Temp
 	/// </summary>
@@ -52,26 +54,32 @@ public class UpdateBehavior : MonoBehaviour
 
 	private void Update()
 	{
-		//If not currently updating, determine if there are any further updates
-		if(!updating)
-		{
-			if((nextUpdate + numUpdates) < updateLog.Length)
-			{
-				int _prevUpdates = numUpdates;
-				while(updateLog[nextUpdate + numUpdates].scoreRequirement <= (Player.instance.GetScore() - startingScore))
-				{
-					++numUpdates;
-					if((nextUpdate + numUpdates) >= updateLog.Length)
-					{
-						break;
-					}
-				}
-				if(_prevUpdates != numUpdates)
-				{
-					VisualCommandPanel.instance.AddMessage(numUpdates.ToString() + " updates available!");
-				}
-			}
-		}
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            if (!everythingUpdated)
+            { 
+                //If not currently updating, determine if there are any further updates
+                if (!updating)
+                {
+                    if ((nextUpdate + numUpdates) < updateLog.Length)
+                    {
+                        int _prevUpdates = numUpdates;
+                        while (updateLog[nextUpdate + numUpdates].scoreRequirement <= (Player.instance.GetScore() - startingScore))
+                        {
+                            ++numUpdates;
+                            if ((nextUpdate + numUpdates) >= updateLog.Length)
+                            {
+                                break;
+                            }
+                        }
+                        if (_prevUpdates != numUpdates)
+                        {
+                            VisualCommandPanel.instance.AddMessage(numUpdates.ToString() + " updates available!");
+                        }
+                    }
+                }
+            }
+        }
 	}
 
 	public void FactoryReset()
@@ -79,6 +87,7 @@ public class UpdateBehavior : MonoBehaviour
 		startingScore = Player.instance.GetScore();///TEMPORARY VARIABLE HERE///
 		nextUpdate = 0;
 		numUpdates = 0;
+        everythingUpdated = false;
 	}
 
 	public int PrepareUpdates()
@@ -102,7 +111,11 @@ public class UpdateBehavior : MonoBehaviour
 
 		VisualCommandPanel.instance.AddMessage (updateLog[nextUpdate].updateMessage);
 		++nextUpdate;
-	}
+        if (nextUpdate == updateLog.Length)
+        {
+            everythingUpdated = true;
+        }
+    }
 
 	public void FinishUpdate()
 	{
@@ -117,4 +130,17 @@ public class UpdateBehavior : MonoBehaviour
 		VisualCommandPanel.instance.AddMessage("Up to date");
 		numUpdates = 0;
 	}
+
+    public void UnlockAll()
+    {
+        while(!everythingUpdated)
+        {
+            ApplyNextUpdate();
+        }
+    }
+
+    public bool EverythingUnlocked()
+    {
+        return everythingUpdated;
+    }
 }

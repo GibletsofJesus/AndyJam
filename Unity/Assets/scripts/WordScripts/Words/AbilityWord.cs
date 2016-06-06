@@ -29,20 +29,23 @@ public abstract class AbilityWord : Word
 
 	protected override void Update()
 	{
-		if(!behaviorActive)
-		{
-			currentCooldown = Mathf.Min(currentCooldown + Time.deltaTime, wordCooldown);
-			if(wordCooldown == 0.0f)
-			{
-				wordHUD.UpdateCooldown (1.0f);
-			}
-			else
-			{
-				float _cooldownPercent = currentCooldown / wordCooldown;
-				wordHUD.UpdateCooldown (((_cooldownPercent * 1000.0f) - ((_cooldownPercent * 1000.0f) % pixelCooldown)) / 1000.0f);
-			}
-		}
-		base.Update ();
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            if (!behaviorActive)
+            {
+                currentCooldown = Mathf.Min(currentCooldown + Time.deltaTime, wordCooldown);
+                if (wordCooldown == 0.0f)
+                {
+                    wordHUD.UpdateCooldown(1.0f);
+                }
+                else
+                {
+                    float _cooldownPercent = currentCooldown / wordCooldown;
+                    wordHUD.UpdateCooldown(((_cooldownPercent * 1000.0f) - ((_cooldownPercent * 1000.0f) % pixelCooldown)) / 1000.0f);
+                }
+            }
+            base.Update();
+        }
 	}
 
 	protected override void TriggerBehavior ()

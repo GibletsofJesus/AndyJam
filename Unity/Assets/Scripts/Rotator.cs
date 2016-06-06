@@ -7,11 +7,17 @@ public class Rotator : MonoBehaviour
     
     private void Update()
     {
-        transform.Rotate(Vector3.forward, rotSpeed * Time.deltaTime);
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            transform.Rotate(Vector3.forward, rotSpeed * Time.deltaTime);
+        }
     }
  
     private void LateUpdate()
     {
-        transform.rotation = Quaternion.Euler(0.0f, 0.0f, transform.eulerAngles.z);
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            transform.rotation = Quaternion.Euler(0.0f, 0.0f, transform.eulerAngles.z);
+        }
     }
 }

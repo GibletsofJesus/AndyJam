@@ -23,11 +23,6 @@ public class UpdateWord : AbilityWord
 		wordHUD.Activate ();
 	}
 
-	protected override void Update()
-	{
-		base.Update ();
-	}
-
 	protected override void TriggerBehavior ()
 	{
 		numUpdates = UpdateBehavior.instance.PrepareUpdates ();
@@ -45,6 +40,11 @@ public class UpdateWord : AbilityWord
 	
 	protected override void Behavior ()
 	{
+        if(UpdateBehavior.instance.EverythingUnlocked())
+        {
+            EndBehavior();
+            return;
+        }
 		if(updating)
 		{
 			UpdateUpdatingText(updateTextIndex + 1);
@@ -79,6 +79,8 @@ public class UpdateWord : AbilityWord
 		UpdateBehavior.instance.FinishUpdate ();
 		updateTextCooldown = 0.0f; 
 		updateTextIndex = 0;
+        updating = false;
+        updateProgress = 0.0f;
 		wordHUD.UpdateWord (wordTiers [currentTier]);
 		base.EndBehavior ();
 	}

@@ -69,48 +69,55 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (counting < 10) 
-		{
-			if (WaveCooldown ()) {
-				TheWave wave = new TheWave ();
-				wave.eTypes = PickRandomEnemy ();
-				wave.spawnAmount = Random.Range (enemyPatterns [(int)wave.eTypes].minSpawn, enemyPatterns [(int)wave.eTypes].maxSpawn);
-				wave.currentSpawnCool = enemyPatterns [(int)wave.eTypes].spawnRate;
-				waves.Add (wave);
-
-			}
-			for (int i = 0; i < waves.Count; i++) {
-				if (SpawnRateCoolDown (waves [i])) {
-					Enemy e = EnemyPooling (enemyPatterns [(int)waves [i].eTypes].enemy);
-               
-					int spawnPos = Random.Range (0, enemyPatterns [(int)waves [i].eTypes].spawnLocations.Length - 1);
-					while (spawnPos == prevSpawnPos) {
-						spawnPos = Random.Range (0, enemyPatterns [(int)waves [i].eTypes].spawnLocations.Length - 1);
-
-					}
-					prevSpawnPos = spawnPos;
-					EnemyPatterns _pat = enemyPatterns [(int)waves [i].eTypes];
-					e.transform.position = _pat.spawnLocations [spawnPos].position;
-					e.OnSpawn ();
-					e.gameObject.SetActive (true);
-					waves [i].spawnAmount--;
-					if (waves [i].spawnAmount == 0) {
-						waves.RemoveAt (i);
-						counting++;
-						--i;
-					}
-				}
-			}
-		}
-        if (counting == 10 && !bossSpawned)
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
-            Invoke("SpawnBoss", 3);
-            bossSpawned = true;
+            if (counting < 10)
+            {
+                if (WaveCooldown())
+                {
+                    TheWave wave = new TheWave();
+                    wave.eTypes = PickRandomEnemy();
+                    wave.spawnAmount = Random.Range(enemyPatterns[(int)wave.eTypes].minSpawn, enemyPatterns[(int)wave.eTypes].maxSpawn);
+                    wave.currentSpawnCool = enemyPatterns[(int)wave.eTypes].spawnRate;
+                    waves.Add(wave);
+
+                }
+                for (int i = 0; i < waves.Count; i++)
+                {
+                    if (SpawnRateCoolDown(waves[i]))
+                    {
+                        Enemy e = EnemyPooling(enemyPatterns[(int)waves[i].eTypes].enemy);
+
+                        int spawnPos = Random.Range(0, enemyPatterns[(int)waves[i].eTypes].spawnLocations.Length - 1);
+                        while (spawnPos == prevSpawnPos)
+                        {
+                            spawnPos = Random.Range(0, enemyPatterns[(int)waves[i].eTypes].spawnLocations.Length - 1);
+
+                        }
+                        prevSpawnPos = spawnPos;
+                        EnemyPatterns _pat = enemyPatterns[(int)waves[i].eTypes];
+                        e.transform.position = _pat.spawnLocations[spawnPos].position;
+                        e.OnSpawn();
+                        e.gameObject.SetActive(true);
+                        waves[i].spawnAmount--;
+                        if (waves[i].spawnAmount == 0)
+                        {
+                            waves.RemoveAt(i);
+                            counting++;
+                            --i;
+                        }
+                    }
+                }
+            }
+            if (counting == 10 && !bossSpawned)
+            {
+                Invoke("SpawnBoss", 3);
+                bossSpawned = true;
+            }
+
+            CircleSwarm();
+
         }
-
-        CircleSwarm();
-     
-
     }
 
     public Enemy EnemyPooling(Enemy en)

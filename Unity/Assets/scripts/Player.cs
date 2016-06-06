@@ -6,6 +6,8 @@ public class Player : Actor
 	private static Player staticInstance = null;
 	public static Player instance {get {return staticInstance;} set{}}
 
+    [SerializeField] private SpriteRenderer spriteRenderer = null;
+
 	protected float updatedDefaultHealth;
 	[SerializeField] private int defaultLives = 3;
 	private int lives;
@@ -19,6 +21,11 @@ public class Player : Actor
     //public GameObject target;
     Vector3 screenBottom, screenTop;
     Vector2 verticalBoundsBot, verticalBoundsTop;
+
+    private bool isInvincible = false;
+    private float invincibleFlickerRate = 0.25f;
+    private float invincibleFlickerCooldown = 0.0f;
+    private bool flickerDown = true;
 
     protected override void Awake()
 	{
@@ -47,7 +54,7 @@ public class Player : Actor
             {
                 rig.AddForce(-Vector2.right * 2, ForceMode2D.Impulse);
             }
-            if (transform.position.y >= verticalBoundsTop.y/2 - 1f)
+            if (transform.position.y >= verticalBoundsTop.y / 2 - 1f)
             {
                 rig.AddForce(-Vector2.up * 2, ForceMode2D.Impulse);
             }
@@ -64,6 +71,29 @@ public class Player : Actor
                 angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, rotLerp.y, Time.deltaTime * 5);
 
             transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
+        }
+        //Invincible flicker logic
+        if(isInvincible)
+        {   
+            if(flickerDown)
+            {
+                invincibleFlickerCooldown = Mathf.Max(invincibleFlickerCooldown - Time.deltaTime, 0.0f);
+                if (invincibleFlickerCooldown == 0)
+                {
+                    flickerDown = false;
+                }
+            }
+            else
+            {
+                invincibleFlickerCooldown = Mathf.Min(invincibleFlickerCooldown + Time.deltaTime, invincibleFlickerRate);
+                if (invincibleFlickerCooldown == invincibleFlickerRate)
+                {
+                    flickerDown = true;
+                }
+            }
+            Color _flickerColour = spriteRenderer.color;
+            _flickerColour.a = 0.25f + ((invincibleFlickerCooldown / invincibleFlickerRate) / 0.75f);
+            spriteRenderer.color = _flickerColour;
         }
     }
 
@@ -172,40 +202,42 @@ public class Player : Actor
 
     public override void TakeDamage(float _damage)
     {
-		//Do not call base as players have lives
-		health -= _damage;
         soundManager.instance.playSound(0);
-        if (health <= 0)
+        if (!isInvincible)
         {
-            
-            health = updatedDefaultHealth;
-            --lives;
-            PlayerHUD.instance.UpdateLives(lives);
-            //Out of lives then kill player
-            if (lives == 0)
+            health -= _damage;
+            if (health <= 0)
             {
-                Death();
-            }
-            //If not dead then reset health to the current upgraded amount
-            else
-            {
-                Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
-                ex.transform.position = transform.position;
-                gameObject.SetActive(false);
-                ex.gameObject.SetActive(true);
-                ex.explode();
 
-                Invoke("Respawn", 2);
+                health = updatedDefaultHealth;
+                --lives;
+                PlayerHUD.instance.UpdateLives(lives);
+                //Out of lives then kill player
+                if (lives == 0)
+                {
+                    Death();
+                }
+                //If not dead then reset health to the current upgraded amount
+                else
+                {
+                    Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+                    ex.transform.position = transform.position;
+                    gameObject.SetActive(false);
+                    ex.gameObject.SetActive(true);
+                    ex.explode();
+
+                    Invoke("Respawn", 2);
+                }
             }
+            PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
+
+            if (CameraShake.instance.shakeDuration < 0.2f)
+                CameraShake.instance.shakeDuration += 0.2f;
+            CameraShake.instance.shakeAmount = 0.5f;
+
+            GetComponent<SpriteRenderer>().color = Color.red;
+            Invoke("revertColour", .1f);
         }
-        PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
-
-        if (CameraShake.instance.shakeDuration < 0.2f)
-            CameraShake.instance.shakeDuration += 0.2f;
-        CameraShake.instance.shakeAmount = 0.5f;
-
-        GetComponent<SpriteRenderer>().color = Color.red;
-        Invoke("revertColour", .1f);
     }
 
     protected override void Death()
@@ -296,5 +328,13 @@ public class Player : Actor
                 break;
 
         }
+    }
+
+    public void SetInvincible(bool _invincible)
+    {
+        isInvincible = _invincible;
+        invincibleFlickerCooldown = invincibleFlickerRate;
+        spriteRenderer.color = Color.white;
+        flickerDown = true;
     }
 }

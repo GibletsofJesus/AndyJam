@@ -76,4 +76,18 @@ public class AdManager : MonoBehaviour
 		}
 	}
 
+    public void EnableAdBlock()
+    {
+        if (!adblock)
+        {
+            VisualCommandPanel.instance.AddMessage("Adblocker enabled");
+            for (int i = 0; i < activeAds.Count; ++i)
+            {
+                activeAds[i].CloseAd(closePoint);
+            }
+            activeAds.Clear();
+            adblock = true;
+        }
+    }
+
 }
