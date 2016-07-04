@@ -21,6 +21,7 @@ public class UpdateWord : AbilityWord
 		base.Start ();
 		wordActive = true;
 		wordHUD.Activate ();
+        wordHUD.UpdateWord(wordTiers[0]);
 	}
 
 	protected override void TriggerBehavior ()
@@ -64,11 +65,12 @@ public class UpdateWord : AbilityWord
 			if(numUpdates == 0)
 			{
 				EndBehavior();
+                wordHUD.CooldownFinished();
 			}
 			else
 			{
 				updateProgress = 0.0f;
-				wordHUD.UpdateCooldown(updateProgress);
+                wordHUD.TriggerSuccess();
 				updating = true;
 			}
 		}
@@ -96,4 +98,18 @@ public class UpdateWord : AbilityWord
 			wordHUD.UpdateWord (updateText [updateTextIndex]);
 		}
 	}
+
+    public override void Reset()
+    {
+        if (behaviorActive)
+        {
+            updateTextCooldown = 0.0f;
+            updateTextIndex = 0;
+            updating = false;
+            updateProgress = 0.0f;
+            wordHUD.UpdateWord(wordTiers[currentTier]);
+            wordHUD.UpdateCooldown(1.0f);
+        }
+        base.Reset();
+    }
 }

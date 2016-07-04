@@ -33,15 +33,22 @@ public abstract class AbilityWord : Word
         {
             if (!behaviorActive)
             {
-                currentCooldown = Mathf.Min(currentCooldown + Time.deltaTime, wordCooldown);
-                if (wordCooldown == 0.0f)
+                if (currentCooldown != wordCooldown)
                 {
-                    wordHUD.UpdateCooldown(1.0f);
-                }
-                else
-                {
-                    float _cooldownPercent = currentCooldown / wordCooldown;
-                    wordHUD.UpdateCooldown(((_cooldownPercent * 1000.0f) - ((_cooldownPercent * 1000.0f) % pixelCooldown)) / 1000.0f);
+                    currentCooldown = Mathf.Min(currentCooldown + Time.deltaTime, wordCooldown);
+                    if (wordCooldown == 0.0f)
+                    {
+                        wordHUD.UpdateCooldown(1.0f);
+                    }
+                    else
+                    {
+                        float _cooldownPercent = currentCooldown / wordCooldown;
+                        wordHUD.UpdateCooldown(((_cooldownPercent * 1000.0f) - ((_cooldownPercent * 1000.0f) % pixelCooldown)) / 1000.0f);
+                    }
+                    if(currentCooldown == wordCooldown)
+                    {
+                        wordHUD.CooldownFinished();
+                    }
                 }
             }
             base.Update();
@@ -87,6 +94,16 @@ public abstract class AbilityWord : Word
 		thisWord = wordTiers [updatedTier];
 		wordHUD.UpdateWord (thisWord);
 	}
+
+    public override void Reset()
+    {
+        if (behaviorActive)
+        {
+            EndBehavior();
+        }
+        wordHUD.UpdateCooldown(1.0f);
+        Start();
+    }
 
 
 }

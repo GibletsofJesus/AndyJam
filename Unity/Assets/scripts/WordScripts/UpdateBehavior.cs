@@ -88,6 +88,11 @@ public class UpdateBehavior : MonoBehaviour
 		nextUpdate = 0;
 		numUpdates = 0;
         everythingUpdated = false;
+        updating = false;
+        foreach(Word _w in FindObjectsOfType<Word>())
+        {
+            _w.Reset();
+        }
 	}
 
 	public int PrepareUpdates()

@@ -31,4 +31,13 @@ public class Backup : AbilityWord
 	{
 		base.EndBehavior ();
 	}
+
+    public override void Reset()
+    {
+        if (behaviorActive)
+        {
+            EndBehavior();
+        }
+        base.Reset();
+    }
 }

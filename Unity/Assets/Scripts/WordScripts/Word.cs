@@ -13,7 +13,8 @@ public abstract class Word : MonoBehaviour
 	protected virtual void Start()
 	{
 		wordActive = false;
-	}
+        behaviorActive = false;
+    }
 
 	protected virtual void Update()
 	{
@@ -51,4 +52,9 @@ public abstract class Word : MonoBehaviour
 	{
 		behaviorActive = false;
 	}
+
+    public virtual void Reset()
+    {
+        Start();
+    }
 }

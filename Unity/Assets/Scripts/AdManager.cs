@@ -90,4 +90,9 @@ public class AdManager : MonoBehaviour
         }
     }
 
+    public void DisableAdBlock()
+    {
+        adblock = false;
+    }
+
 }

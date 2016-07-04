@@ -280,8 +280,8 @@ public class Player : Actor
         PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
         lives = defaultLives;
         PlayerHUD.instance.UpdateLives(lives);
-        score = 0;
-        PlayerHUD.instance.UpdateScore(score);
+        //score = 0;
+        //PlayerHUD.instance.UpdateScore(score);
 	}
 
     public int GetScore()

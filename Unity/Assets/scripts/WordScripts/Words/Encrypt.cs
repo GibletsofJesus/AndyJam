@@ -6,7 +6,7 @@ public class Encrypt : AbilityWord
 {
     [SerializeField] private float[] invincibleDuration = null;
     private float invincibleCooldown = 0.0f;
-    [SerializeField] private Image lockedHealth = null;
+    [SerializeField] private GameObject lockedHealth = null;
 
 	protected override void Start ()
 	{
