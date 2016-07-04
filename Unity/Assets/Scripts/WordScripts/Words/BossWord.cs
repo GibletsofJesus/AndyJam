@@ -10,15 +10,18 @@ public class BossWord : Word
 	
 	private void Awake ()
 	{
-		staticInstance = this;
+        staticInstance = this;
 	}
 	
 	protected override void TriggerBehavior ()
 	{
-		base.TriggerBehavior ();
-		wordActive = false;
-		boss.PasswordEntered ();
-        base.EndBehavior();
+        if (boss)
+        {
+            base.TriggerBehavior();
+            wordActive = false;
+            boss.PasswordEntered();
+            base.EndBehavior();
+        }
 	}
 	
 	protected override void Behavior ()

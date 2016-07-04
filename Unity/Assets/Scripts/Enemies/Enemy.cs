@@ -59,7 +59,7 @@ public class Enemy : Actor
         }
     }
 
-	protected override void Reset()
+	public override void Reset()
 	{
 		base.Reset ();
         score = defaultScore;
@@ -69,6 +69,15 @@ public class Enemy : Actor
     {
         base.Death();
         Player.instance.IncreaseScore(score);
+    }
+
+    public virtual void Death(bool _noScore)
+    {
+        base.Death();
+        if (!_noScore)
+        { 
+            Player.instance.IncreaseScore(score);
+        }
     }
 
     public override void TakeDamage(float _damage)

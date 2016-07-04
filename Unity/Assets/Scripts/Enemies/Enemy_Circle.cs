@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Enemy_Circle : Enemy 
 {
-    GameObject player;
+    private GameObject player = null;
     Vector2 moveTarget;
     bool circleJerks = false;
     int rotWay = 20;
@@ -37,7 +37,7 @@ public class Enemy_Circle : Enemy
         }
         if (circleJerks)
         {
-            if (player != null)
+            if (player)
             {
                 rotWay = Camera.main.WorldToViewportPoint(Player.instance.transform.position).x > 0.5f ? 20 : -20;
             }
@@ -58,7 +58,7 @@ public class Enemy_Circle : Enemy
         transform.rotation = Quaternion.Lerp(transform.rotation, newRot, 20*(speed * Time.deltaTime));
     }
 
-    protected override void Reset()
+    public override void Reset()
     {
         base.Reset();
         circleJerks = false;

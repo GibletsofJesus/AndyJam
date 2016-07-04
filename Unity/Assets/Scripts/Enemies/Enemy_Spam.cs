@@ -37,7 +37,7 @@ public class Enemy_Spam : Enemy
        startX = transform.position.x;
     }
 
-	protected virtual void OnTriggerEnter2D(Collider2D _col)
+	protected override void OnTriggerEnter2D(Collider2D _col)
 	{
 		if (_col.gameObject.tag == "Player")
 		{

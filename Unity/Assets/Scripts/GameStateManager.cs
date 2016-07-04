@@ -26,6 +26,13 @@ public class GameStateManager : MonoBehaviour {
 
     public void WinState()
     {
+        foreach(Enemy _e in GameObject.FindObjectsOfType<Enemy>())
+        {
+            if(_e.isActiveAndEnabled)
+            {
+                _e.Death(true);
+            }
+        }
         gameOverText.text = "You won!";
         StartCoroutine(gameOveranims());
     }
@@ -36,7 +43,7 @@ public class GameStateManager : MonoBehaviour {
     }
     public void Loadlevel(int l)
     {
-        Application.LoadLevel(l);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(l);
     }
 
     IEnumerator gameOveranims()
