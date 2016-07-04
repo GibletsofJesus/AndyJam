@@ -111,7 +111,7 @@ public class Actor : MonoBehaviour
         ex.explode();
     } 
 
-	protected virtual void Reset()
+	public virtual void Reset()
 	{
 		shootCooldown = 0.0f;
 		health = defaultHealth;

@@ -55,7 +55,7 @@ public class soundManager : MonoBehaviour {
                 switch (type)
                 {
                     case 0:
-                        audioSrcs[c].PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length - 1)]);
+                        audioSrcs[c].PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length)]);
                 audioSrcs[c].volume = volumeMultiplayer * .4f;
                         break;
                     case 1:

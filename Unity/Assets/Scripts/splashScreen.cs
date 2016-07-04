@@ -39,6 +39,6 @@ public class splashScreen : MonoBehaviour {
 
     public void loadLevel()
     {
-        Application.LoadLevel(1);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 }

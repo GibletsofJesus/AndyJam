@@ -188,7 +188,7 @@ public class Player : Actor
                     ps.Emit(1);
                 }
 
-                soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length - 1)]);
+                soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length)]);
 
                 if (CameraShake.instance.shakeDuration < 0.2f)
                 {
@@ -273,7 +273,7 @@ public class Player : Actor
         GetComponent<SpriteRenderer>().color = Color.white;
     }
 
-	protected override void Reset()
+	public override void Reset()
 	{
 		base.Reset ();
 		updatedDefaultHealth = defaultHealth;

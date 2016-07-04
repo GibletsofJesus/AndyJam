@@ -43,7 +43,7 @@ public class AdManager : MonoBehaviour
 
 	private void GenerateAd(Vector3 _pos)
 	{
-		Ad _ad = AdPooling (Random.Range (0, adPrefabs.Length - 1));
+		Ad _ad = AdPooling (Random.Range (0, adPrefabs.Length));
 		_ad.SpawnAd (_pos, new Vector3(Random.Range(-15,15),Random.Range(-15,15),0.0f));
 		activeAds.Add (_ad);
 	}

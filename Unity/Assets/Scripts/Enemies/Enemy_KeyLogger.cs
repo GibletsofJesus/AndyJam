@@ -3,8 +3,6 @@ using System.Collections;
 
 public class Enemy_KeyLogger : Enemy 
 {
-   
-    Vector2 target;
     float screenSide;
 	// Use this for initialization
     Vector2 moveHere = Vector2.zero;
@@ -36,7 +34,7 @@ public class Enemy_KeyLogger : Enemy
         }
         transform.position = Vector2.MoveTowards(transform.position, moveHere, speed * Time.deltaTime);
     }
-    protected override void Reset()
+    public override void Reset()
     {
         base.Reset();
     }
