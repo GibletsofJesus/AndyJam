@@ -3,6 +3,11 @@
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
+/Unity/[Ll]ibrary/
+/Unity/[Tt]emp/
+/Unity/[Oo]bj/
+/Unity/[Bb]uild/
+/Unity/[Bb]uilds/
 /Assets/AssetStoreTools*
 /Library/metadata
 
