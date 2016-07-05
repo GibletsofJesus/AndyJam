@@ -8,15 +8,15 @@ public class WordHUD : MonoBehaviour
 	[SerializeField] private Image backgroundImage = null;
 	[SerializeField] private Image cooldownImage = null;
     [SerializeField] private Image iconImage = null;
+    [SerializeField] private Transform originalIconPosition = null;
 
     private bool displayIcon = true;
-    private Vector3 originalIconPosition;
     private float lerpValue = 0;
     private float lerpSpeed = 2.0f;
 
     private void Start()
     {
-        originalIconPosition = iconImage.rectTransform.position;
+        originalIconPosition.position = iconImage.rectTransform.position;
     }
 
     public void UpdateCooldown(float _fill)
@@ -71,7 +71,7 @@ public class WordHUD : MonoBehaviour
                 lerpValue += Time.deltaTime * lerpSpeed;
                 lerpValue = lerpValue >= 1 ? 1 : lerpValue;
             }
-            iconImage.rectTransform.position = Vector3.Lerp(originalIconPosition + (Vector3.left * 50.0f), originalIconPosition, lerpValue);
+            iconImage.rectTransform.position = Vector3.Lerp(originalIconPosition.position + (Vector3.left * iconImage.rectTransform.rect.width), originalIconPosition.position, lerpValue);
         }
     }
 }
