@@ -32,8 +32,8 @@ public class Player : Actor
     private float maxAdCool;
     protected override void Awake()
 	{
-        maxAdCool = Random.Range(2, 5);
-        randomAdAmount = Random.Range(2, 6);
+        maxAdCool = Random.Range(1, 3);
+        randomAdAmount = Random.Range(2, 5);
 		staticInstance = this;
 		base.Awake ();
 		updatedDefaultHealth = defaultHealth;
