@@ -13,7 +13,7 @@ public class Player : Actor
 	private int lives;
 
     public int score = 0;
-
+    public bool advertAttack = false;
     //public float moveSpeed;
     public AudioClip[] shootSounds;
     public ParticleSystem[] muzzleflash;
@@ -26,9 +26,14 @@ public class Player : Actor
     private float invincibleFlickerRate = 0.25f;
     private float invincibleFlickerCooldown = 0.0f;
     private bool flickerDown = true;
-
+    private int addAmount = 0;
+    private int randomAdAmount;
+    private float adCool = 0;
+    private float maxAdCool;
     protected override void Awake()
 	{
+        maxAdCool = Random.Range(2, 5);
+        randomAdAmount = Random.Range(2, 6);
 		staticInstance = this;
 		base.Awake ();
 		updatedDefaultHealth = defaultHealth;
@@ -95,6 +100,7 @@ public class Player : Actor
             _flickerColour.a = 0.25f + ((invincibleFlickerCooldown / invincibleFlickerRate) / 0.75f);
             spriteRenderer.color = _flickerColour;
         }
+        AdwareAds();
     }
 
     bool rolling;
@@ -336,5 +342,31 @@ public class Player : Actor
         invincibleFlickerCooldown = invincibleFlickerRate;
         spriteRenderer.color = Color.white;
         flickerDown = true;
+    }
+
+    void AdwareAds()
+    {
+        if (advertAttack)
+        {
+            if (adCool < maxAdCool)
+            {
+                adCool += Time.deltaTime;
+            }
+            else
+            {
+                if (addAmount < randomAdAmount)
+                {
+                    AdManager.instance.TryGenerateAd(new Vector3(25, 25, 0));
+                    addAmount++;
+                    adCool = 0;
+                }
+                else
+                {
+                    addAmount = 0;
+                    adCool = 0;
+                    advertAttack = false;
+                }
+            }
+        }
     }
 }
