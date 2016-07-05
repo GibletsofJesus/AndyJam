@@ -44,7 +44,6 @@ public class Enemy_Spam : Enemy
 			_col.gameObject.GetComponent<Actor>().TakeDamage(contactHitDamage);
 			AdManager.instance.TryGenerateAd (new Vector3 (25,25, 0));
 			Death();
-			// gameObject.SetActive(false);
 		}
 	}
 

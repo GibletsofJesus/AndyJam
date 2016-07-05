@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Enemy : Actor
 {
- 
     public float contactHitDamage = 5;
 	[SerializeField] private int defaultScore = 100;
     Vector3 screenBottom;
@@ -80,11 +79,13 @@ public class Enemy : Actor
     public override void TakeDamage(float _damage)
     {
         base.TakeDamage(_damage);
-    } 
+    }
+ 
     public virtual void OnSpawn()
     {
         
     }
+
     protected void SetStat(float mod)
     {
         score *= (int)mod;
