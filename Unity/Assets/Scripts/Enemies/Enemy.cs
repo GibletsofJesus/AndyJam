@@ -22,8 +22,6 @@ public class Enemy : Actor
         {
             base.Update();
 
-//            transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
-
             if (transform.position.y > screenBottom.y + 2)
             {
                 Shoot(projData, -transform.up.normalized, shootTransform);
@@ -41,7 +39,6 @@ public class Enemy : Actor
         {
             _col.gameObject.GetComponent<Actor>().TakeDamage(contactHitDamage);
             Death();
-           // gameObject.SetActive(false);
         }
     }
 
