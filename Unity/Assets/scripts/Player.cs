@@ -248,7 +248,7 @@ public class Player : Actor
 
     protected override void Death()
     {
-        Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 2);
+        Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
         ex.transform.position = transform.position;
         gameObject.SetActive(false);
         ex.gameObject.SetActive(true);

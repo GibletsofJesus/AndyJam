@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 9ea57a0554d4f6f49aa1208e6075a078
-timeCreated: 1467712270
+timeCreated: 1467714041
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -20,7 +20,7 @@ TextureImporter:
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -30,7 +30,7 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
@@ -42,7 +42,7 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
+    filterMode: 0
     aniso: 16
     mipBias: -1
     wrapMode: 1
@@ -55,9 +55,9 @@ TextureImporter:
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 5
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
@@ -71,8 +71,20 @@ TextureImporter:
         width: 81
         height: 79
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 40.5, y: 39.5}
+        - {x: -40.5, y: 39.5}
+        - {x: -40.5, y: 15.5}
+        - {x: -32.5, y: 12.5}
+        - {x: -31.5, y: 12.5}
+        - {x: -26.5, y: -9.5}
+        - {x: -10.5, y: -39.5}
+        - {x: 11.5, y: -39.5}
+        - {x: 21.5, y: -24.5}
+        - {x: 24.5, y: -9.5}
+        - {x: 40.5, y: 16.5}
     - name: bossman - pieces_1
       rect:
         serializedVersion: 2
@@ -80,9 +92,10 @@ TextureImporter:
         y: 106
         width: 8
         height: 9
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_2
       rect:
         serializedVersion: 2
@@ -90,9 +103,10 @@ TextureImporter:
         y: 99
         width: 14
         height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_3
       rect:
         serializedVersion: 2
@@ -100,9 +114,10 @@ TextureImporter:
         y: 88
         width: 9
         height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_4
       rect:
         serializedVersion: 2
@@ -110,9 +125,10 @@ TextureImporter:
         y: 80
         width: 8
         height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_5
       rect:
         serializedVersion: 2
@@ -120,9 +136,10 @@ TextureImporter:
         y: 69
         width: 5
         height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_6
       rect:
         serializedVersion: 2
@@ -130,9 +147,10 @@ TextureImporter:
         y: 59
         width: 9
         height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 3
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_7
       rect:
         serializedVersion: 2
@@ -140,9 +158,10 @@ TextureImporter:
         y: 44
         width: 14
         height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 3
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_8
       rect:
         serializedVersion: 2
@@ -150,9 +169,10 @@ TextureImporter:
         y: 48
         width: 8
         height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 8
+      pivot: {x: 1, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_9
       rect:
         serializedVersion: 2
@@ -160,9 +180,10 @@ TextureImporter:
         y: 24
         width: 9
         height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 3
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_10
       rect:
         serializedVersion: 2
@@ -170,9 +191,10 @@ TextureImporter:
         y: 32
         width: 9
         height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 3
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_11
       rect:
         serializedVersion: 2
@@ -180,9 +202,10 @@ TextureImporter:
         y: 3
         width: 9
         height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     - name: bossman - pieces_12
       rect:
         serializedVersion: 2
@@ -190,9 +213,11 @@ TextureImporter:
         y: 12
         width: 5
         height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 3
+      pivot: {x: 1, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
   spritePackingTag: 
   userData: 
   assetBundleName: 
