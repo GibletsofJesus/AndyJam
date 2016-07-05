@@ -15,7 +15,7 @@ public class ExplosionManager : MonoBehaviour {
         instance = this;
     }
 
-    public Explosion PoolingExplosion(Transform t, int type)
+    public Explosion PoolingExplosion(Transform t, int type) // 0 for small explosion, 1 for medium, 2 for big
     {
         switch (type)
         {
@@ -44,7 +44,6 @@ public class ExplosionManager : MonoBehaviour {
                         return mediumExploList[i];
                     }
                 }
-
                 GameObject med = Instantiate(mediumExplosionPrefab, t.position, t.rotation) as GameObject;
                 med.transform.parent = transform.parent;
                 //newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;

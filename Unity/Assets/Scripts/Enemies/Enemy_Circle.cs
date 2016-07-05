@@ -7,7 +7,8 @@ public class Enemy_Circle : Enemy
     Vector2 moveTarget;
     bool circleJerks = false;
     int rotWay = 20;
- 	
+    public bool bossMode;
+
 	// Update is called once per frame
 	protected override void Update () 
     {
@@ -26,7 +27,7 @@ public class Enemy_Circle : Enemy
         float distance = Vector2.Distance(transform.position, moveTarget);
         if (!circleJerks)
         {
-            if (distance > 7)
+            if (distance > ((bossMode)? 3 : 7))//7 is normal
             {
                 transform.position = Vector2.MoveTowards(transform.position, moveTarget, speed * Time.deltaTime);
             }
