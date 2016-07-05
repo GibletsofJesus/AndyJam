@@ -159,14 +159,9 @@ public class LeaderBoard : MonoBehaviour
         {
             enterName.SetActive(true);
         }
-        //else
-        //{
-        //    StartCoroutine(MainMenu.instance.wholeScreenFade(true));
-        //}
     }
     public void SetName(string _name)
     {
-      //  _name.Insert(3, "&");
         playerName = _name;
     }
 

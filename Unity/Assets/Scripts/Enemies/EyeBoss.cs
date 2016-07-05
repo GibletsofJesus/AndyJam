@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 
 public class EyeBoss : Boss
@@ -15,7 +16,10 @@ public class EyeBoss : Boss
     int dosCount = 0;
     bool move = false;
 
-     [SerializeField] private SpriteRenderer bossRenderer = null;
+    [SerializeField]
+    private SpriteRenderer bossRenderer = null;
+    [SerializeField]
+    private ParticleSystem spawnParticles;
 
     protected override void Awake()
     {
@@ -26,9 +30,10 @@ public class EyeBoss : Boss
     void SpawnBossEnemies(Vector2 _spawnPoint, Enemy _enemy)
     {
         Enemy e = EnemyManager.instance.EnemyPooling(_enemy);
+        e.GetComponent<Enemy_Circle>().bossMode = true;
         e.transform.position = _spawnPoint;
         e.gameObject.SetActive(true);
-
+        e.hideFlags = HideFlags.HideInHierarchy;
     }
 
     protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
@@ -79,6 +84,11 @@ public class EyeBoss : Boss
 
                 base.Update();
             }
+            else
+            {
+                if (spawnParticles.isPlaying)
+                    spawnParticles.Stop();
+            }
         }
     }
 
@@ -92,70 +102,69 @@ public class EyeBoss : Boss
         base.TakeDamage(_damage);
     }
 
-    protected override IEnumerator bossDeath()
+    public void doDeath()
     {
-        Explosion ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[0].transform, 0);
-        ex.transform.position = transform.position;
-        ex.gameObject.SetActive(true);
-        ex.explode();
-        yield return new WaitForSeconds(0.7f);
-
-        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[3].transform, 0);
-        ex.transform.position = transform.position;
-        ex.gameObject.SetActive(true);
-        ex.explode();
-        yield return new WaitForSeconds(0.4f);
-
-        ex = ExplosionManager.instance.PoolingExplosion(eyeShot[1], 1);
-        ex.transform.position = transform.position;
-        ex.gameObject.SetActive(true);
-        ex.explode();
-        yield return new WaitForSeconds(0.2f);
-
-        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[1].transform, 0);
-        ex.transform.position = transform.position;
-        ex.gameObject.SetActive(true);
-        ex.explode();
-        yield return new WaitForSeconds(0.35f);
-
-        ex = ExplosionManager.instance.PoolingExplosion(eyeShot[2], 1);
-        ex.transform.position = transform.position;
-        ex.gameObject.SetActive(true);
-        ex.explode();
-        yield return new WaitForSeconds(0.1f);
-
-        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[5].transform, 0);
-        ex.transform.position = transform.position;
-        ex.gameObject.SetActive(true);
-        ex.explode();
-        yield return new WaitForSeconds(0.4f);
-
-        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[2].transform, 0);
-        ex.transform.position = transform.position;
-        ex.gameObject.SetActive(true);
-        ex.explode();
-        yield return new WaitForSeconds(0.1f);
-
-        ex = ExplosionManager.instance.PoolingExplosion(base.shootTransform[4].transform, 0);
-        ex.transform.position = transform.position;
-        ex.gameObject.SetActive(true);
-        ex.explode();
-        yield return new WaitForSeconds(0.4f);
-
-        ex = ExplosionManager.instance.PoolingExplosion(eyeShot[0], 1);
-        ex.transform.position = transform.position;
-        ex.gameObject.SetActive(true);
-        ex.explode();
-        yield return new WaitForSeconds(2f);
-
-        ex = ExplosionManager.instance.PoolingExplosion(mouthShot, 2);
-        ex.transform.position = transform.position;
-        ex.explode();
-        StartCoroutine(base.bossDeath());
-        yield return new WaitForSeconds(.7f);
-        
+        StartCoroutine(bossDeath());
     }
 
+    protected override IEnumerator bossDeath()
+    {
+        Debug.Log("triggered");
+        Material m = bossRenderer.material;
+        float burnAmount=0;
+        
+        GetComponent<Animator>().SetBool("death",true);
+        Explosion ex;
+
+        //also do eyes and mouth transforms
+
+        foreach (GameObject go in base.shootTransform)
+        {
+            if (Random.value > .5f)
+                ex = ExplosionManager.instance.PoolingExplosion(go.transform, 0);
+            else
+                ex = ExplosionManager.instance.PoolingExplosion(go.transform, 1);
+            
+            ex.gameObject.SetActive(true);
+            ex.explode();
+            yield return new WaitForSeconds(Random.Range(0.4f, .8f));
+            burnAmount += 0.05f;
+            m.SetFloat("_Fade", burnAmount);
+        }
+
+        foreach (Transform t in eyeShot)
+        {
+            if (Random.value > .5f)
+                ex = ExplosionManager.instance.PoolingExplosion(t.transform, 0);
+            else
+                ex = ExplosionManager.instance.PoolingExplosion(t.transform, 1);
+            
+            ex.gameObject.SetActive(true);
+            ex.explode();
+            yield return new WaitForSeconds(Random.Range(0.4f, 0.75f));
+            burnAmount += 0.05f;
+            m.SetFloat("_Fade", burnAmount);
+        }
+
+        yield return new WaitForSeconds(1);
+        ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        burnAmount += 0.05f;
+        m.SetFloat("_Fade", burnAmount);
+
+        GetComponent<Animator>().Play("boss_die_idle");
+        yield return new WaitForSeconds(1.5f);
+
+        Player.instance.IncreaseScore(score);
+        EnemyManager.instance.NextLevel();
+
+        ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        bossRenderer.enabled = false;
+    }
+    
     protected override void Movement()
     {
         transform.position = Vector2.MoveTowards(transform.position, bossTarget, speed * 2 * Time.deltaTime);
@@ -169,15 +178,19 @@ public class EyeBoss : Boss
     {
         if (dosCount < 30 && cool >= maxCool)
         {
+            if (!spawnParticles.isPlaying)
+                spawnParticles.Play();
+
             if (MiniCool())
             {
-                SpawnBossEnemies(eyeShot[Random.Range(0, eyeShot.Length - 1)].position, littleBastards);
+                SpawnBossEnemies(mouthShot.position, littleBastards);
                 minicooler = 0;
                 dosCount++;
             }
         }
         else
         {
+            spawnParticles.Stop();
             dosCount = 0;
         }
         if (dosCount >= 10 && cool >= maxCool)
@@ -199,4 +212,18 @@ public class EyeBoss : Boss
         }
     }
 
+}
+[CustomEditor(typeof(EyeBoss))]
+public class ObjectBuilderEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        EyeBoss myScript = (EyeBoss)target;
+        if (GUILayout.Button("Kill boss"))
+        {
+            myScript.doDeath();
+        }
+    }
 }
