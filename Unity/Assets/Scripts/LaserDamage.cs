@@ -6,6 +6,11 @@ public class LaserDamage : MonoBehaviour
     [SerializeField] private string[] damageTags = null;
     [SerializeField] private float laserDamage = 5.0f;
 
+    public void SetDamage(float _damage)
+    {
+        laserDamage = _damage;
+    }
+
     private void OnTriggerStay2D(Collider2D _col)
     {
         for (int i = 0; i < damageTags.Length; ++i)

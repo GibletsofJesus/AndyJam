@@ -2,6 +2,8 @@
 
 public class LaserModule : MonoBehaviour
 {
+    [SerializeField] private LaserDamage damageModule = null;
+
     [SerializeField] private Animator animator = null;
     [SerializeField] private ParticleSystem chargeParticles = null;
 
@@ -21,6 +23,14 @@ public class LaserModule : MonoBehaviour
     private const float SIZE = 13.0f / 16.0f;
 
     private Vector3 originalLocal;
+
+    public void SetParameters(float _charge, float _duration, float _damage)
+    {
+        chargeTime = _charge;
+        animator.SetFloat("Speed", 1.0f / chargeTime);
+        laserDuration = _duration;
+        damageModule.SetDamage(_damage);
+    }
 
     private void Awake()
     {
@@ -113,7 +123,11 @@ public class LaserModule : MonoBehaviour
     {
         return fireLaser;
     }
+    public bool IsLaserCharging()
+    {
+        return !laserCharged;
+    }
 
-   
+
 
 }

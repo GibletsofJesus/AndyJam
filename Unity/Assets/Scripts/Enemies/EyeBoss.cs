@@ -102,10 +102,10 @@ public class EyeBoss : Boss
         base.TakeDamage(_damage);
     }
 
-    public void doDeath()
-    {
-        StartCoroutine(bossDeath());
-    }
+    //public void doDeath()
+    //{
+    //    StartCoroutine(bossDeath());
+    //}
 
     protected override IEnumerator bossDeath()
     {
@@ -213,17 +213,17 @@ public class EyeBoss : Boss
     }
 
 }
-[CustomEditor(typeof(EyeBoss))]
-public class ObjectBuilderEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
+//[CustomEditor(typeof(EyeBoss))]
+//public class ObjectBuilderEditor : Editor
+//{
+//    public override void OnInspectorGUI()
+//    {
+//        DrawDefaultInspector();
 
-        EyeBoss myScript = (EyeBoss)target;
-        if (GUILayout.Button("Kill boss"))
-        {
-            myScript.doDeath();
-        }
-    }
-}
+//        EyeBoss myScript = (EyeBoss)target;
+//        if (GUILayout.Button("Kill boss"))
+//        {
+//            myScript.doDeath();
+//        }
+//    }
+//}

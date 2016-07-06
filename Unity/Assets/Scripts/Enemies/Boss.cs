@@ -12,6 +12,7 @@ public class Boss : Enemy
 	private int charactersHidden;
 
     protected bool bossDefeated = false;
+    public bool bossIsDefeated { get { return bossDefeated; } }
 
     public override void TakeDamage(float _damage)
     {
@@ -92,5 +93,13 @@ public class Boss : Enemy
         base.Death();
         EnemyManager.instance.NextLevel();
         yield return new WaitForSeconds(0.1f);
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D _col)
+    {
+        if (_col.gameObject.tag == "Player")
+        {
+            _col.gameObject.GetComponent<Actor>().TakeDamage(contactHitDamage);
+        }
     }
 }

@@ -76,7 +76,7 @@ public class Actor : MonoBehaviour
         return false;
     }
    
-    void CoolDown()
+    protected void CoolDown()
     {
 		shootCooldown = (shootCooldown + Time.deltaTime) > shootRate ? shootRate : (shootCooldown + Time.deltaTime);
     }
@@ -96,7 +96,7 @@ public class Actor : MonoBehaviour
 		}
     }
 
-    void revertColour()
+    protected void revertColour()
     {
         GetComponent<SpriteRenderer>().color = Color.white;
     }

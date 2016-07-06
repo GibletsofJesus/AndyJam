@@ -3,17 +3,19 @@ using System.Collections;
 
 public class WormBoss : Boss
 {
-    [SerializeField] private Transform[] rightPivots = null;
-    [SerializeField] private Transform[] leftPivots = null;
-
-    [SerializeField] private LaserModule laser = null;
-    [SerializeField] private Transform mouth = null;
+    [SerializeField] private WormLaserSegment laserSegment = null;
+    [SerializeField] private WormMouthSegment mouthSegment = null;
 
     [SerializeField] private SpriteRenderer bossRenderer = null;
     // [SerializeField] private ParticleSystem spawnParticles;
 
     private bool atStartPosition = false;
     [SerializeField] private Vector3 startPosition = Vector3.zero;
+
+    [SerializeField] private float laserPatternCooldown = 10.0f;
+    private float laserTime = 0.0f;
+    [SerializeField] private float mouthPatternCooldown = 10.0f;
+    private float mouthTime = 0.0f;
 
     protected override void Awake()
     {
@@ -64,6 +66,41 @@ public class WormBoss : Boss
             if (!bossDefeated)
             {
                 base.Update();
+
+                laserTime += Time.deltaTime;
+                if (laserTime >= laserPatternCooldown)
+                {
+                    float _rand = Random.Range(0.0f, 1.0f);
+                    if (_rand < 0.45f)
+                    {
+                        laserSegment.LaserHoldPattern();
+                    }
+                    else if (_rand < 0.8f)
+                    {
+                        laserSegment.LaserSweepPattern();
+                    }
+                    else
+                    {
+                        laserSegment.LaserRepeatingPattern();
+                    }
+                    laserTime = 0.0f;
+                }
+
+                mouthTime += Time.deltaTime;
+                if (mouthTime >= mouthPatternCooldown)
+                {
+                    float _rand = Random.Range(0.0f, 1.0f);
+                    if (_rand < 0.5f)
+                    {
+                        mouthSegment.MouthStreamPattern();
+                    }
+                    else
+                    {
+                        mouthSegment.MouthSprayPattern();
+                    }
+                    mouthTime = 0.0f;
+                }
+
             }
             else
             {
@@ -75,16 +112,21 @@ public class WormBoss : Boss
 
     public override void TakeDamage(float _damage)
     {
+        if (IsInvoking("revertColour"))
+        {
+            CancelInvoke("revertColour");
+        }
         bossRenderer.color = Color.red;
         Invoke("revertColour", .1f);
         
         base.TakeDamage(_damage);
     }
 
-    public void doDeath()
+    public void TakeDamageFromSegment(float _damage)
     {
-        StartCoroutine(bossDeath());
+        base.TakeDamage(_damage);
     }
+
 
     protected override IEnumerator bossDeath()
     {
@@ -109,5 +151,12 @@ public class WormBoss : Boss
                 atStartPosition = true;
             }
         }
+    }
+
+    protected override void Death()
+    {
+        laserSegment.Reset();
+        mouthSegment.Reset();
+        base.Death();
     }
 }

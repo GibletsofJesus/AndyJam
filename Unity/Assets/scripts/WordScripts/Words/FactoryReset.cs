@@ -18,7 +18,11 @@ public class FactoryReset : AbilityWord
             {
                 if(_e is Boss)
                 {
-                    _e.TakeDamage(3000);
+                    _e.TakeDamage(5000);
+                }
+                else if(_e is WormBossSegment)
+                {
+                    _e.TakeDamage(100);
                 }
                 else
                 {

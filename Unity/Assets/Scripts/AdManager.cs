@@ -41,14 +41,32 @@ public class AdManager : MonoBehaviour
 		}
 	}
 
-	private void GenerateAd(Vector3 _pos)
+    public void TryGenerateAd(Vector3 _pos, int _index)
+    {
+        if (!adblock)
+        {
+            if ((100.0f - adPercent) > Random.Range(0.0f, 100.0f))
+            {
+                GenerateAd(_pos);
+            }
+        }
+    }
+
+    private void GenerateAd(Vector3 _pos)
 	{
 		Ad _ad = AdPooling (Random.Range (0, adPrefabs.Length));
 		_ad.SpawnAd (_pos, new Vector3(Random.Range(-15,15),Random.Range(-15,15),0.0f));
 		activeAds.Add (_ad);
 	}
 
-	private Ad AdPooling(int _index)
+    private void GenerateAd(Vector3 _pos, int _index)
+    {
+        Ad _ad = AdPooling(_index);
+        _ad.SpawnAd(_pos, new Vector3(Random.Range(-15, 15), Random.Range(-15, 15), 0.0f));
+        activeAds.Add(_ad);
+    }
+
+    private Ad AdPooling(int _index)
 	{
 		for (int i = 0; i < pooledAds[_index].Count; i++)
 		{
