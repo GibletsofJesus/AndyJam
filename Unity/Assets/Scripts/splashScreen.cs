@@ -97,7 +97,7 @@ public class splashScreen : MonoBehaviour
 
     public void loadLevel()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(3);
     }
 
     void OptionSelect()
