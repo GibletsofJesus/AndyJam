@@ -26,7 +26,11 @@ public class folder_boss : MonoBehaviour {
         headTop.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
     }
 
-    //public void CannonRot()
+    public void CannonRot(int cannonIndex, float desiredRotation)
+    {
+        desiredRotation = Mathf.Clamp(desiredRotation, -30, 30);
+        Cannons[cannonIndex].transform.rotation = Quaternion.Euler(new Vector3(0, 0, desiredRotation));
+    }
 
 }
 
@@ -46,5 +50,23 @@ public class folderTester : Editor
         {
             myScript.mouth(false);
         }
+
+        if (GUILayout.Button("R cannon UP"))
+        {
+            myScript.CannonRot(1, 30);
+        }
+        if (GUILayout.Button("R cannon DOWN"))
+        {
+            myScript.CannonRot(1, -30);
+        }
+        if (GUILayout.Button("L cannon UP"))
+        {
+            myScript.CannonRot(0, 30);
+        }
+        if (GUILayout.Button("L cannon DOWN"))
+        {
+            myScript.CannonRot(0, -30);
+        }
+
     }
 }

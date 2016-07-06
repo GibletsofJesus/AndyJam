@@ -7,7 +7,7 @@ public class CloseWord : Word
 	{
 		base.Start ();
 		wordActive = true;
-		word = "close.exe";
+		word = "close";
 	}
 	
 	protected override void Update()
