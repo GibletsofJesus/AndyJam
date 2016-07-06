@@ -25,9 +25,9 @@ public class splashScreen : MonoBehaviour
     private int menuSelect = 0;
     private float menuCool = 0.5f;
     private float maxMenuCool = 0.35f;
-    private float buttonCool = 0.5f;
-    private float maxButtonCool = 0.5f;
-    bool leaderBool = false;
+    private float buttonCool = 0.35f;
+    private float maxButtonCool = 0.35f;
+    public bool leaderBool = false;
 
 	void Update ()
     {        if (allowStart)
@@ -60,31 +60,27 @@ public class splashScreen : MonoBehaviour
                     GreenShip.instance.ship = ship.sprite;
                     anim.Play("splash_out");
                     foreach (Text t in options)
-                    {
-                        t.CrossFadeColor(new Color(0, 0, 0, 0), 0.3f, false, true);
-                    }
                     allowStart = false;
                     break;
                 case 1:
                     leaderBool = !leaderBool;
                     ShowLeaderBoard(leaderBool);
                     buttonCool = 0;
+                    soundManager.instance.playSound(swapSounds[0]);
                     break;
                 case 2:
                     if (Input.GetButton("Fire1") && allowStart && MenuCooldown())
+                    {
                         Application.Quit();
+                        soundManager.instance.playSound(swapSounds[0]);
+                    }
                     break;
             }
         }
     }
 
     bool transitioning;
-
-    public void letPlayerStart()
-    {
-        allowStart = true;
-    }
-
+    
     public void loadLevel()
     {
         SceneManager.LoadScene(3);
@@ -111,6 +107,7 @@ public class splashScreen : MonoBehaviour
                 }
             }
             menuCool = 0;
+            soundManager.instance.playSound(swapSounds[1]);
         }
     }
 
@@ -139,15 +136,26 @@ public class splashScreen : MonoBehaviour
                 options[i].color = Color.white;
             }
         }
-        soundManager.instance.playSound(MenuBoop);
     }
 
     void ShowMenu()
     {
-        foreach (Text t in options)
+        StartCoroutine(FadeMenu());
+    }
+
+    IEnumerator FadeMenu()
+    {
+        while (options[0].color.a < 1)
         {
-            t.CrossFadeAlpha(1, 5, false);
+            foreach (Text t in options)
+            {
+                Color col = t.color;
+                col.a += Time.deltaTime;
+                t.color = col;
+            }
+            yield return new WaitForEndOfFrame();
         }
+        allowStart = true;
     }
 
     void DisplayLeaderBoard()
