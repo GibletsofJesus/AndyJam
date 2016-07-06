@@ -220,7 +220,6 @@ public class EnemyManager : MonoBehaviour
         soundManager.instance.music.enabled = true;
         Enemy b = EnemyPooling(levels[currentLevel].boss);
         Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 1.2f));
-        //Vector3 spawnPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, .75f));
         spawnPos.z = 0;
         b.transform.position = spawnPos;
         b.OnSpawn();
