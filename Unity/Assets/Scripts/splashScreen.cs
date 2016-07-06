@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 public class splashScreen : MonoBehaviour
 {
-
+    public AudioClip MenuBoop;
+    public Color highLightCol;
     public Animator anim;
     public SpriteRenderer ship;
     public Sprite ShipA, ShipB;
@@ -23,19 +24,13 @@ public class splashScreen : MonoBehaviour
     bool once = false;
     private int menuSelect = 0;
     private float menuCool = 0.5f;
-    private float maxMenuCool = 0.5f;
+    private float maxMenuCool = 0.35f;
     private float buttonCool = 0.5f;
     private float maxButtonCool = 0.5f;
     bool leaderBool = false;
-    // Update is called once per frame
-    void Awake()
-    {
-       
-    }
+
 	void Update ()
-    {
-       
-        if (allowStart)
+    {        if (allowStart)
         {
             OptionSelect();
             ChangeMenuColour();
@@ -56,39 +51,34 @@ public class splashScreen : MonoBehaviour
             }
             buttonCool = 0;
         }
-        if (Input.GetButton("Fire1") && allowStart && ButtonCoolDown())
+        if (Input.GetButton("Fire1") && allowStart && ButtonCoolDown() && !transitioning)
         {
             switch (menuSelect)
             {
                 case 0:
+                    anim.StopPlayback();
+                    GreenShip.instance.ship = ship.sprite;
+                    anim.Play("splash_out");
+                    foreach (Text t in options)
                     {
-                        anim.StopPlayback();
-                        GreenShip.instance.ship = ship.sprite;
-                        anim.Play("splash_out");
-                        foreach (Text t in options)
-                        {
-                            t.CrossFadeColor(new Color(0, 0, 0, 0), 0.3f, false, true);
-                        }
-                        allowStart = false;
-
-                        break;
+                        t.CrossFadeColor(new Color(0, 0, 0, 0), 0.3f, false, true);
                     }
+                    allowStart = false;
+                    break;
                 case 1:
-                    {
-                        leaderBool = !leaderBool;
-                        ShowLeaderBoard(leaderBool);
-                        buttonCool = 0;
-                        break;
-                    }
+                    leaderBool = !leaderBool;
+                    ShowLeaderBoard(leaderBool);
+                    buttonCool = 0;
+                    break;
                 case 2:
-                    {
-                        if (Input.GetButton("Fire1") && allowStart && MenuCooldown())
-                            Application.Quit();
-                        break;
-                    }
+                    if (Input.GetButton("Fire1") && allowStart && MenuCooldown())
+                        Application.Quit();
+                    break;
             }
         }
-	}
+    }
+
+    bool transitioning;
 
     public void letPlayerStart()
     {
@@ -102,7 +92,7 @@ public class splashScreen : MonoBehaviour
 
     void OptionSelect()
     {
-        if (Input.GetAxis("Vertical") != 0 && MenuCooldown())
+        if (Input.GetAxis("Vertical") != 0 && MenuCooldown() && !leaderBool)
         {
             if (Input.GetAxis("Vertical")<0)
             {
@@ -142,23 +132,24 @@ public class splashScreen : MonoBehaviour
         {
             if (i == menuSelect)
             {
-                options[i].color = Color.blue;
+                options[i].color = highLightCol;
             }
             else
             {
                 options[i].color = Color.white;
             }
         }
+        soundManager.instance.playSound(MenuBoop);
     }
 
     void ShowMenu()
     {
-      foreach(Text t in options)
-            {
-                t.gameObject.SetActive(true);
-            }
+        foreach (Text t in options)
+        {
+            t.CrossFadeAlpha(1, 5, false);
+        }
     }
-  // Update is called once per frame
+
     void DisplayLeaderBoard()
     {
         if (!once)
@@ -168,7 +159,12 @@ public class splashScreen : MonoBehaviour
             {
                 rank[i].text = (i + 1).ToString();
                 scores[i].text = k[i].Value.ToString();
-                names[i].text = k[i].Key;
+
+                string s = k[i].Key;
+                s = s.Insert(4, " ");
+                s = s.Insert(3, " ");
+                names[i].text = s;
+
                 rank[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.05f));
                 scores[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.05f));
                 names[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.05f));
@@ -177,24 +173,30 @@ public class splashScreen : MonoBehaviour
     }
     void ShowLeaderBoard(bool _onOff)
     {
-        if (_onOff)
-        {
-            foreach (GameObject g in titles)
-            {
-                g.SetActive(false);
-            }
-            lBoard.gameObject.SetActive(true);
-        }
-        else
-        {
-             lBoard.gameObject.SetActive(false);
-            
-            foreach (GameObject g in titles)
-            {
-                g.SetActive(true);
-            }
-        }
+        if (!transitioning)
+            StartCoroutine(leadboardPan(_onOff));
     }
+
+    IEnumerator leadboardPan(bool InOut)
+    {
+        transitioning = true;
+        Vector3 mainMenu = new Vector3(0.5f, -0.87f, -10);
+        Vector3 leadboardView = new Vector3(5.5f, -9.53f, -10);
+
+        float lerpVal = 0;
+        while (lerpVal < 1)
+        {
+            if (InOut)
+                Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, leadboardView, lerpVal);
+            else
+                Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, mainMenu, lerpVal);
+
+            lerpVal += Time.deltaTime * 0.8f;
+            yield return new WaitForEndOfFrame();
+        }
+        transitioning = false;
+    }
+
     bool ButtonCoolDown()
     {
         if (buttonCool<maxButtonCool)
