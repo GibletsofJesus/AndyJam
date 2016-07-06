@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class PauseMenu : MenuSelect 
 {
     Slider slide;
+    Slider slide2;
 	// Use this for initialization
 	void Start ()
     {
-        slide = box[1].GetComponentInChildren<Slider>();
+        slide = box[0].GetComponentInChildren<Slider>();
+        slide2 = box[1].GetComponentInChildren<Slider>();
 	}
 	
 	// Update is called once per frame
@@ -23,12 +25,13 @@ public class PauseMenu : MenuSelect
     {
         if (selectBox == 0)
         {
-           // if (Input.GetButtonDown("Fire1"))
-           //     GameStateManager.instance.ChangeState(GameStateManager.instance.previousState);
+            ChangeVolumeSlide(slide);
+            soundManager.instance.volumeMultiplayer = slide.value;
         }
         else if (selectBox == 1)
         {
-            DoAction(ChangeVolumeSlide);
+            ChangeVolumeSlide(slide2);
+            soundManager.instance.music.volume = slide2.value;
         }
         if (Input.GetButtonDown("Fire1"))
         {
@@ -45,16 +48,16 @@ public class PauseMenu : MenuSelect
         SceneManager.LoadScene(1);
     }
 
-    void ChangeVolumeSlide()
+    void ChangeVolumeSlide(Slider _sl)
     {
-        if (slide.value > 0 || slide.value < 1)
+        if (_sl.value > 0 || _sl.value < 1)
         {
             if (Input.GetJoystickNames()[0] == "")
-                box[1].GetComponentInChildren<Slider>().value += Input.GetAxis("Horizontal") * 10;
+               _sl.value += Input.GetAxis("Horizontal") * 10;
             else
-                box[1].GetComponentInChildren<Slider>().value += Input.GetAxis("Horizontal") / 100;
+               _sl.value += Input.GetAxis("Horizontal") / 100;
 
-          //  SoundManager.instance.changeVolume(slide.value);
+          
         }
     }
 }

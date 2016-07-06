@@ -4,7 +4,7 @@ using System.Collections;
 
 public class GameStateManager : MonoBehaviour {
 
-    public enum GameState { Paused,Gameplay};
+    public enum GameState { Paused,Gameplay,GameOver};
     public GameObject pauseUI, GameOverUI,buttons;
 
     public Text youScored,gameOverText;
@@ -22,6 +22,7 @@ public class GameStateManager : MonoBehaviour {
 
     public void GameOver()
     {
+        state = GameState.GameOver;
         if (LeaderBoard.instance.CheckIfHighScore(Player.instance.score))
         {
             enterName.SetActive(true);

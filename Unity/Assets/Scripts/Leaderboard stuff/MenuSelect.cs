@@ -45,7 +45,7 @@ public class MenuSelect : MonoBehaviour
                 }
             }
             coolDown = 0;
-          //  SoundManager.instance.playSound(0);
+            soundManager.instance.playSound(0);
         }
     }
    protected virtual void SetFunctionToButton()
@@ -59,7 +59,7 @@ public class MenuSelect : MonoBehaviour
         {
             if (selectBox == i)
             {
-                box[i].color = Color.green;
+                box[i].color = Color.blue;
             }
             else
             {
