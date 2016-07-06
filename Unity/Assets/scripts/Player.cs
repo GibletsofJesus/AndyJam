@@ -42,10 +42,11 @@ public class Player : Actor
         screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
         verticalBoundsBot = Camera.main.ViewportToWorldPoint(new Vector3(.5f, 0f));
         verticalBoundsTop = Camera.main.ViewportToWorldPoint(new Vector3(.5f, .5f));
-        GetComponent<SpriteRenderer>().sprite = GreenShip.instance.ship;
+        
     }
     void Start()
     {
+        spriteRenderer.sprite = GreenShip.instance.ship;
         Destroy(GreenShip.instance.gameObject);
     }
 	// Update is called once per frame

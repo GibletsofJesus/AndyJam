@@ -17,7 +17,8 @@ public class LeaderBoard : MonoBehaviour
     public string gameName;
     int playerScore;
     public int stringLength;
-    List<KeyValuePair<string, int>> scores = new List<KeyValuePair<string,int>>();
+    [SerializeField]
+    public List<KeyValuePair<string, int>> scores = new List<KeyValuePair<string,int>>();
 
 	// Use this for initialization
 	void Awake () 
@@ -33,6 +34,7 @@ public class LeaderBoard : MonoBehaviour
         if (CheckScoreFile())
         {
             ReadScoreFile();
+            SortScores();
         }
         else
         {
