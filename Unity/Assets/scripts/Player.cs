@@ -46,8 +46,11 @@ public class Player : Actor
     }
     void Start()
     {
-        spriteRenderer.sprite = GreenShip.instance.ship;
-        Destroy(GreenShip.instance.gameObject);
+        if (GreenShip.instance)
+        {
+            spriteRenderer.sprite = GreenShip.instance.ship;
+            Destroy(GreenShip.instance.gameObject);
+        }
     }
 	// Update is called once per frame
     protected void FixedUpdate()

@@ -59,7 +59,7 @@ public class MenuSelect : MonoBehaviour
         {
             if (selectBox == i)
             {
-                box[i].color = Color.blue;
+                box[i].color = new Color(0,.5f,1);
             }
             else
             {

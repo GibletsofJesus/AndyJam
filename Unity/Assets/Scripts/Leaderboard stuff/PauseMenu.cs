@@ -52,12 +52,17 @@ public class PauseMenu : MenuSelect
     {
         if (_sl.value > 0 || _sl.value < 1)
         {
-            if (Input.GetJoystickNames()[0] == "")
-               _sl.value += Input.GetAxis("Horizontal") * 10;
+            if (Input.GetJoystickNames().Length > 0)
+            {
+                if (Input.GetJoystickNames()[0] == "")
+                    _sl.value += Input.GetAxis("Horizontal") * 10;
+                else
+                    _sl.value += Input.GetAxis("Horizontal") / 100;
+            }
             else
-               _sl.value += Input.GetAxis("Horizontal") / 100;
-
-          
+            {
+                _sl.value += Input.GetAxis("Horizontal") * 10;
+            }       
         }
     }
 }

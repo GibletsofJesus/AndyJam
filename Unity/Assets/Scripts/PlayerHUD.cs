@@ -24,8 +24,9 @@ public class PlayerHUD : MonoBehaviour
     private void Awake()
     {
         staticInstance = this;
-		pixelCooldown =(1.0f / (float)pixels) * 1000.0f;
-        liveSprite = GreenShip.instance.ship;
+        pixelCooldown = (1.0f / (float)pixels) * 1000.0f;
+        if (GreenShip.instance)
+            liveSprite = GreenShip.instance.ship;
         foreach (Image i in lives)
         {
             i.sprite = liveSprite;
