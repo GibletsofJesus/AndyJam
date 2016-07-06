@@ -4,6 +4,11 @@ using System.Collections;
 public class Authenticate : AbilityWord
 {
     [SerializeField] private LaserModule laser = null;
+    [SerializeField] private GameObject chargeCannon = null;
+    [SerializeField] private Transform chargeCannonOriginalPosition;
+    [SerializeField] private Transform chargeCannonNewPosition;
+
+    private float cannonMove = 0.0f;
 
 	protected override void Start ()
 	{
@@ -15,18 +20,36 @@ public class Authenticate : AbilityWord
 	{
 		base.TriggerBehavior ();
         laser.FireLaser();
+        cannonMove = 0.0f;
 	}
 	
 	protected override void Behavior ()
 	{
 		if(!laser.IsLaserFiring())
         {
-            EndBehavior();
+            cannonMove = Mathf.Max(0.0f, cannonMove - Time.deltaTime);
+            if (cannonMove == 0.0f)
+            {
+                EndBehavior();
+            }
         }
-	}
+        else
+        {
+            cannonMove = Mathf.Min(1.0f, cannonMove + Time.deltaTime);
+        }
+        chargeCannon.transform.localPosition = Vector3.Lerp(chargeCannonOriginalPosition.localPosition, chargeCannonNewPosition.localPosition, cannonMove);
+    }
 	
 	protected override void EndBehavior()
 	{
 		base.EndBehavior ();
 	}
+
+    public override void Reset()
+    {
+        laser.Reset();
+        cannonMove = 0.0f;
+        chargeCannon.transform.localPosition = Vector3.Lerp(chargeCannonOriginalPosition.localPosition, chargeCannonNewPosition.localPosition, cannonMove);
+        base.Reset();
+    }
 }

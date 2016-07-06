@@ -41,4 +41,9 @@ public class BossWord : Word
 		wordActive = true;
 	}
 
+    public override void Reset()
+    {
+        //This is needed to override base behavior to prevent if from happening
+    }
+
 }

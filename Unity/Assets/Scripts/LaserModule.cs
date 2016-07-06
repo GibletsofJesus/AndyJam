@@ -2,6 +2,9 @@
 
 public class LaserModule : MonoBehaviour
 {
+    [SerializeField] private Animator animator = null;
+    [SerializeField] private ParticleSystem chargeParticles = null;
+
     [SerializeField] private float laserSpeed = 25.0f;
 
     [SerializeField] private GameObject laserCore = null;
@@ -17,12 +20,15 @@ public class LaserModule : MonoBehaviour
 
     private const float SIZE = 13.0f / 16.0f;
 
+    private Vector3 originalLocal;
+
     private void Awake()
     {
         laserCore.SetActive(false);
         laserTip.SetActive(false);
         laserBack.SetActive(false);
-        transform.localPosition = Vector3.zero;
+        originalLocal = transform.localPosition;
+        animator.SetFloat("Speed", 1.0f / chargeTime);
     }
 
     private void Update()
@@ -40,7 +46,6 @@ public class LaserModule : MonoBehaviour
                     }
                     else
                     {
-                        laserBack.SetActive(true);
                         laserCore.transform.localScale = new Vector3(1, Mathf.Max(laserCore.transform.localScale.y - (Time.deltaTime * laserSpeed / SIZE / 2.0f),0.0f), 1);
                         transform.localPosition = new Vector3(0.0f, transform.localPosition.y + ((Time.deltaTime * laserSpeed)/2.0f), 0.0f);
                         if(laserCore.transform.localScale.y == 0.0f)
@@ -61,6 +66,9 @@ public class LaserModule : MonoBehaviour
                         laserCharged = true;
                         laserCore.SetActive(true);
                         laserTip.SetActive(true);
+                        laserBack.SetActive(true);
+                        animator.ResetTrigger("Charge");
+                        chargeParticles.Stop();
                     }
                 }
             }
@@ -74,7 +82,9 @@ public class LaserModule : MonoBehaviour
             fireLaser = true;
             laserCharged = false;
             laserTime = 0.0f;
-            transform.localPosition = Vector3.zero;
+            transform.localPosition = originalLocal;
+            animator.SetTrigger("Charge");
+            chargeParticles.Play();
         }
     }
 
@@ -83,10 +93,20 @@ public class LaserModule : MonoBehaviour
         laserCore.SetActive(false);
         laserTip.SetActive(false);
         laserBack.SetActive(false);
-        transform.localPosition = Vector3.zero;
+        
         fireLaser = false;
         laserCharged = false;
         laserTime = 0.0f;
+
+        transform.localPosition = originalLocal;
+        laserCore.transform.localScale = new Vector3(1, 0, 1);
+        laserTip.transform.localPosition = new Vector3(0.0f, (SIZE / 2.0f) * ((laserCore.transform.localScale.y * 2) + 1), 0.0f);
+
+        animator.ResetTrigger("Charge");
+        if (chargeParticles.isPlaying)
+        {
+            chargeParticles.Stop();
+        }
     }
 
     public bool IsLaserFiring()

@@ -25,6 +25,11 @@ public class PlayerHUD : MonoBehaviour
     {
         staticInstance = this;
 		pixelCooldown =(1.0f / (float)pixels) * 1000.0f;
+        liveSprite = GreenShip.instance.ship;
+        foreach (Image i in lives)
+        {
+            i.sprite = liveSprite;
+        }
     }
 
     public void UpdateHealth(float _healthPercent)
