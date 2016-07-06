@@ -22,7 +22,11 @@ public class LeaderBoard : MonoBehaviour
 	// Use this for initialization
 	void Awake () 
     {
-	    if (leader==null)
+	    if (leader!=null)
+        {
+            Destroy(gameObject);
+        }
+        else
         {
             leader = this;
         }
@@ -34,6 +38,7 @@ public class LeaderBoard : MonoBehaviour
         {
             CreateScoreFile();
         }
+        DontDestroyOnLoad(gameObject);
 	}
 
     /// <summary>

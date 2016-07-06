@@ -17,6 +17,7 @@ public class EnterName : MonoBehaviour
     // Use this for initialization
 	void Awake () 
     {
+
         coolDown = maxCool;
         currentCharacter = new int[box.Length];
         for (int i = 0; i < currentCharacter.Length;i++ )
@@ -125,5 +126,7 @@ public class EnterName : MonoBehaviour
         theName =  theName.Insert(3, "&");
         LeaderBoard.instance.SetName(theName);
         LeaderBoard.instance.AddNewScoreToLB();
+        GameStateManager.instance.RunGameOver();
+        transform.parent.gameObject.SetActive(false);
     }
 }

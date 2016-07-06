@@ -12,7 +12,8 @@ public class GameStateManager : MonoBehaviour {
 
     public static GameStateManager instance;
     public GameState state;
-
+    [SerializeField]
+    private GameObject enterName;
 	void Awake()
     {
         instance = this;
@@ -21,6 +22,12 @@ public class GameStateManager : MonoBehaviour {
 
     public void GameOver()
     {
+        if (LeaderBoard.instance.CheckIfHighScore(Player.instance.score))
+        {
+            enterName.SetActive(true);
+        }
+
+        else
         StartCoroutine(gameOveranims());
     }
 
@@ -46,17 +53,21 @@ public class GameStateManager : MonoBehaviour {
         UnityEngine.SceneManagement.SceneManager.LoadScene(l);
     }
 
+    public void RunGameOver()
+    {
+        StartCoroutine(gameOveranims());
+    }
+
     IEnumerator gameOveranims()
     {
         yield return new WaitForSeconds(2);
-        GameOverUI.SetActive(true);
 
-        yield return new WaitForSeconds(1.5f);
-        soundManager.instance.playSound(gameOverSounds);
-        youScored.text = "You scored <color=red> "+ Player.instance.score + "</color>";
-        yield return new WaitForSeconds(2);
-
-        buttons.SetActive(true);
+            GameOverUI.SetActive(true);
+            yield return new WaitForSeconds(1.5f);
+            soundManager.instance.playSound(gameOverSounds);
+            youScored.text = "You scored <color=red> " + Player.instance.score + "</color>";
+            yield return new WaitForSeconds(2);
+         buttons.SetActive(true);
     }
 
     void Update()
