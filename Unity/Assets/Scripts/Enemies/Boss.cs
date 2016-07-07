@@ -83,8 +83,9 @@ public class Boss : Enemy
     {
         //do explosions
         bossDefeated = true;
-        StartCoroutine(bossDeath());
         Player.instance.IncreaseScore(score);
+        StartCoroutine(bossDeath());
+       
 
     }
 

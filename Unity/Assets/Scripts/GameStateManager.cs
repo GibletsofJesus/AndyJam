@@ -34,7 +34,8 @@ public class GameStateManager : MonoBehaviour {
 
     public void WinState()
     {
-        foreach(Enemy _e in GameObject.FindObjectsOfType<Enemy>())
+        state = GameState.GameOver;
+        foreach (Enemy _e in GameObject.FindObjectsOfType<Enemy>())
         {
             if(_e.isActiveAndEnabled)
             {
@@ -42,7 +43,14 @@ public class GameStateManager : MonoBehaviour {
             }
         }
         gameOverText.text = "You won!";
-        StartCoroutine(gameOveranims());
+        if (LeaderBoard.instance.CheckIfHighScore(Player.instance.score))
+        {
+            enterName.SetActive(true);
+        }
+        else
+        {
+            StartCoroutine(gameOveranims());
+        }
     }
 
     public void Quit()

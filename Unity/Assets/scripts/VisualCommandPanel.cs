@@ -11,6 +11,7 @@ public class VisualCommandPanel : MonoBehaviour
 	[SerializeField] private Text textField = null;
 
 	private List<string> messageBuffer = new List<string>();
+    public bool isBufferFree { get { return messageBuffer.Count == 0 ? true : false; } }
 
 	[SerializeField] private float typeRate = 0.05f;
 	private float typeCooldown = 0.0f;

@@ -130,7 +130,6 @@ public class WormBoss : Boss
 
     protected override IEnumerator bossDeath()
     {
-        Player.instance.IncreaseScore(score);
         EnemyManager.instance.NextLevel();
 
         //ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);

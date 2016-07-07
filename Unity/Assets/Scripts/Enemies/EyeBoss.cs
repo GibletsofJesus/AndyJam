@@ -94,11 +94,12 @@ public class EyeBoss : Boss
 
     public override void TakeDamage(float _damage)
     {
-        //if (GetComponent<SpriteRenderer>() && tag == "Enemy")
-        //{
-            bossRenderer.color = Color.red;
-            Invoke("revertColour", .1f);
-        //}
+        if (IsInvoking("revertColour"))
+        {
+            CancelInvoke("revertColour");
+        }
+        bossRenderer.color = Color.red;
+        Invoke("revertColour", .1f);
         base.TakeDamage(_damage);
     }
 
@@ -156,7 +157,6 @@ public class EyeBoss : Boss
         GetComponent<Animator>().Play("boss_die_idle");
         yield return new WaitForSeconds(1.5f);
 
-        Player.instance.IncreaseScore(score);
         EnemyManager.instance.NextLevel();
 
         ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);
