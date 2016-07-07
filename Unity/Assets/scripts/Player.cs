@@ -216,6 +216,11 @@ public class Player : Actor
 
     public override void TakeDamage(float _damage)
     {
+        if(GameStateManager.instance.state == GameStateManager.GameState.GameOver)
+        {
+            _damage = 0;
+        }
+
         soundManager.instance.playSound(0);
         if (!isInvincible)
         {

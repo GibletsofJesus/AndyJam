@@ -52,7 +52,7 @@ public class Projectile : MonoBehaviour
 
     public virtual void Update()
     {
-        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay || GameStateManager.instance.state == GameStateManager.GameState.GameOver)
         {
             GameObject _target = finder.GetClosestObject();
             if (projData.homingBullets && _target)
