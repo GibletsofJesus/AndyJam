@@ -41,41 +41,34 @@ public class Actor : MonoBehaviour
    
     protected virtual bool Shoot(ProjectileData _projData, Vector2 _direction,GameObject[] _shootTransform)
     {
-		if(shootCooldown >= shootRate)
-		{
+        if (shootCooldown >= shootRate)
+        {
             for (int i = 0; i < _shootTransform.Length; i++)
             {
+                Projectile p;
+                if (gameObject.name == "trojan horse" || gameObject.name == "trojan horse(clone)")
+                    p = ProjectileManager.instance.PoolingEnemyProjectile(_shootTransform[i].transform);
+                else
+                    p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
 
-                if (!GetComponent<Enemy_Trojan>())
+                p.SetProjectile(_projData, _direction);
+                p.transform.position = _shootTransform[i].transform.position;
+                p.gameObject.SetActive(true);
+                shootCooldown = 0;
+                if (tag == "Enemy")
                 {
-                    Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
-                    p.SetProjectile(_projData, _direction);
-                    p.transform.position = _shootTransform[i].transform.position;
-                    p.gameObject.SetActive(true);
-                    shootCooldown = 0;
-                    if (tag == "Enemy")
-                    {
-                        p.GetComponentInChildren<ParticleSystem>().startLifetime = .15f;
-                    }
-                    else
-                    {
-                        p.GetComponentInChildren<ParticleSystem>().startLifetime = .2f;
-                    }
+                    p.GetComponentInChildren<ParticleSystem>().startLifetime = .15f;
                 }
                 else
                 {
-                    Projectile p = ProjectileManager.instance.PoolingEnemyProjectile(_shootTransform[i].transform);
-                    p.SetProjectile(_projData, _direction);
-                    p.transform.position = _shootTransform[i].transform.position;
-                    p.gameObject.SetActive(true);
-                    shootCooldown = 0;
+                    p.GetComponentInChildren<ParticleSystem>().startLifetime = .2f;
                 }
             }
             return true;
         }
         return false;
     }
-   
+
     protected void CoolDown()
     {
 		shootCooldown = (shootCooldown + Time.deltaTime) > shootRate ? shootRate : (shootCooldown + Time.deltaTime);

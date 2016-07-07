@@ -4,7 +4,8 @@ using System.Collections;
 public class Enemy_Trojan : Enemy
 {
    public Enemy_TrojanMini miniMe;
-   
+    public ParticleSystem newparticles;
+
     protected override void Awake()
     {
         base.Awake();
@@ -26,7 +27,7 @@ public class Enemy_Trojan : Enemy
     }
 
 
-    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform )
     {
         Vector3 shootDir = -(transform.position - new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y));
 
@@ -39,10 +40,9 @@ public class Enemy_Trojan : Enemy
     }
     protected override void Death()
     {
-
        for (int i = 0; i < 2; i++)
             {
-                Enemy e = EnemyManager.instance.EnemyPooling(miniMe); // Enemy.Instantiate(this);//
+                Enemy e = EnemyManager.instance.EnemyPooling(miniMe);
                 e.transform.position = new Vector2(transform.position.x + (i * 1.5f), transform.position.y);
             }
        

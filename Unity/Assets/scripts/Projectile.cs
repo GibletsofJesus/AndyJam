@@ -28,9 +28,8 @@ public class Projectile : MonoBehaviour
 	[SerializeField] private ExplosionAoe aoe = null;
    
 	float aliveCooldown = 0.0f;
-    Vector2 direction; 
-    public TrailRenderer trail;
-    public ParticleSystem ps;
+    Vector2 direction;
+    public ParticleSystem ps,altPs;
     Vector3 screenBottom,screenTop;
 
 
@@ -49,13 +48,6 @@ public class Projectile : MonoBehaviour
         {
             DeactivateProj();
         }
-
-
-        if (transform.position != Vector3.zero)
-        {
-         //   ps.Play();
-        }
-
     }
 
     public virtual void Update()
@@ -65,8 +57,6 @@ public class Projectile : MonoBehaviour
             GameObject _target = finder.GetClosestObject();
             if (projData.homingBullets && _target)
             {
-                //if (target.activeSelf)
-                //{
                 //Turn z axis
                 Quaternion rot = new Quaternion();
                 float z = Mathf.Atan2((_target.transform.position.x - transform.position.x), (_target.transform.position.y - transform.position.y)) * Mathf.Rad2Deg;
@@ -74,16 +64,19 @@ public class Projectile : MonoBehaviour
 
                 rot.eulerAngles = new Vector3(0, 0, -z);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / projData.aliveTime) * Time.deltaTime * 200);
+                if (projData.owner.gameObject.tag == "Enemy")
+                {
+                    if (aliveCooldown < .5f)
+                        transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / projData.aliveTime) * Time.deltaTime * 200);
+                }
+                else
+                    transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / projData.aliveTime) * Time.deltaTime * 200);
+
                 rig.velocity = transform.up * projData.speed;
-                //}
-                //else
-                //	rig.velocity = transform.up * projData.speed;
             }
             else
             {
                 rig.velocity = transform.up * projData.speed;
-                //direction * (speed);// * Time.deltaTime);
             }
 
             Alive();
@@ -93,16 +86,6 @@ public class Projectile : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D col)
     {
-        /*if (col.gameObject.tag != ignoreActor && col.gameObject.tag != "TargetFinder")
-        {
-            if (col.gameObject.GetComponent<Actor>())
-            {
-                Debug.Log("Projectile hit " +col.gameObject.name);
-                col.gameObject.GetComponent<Actor>().TakeDamage(damage);
-                DeactivateProj();
-            }
-        }*/
-
 		if (col.gameObject.tag != projData.parentTag)
 		{
 			if(col.gameObject.GetComponent<Actor>())
@@ -148,33 +131,21 @@ public class Projectile : MonoBehaviour
     {
         //target = null;
 		finder.Reset ();
-        trail.time = 0.00001f;
-        trail.enabled = false;
 		aliveCooldown = 0.0f;
         gameObject.SetActive(false);
         enabled = false;        
     }
 
-    public void SetProjectile(ProjectileData _data, Vector2 _direction, float trailRendTime = 0.05f)
+    public void SetProjectile(ProjectileData _data, Vector2 _direction,bool enemy = true)
     {
 		projData = _data;
-		spriteRenderer.sprite = projData.projSprite;
-		
-		if(_data.homingBullets)
-		{
-			finder.ActivateFinder("Enemy", _data.homingRadius);
-		}
-        //if (_owner.GetComponent<playerMovement>())
-        //    target = _owner.GetComponent<playerMovement>().target;;
-        trail.probeAnchor = transform;
-        //damage = _damage;
-        direction = _direction;
-        //maxAlive = _aliveTime;
-        //speed = _speed;
-        transform.up = _direction;
-        //ignoreActor = _ignoreActor;
+        spriteRenderer.sprite = projData.projSprite;
 
-        trail.enabled = false;
-        trail.time = trailRendTime;
+        if (_data.homingBullets)
+        {
+            finder.ActivateFinder((enemy) ? "Enemy" : "Player", _data.homingRadius);
+        }
+        direction = _direction;
+        transform.up = _direction;
     }
 }
