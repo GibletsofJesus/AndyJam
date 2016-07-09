@@ -29,7 +29,6 @@ public class Projectile : MonoBehaviour
    
 	float aliveCooldown = 0.0f;
     Vector2 direction;
-    public ParticleSystem ps,altPs;
     Vector3 screenBottom,screenTop;
 
 
@@ -66,7 +65,7 @@ public class Projectile : MonoBehaviour
 
                 if (projData.owner.gameObject.tag == "Enemy")
                 {
-                    if (aliveCooldown < .5f)
+                    if (aliveCooldown < .35f)
                         transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / projData.aliveTime) * Time.deltaTime * 200);
                 }
                 else
