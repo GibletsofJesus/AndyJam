@@ -35,8 +35,7 @@ public enum EnemyTypes
     SPYWARE,
 	SPAM,
 	MALWARE,
-	//WORM,
-	//ADWARE,
+	ADWARE,
     COUNT 
 }
 
@@ -63,7 +62,7 @@ public class EnemyManager : MonoBehaviour
     bool logicPaused = false;
 
     [SerializeField]
-    private LevelName levelName;
+    private LevelName levelName = null;
     // Use this for initialization
     void Awake()
     {
@@ -150,6 +149,7 @@ public class EnemyManager : MonoBehaviour
                 {
                     Invoke("SpawnBoss", 3);
                     bossSpawned = true;
+                    waves.Clear();
                 }
 
                 CircleSwarm();

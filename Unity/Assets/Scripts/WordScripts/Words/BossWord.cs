@@ -26,7 +26,7 @@ public class BossWord : Word
 	
 	protected override void Behavior ()
 	{
-
+        
 	}
 	
 	protected override void EndBehavior()
@@ -39,7 +39,7 @@ public class BossWord : Word
 		boss = _boss;
 		word = _password;
 		wordActive = true;
-	}
+    }
 
     public override void Reset()
     {

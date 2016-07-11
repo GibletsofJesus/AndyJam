@@ -5,8 +5,8 @@ public class Authenticate : AbilityWord
 {
     [SerializeField] private LaserModule laser = null;
     [SerializeField] private GameObject chargeCannon = null;
-    [SerializeField] private Transform chargeCannonOriginalPosition;
-    [SerializeField] private Transform chargeCannonNewPosition;
+    [SerializeField] private Transform chargeCannonOriginalPosition = null;
+    [SerializeField] private Transform chargeCannonNewPosition = null;
 
     private float cannonMove = 0.0f;
 

@@ -3,8 +3,6 @@ using System.Collections;
 
 public class WormMouthSegment : WormBossSegment
 {
-    [SerializeField] private Transform mouth = null;
-
     private bool patternActive = false;
 
     private bool randomMovement = true;
@@ -107,7 +105,7 @@ public class WormMouthSegment : WormBossSegment
     {
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
-            if (!wormBoss.bossIsDefeated)
+            if (!boss.bossIsDefeated)
             {
                 Movement();
                 CoolDown();

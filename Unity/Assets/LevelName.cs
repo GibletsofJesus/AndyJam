@@ -4,8 +4,7 @@ using UnityEngine.UI;
 
 public class LevelName : MonoBehaviour
 {
-    [SerializeField] private Canvas theCanvas;
-    [SerializeField] private Text displayText;
+    [SerializeField] private Text displayText = null;
     Vector2 startPos;
     Vector3 OffScreen;
     bool dropName = true;
@@ -27,8 +26,6 @@ public class LevelName : MonoBehaviour
             if (displayText.rectTransform.position.y >= OffScreen.y)
             {
                 displayText.rectTransform.position = new Vector3(displayText.rectTransform.position.x, displayText.rectTransform.position.y - (10f * Time.deltaTime), displayText.rectTransform.position.z);
-                //displayText.transform.position = transform.position;
-                //theCanvas.transform.position = transform.position;
             }
             else
             {
@@ -38,7 +35,6 @@ public class LevelName : MonoBehaviour
         else
         {
             displayText.rectTransform.position = startPos;
-            //displayText.transform.position = startPos;
         }
         
 

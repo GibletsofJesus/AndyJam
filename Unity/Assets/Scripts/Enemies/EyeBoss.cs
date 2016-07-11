@@ -16,10 +16,12 @@ public class EyeBoss : Boss
     int dosCount = 0;
     bool move = false;
 
+    [SerializeField] private Material deathMaterial = null;
+
     [SerializeField]
     private SpriteRenderer bossRenderer = null;
     [SerializeField]
-    private ParticleSystem spawnParticles;
+    private ParticleSystem spawnParticles = null;
 
     protected override void Awake()
     {
@@ -31,6 +33,7 @@ public class EyeBoss : Boss
     {
         Enemy e = EnemyManager.instance.EnemyPooling(_enemy);
         e.GetComponent<Enemy_Circle>().bossMode = true;
+        e.NoScore();
         e.transform.position = _spawnPoint;
         e.gameObject.SetActive(true);
         e.hideFlags = HideFlags.HideInHierarchy;
@@ -110,7 +113,7 @@ public class EyeBoss : Boss
 
     protected override IEnumerator bossDeath()
     {
-        Debug.Log("triggered");
+        bossRenderer.material = deathMaterial;
         Material m = bossRenderer.material;
         float burnAmount=0;
         

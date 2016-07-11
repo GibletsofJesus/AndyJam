@@ -55,6 +55,11 @@ public class Enemy : Actor
         }
     }
 
+    public void NoScore()
+    {
+        score = 0;
+    }
+
 	public override void Reset()
 	{
 		base.Reset ();
