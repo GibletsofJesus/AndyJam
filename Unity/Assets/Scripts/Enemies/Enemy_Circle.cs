@@ -41,7 +41,7 @@ public class Enemy_Circle : Enemy
         {
             if (player)
             {
-                rotWay = Camera.main.WorldToViewportPoint(Player.instance.transform.position).x > 0.5f ? 20 : -20;
+                rotWay = Camera.main.WorldToViewportPoint(Player.instance.transform.position).x > 0.51f ? 20 : -20;
             }
             transform.RotateAround(moveTarget, transform.forward, rotWay* (speed*Time.deltaTime));
             
