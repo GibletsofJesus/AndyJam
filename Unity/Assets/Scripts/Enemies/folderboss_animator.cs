@@ -33,7 +33,6 @@ public class folderboss_animator : MonoBehaviour {
 
     public void End()
     {
-        Debug.Log("disable");
         GetComponent<Animator>().enabled = false;
     }
 }

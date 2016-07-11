@@ -20,7 +20,7 @@ public struct ProjectileData
 
 public class Projectile : MonoBehaviour
 {
-	private ProjectileData projData = new ProjectileData ();
+    private ProjectileData projData = new ProjectileData ();
 
 	[SerializeField] private Rigidbody2D rig = null;
 	[SerializeField] private SpriteRenderer spriteRenderer = null;
@@ -108,14 +108,15 @@ public class Projectile : MonoBehaviour
 					ex.transform.position = transform.position;
 					ex.gameObject.SetActive(true);
 					ex.explode();
-				}
-				else
-				{
-					col.gameObject.GetComponent<Actor>().TakeDamage(projData.projDamage);
-					DeactivateProj();
-				}
-			}
-		}
+                }
+                else
+                {
+                    //if (col.GetComponent<Actor>() != projData.owner)
+                    col.gameObject.GetComponent<Actor>().TakeDamage(projData.projDamage);
+                    DeactivateProj();
+                }
+            }
+        }
     }
 
     void OffScreen()

@@ -11,6 +11,9 @@ public class ProjectileManager : MonoBehaviour
     public GameObject enemyProjectile;
     List<Projectile> enemyProjList = new List<Projectile>();
 
+    public GameObject infectedFile;
+    List<Projectile> infectedFileList = new List<Projectile>();
+
     // Use this for initialization
     void Awake ()
     {
@@ -55,6 +58,25 @@ public class ProjectileManager : MonoBehaviour
         //newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;
         Projectile p = newProj.GetComponent<Projectile>();
         enemyProjList.Add(p);
+        return p;
+    }
+
+    public Projectile PoolingInfectedFile(Transform t)
+    {
+        for (int i = 0; i < infectedFileList.Count; i++)
+        {
+            if (!infectedFileList[i].isActiveAndEnabled)
+            {
+                infectedFileList[i].enabled = true;
+                return infectedFileList[i];
+            }
+        }
+
+        GameObject newProj = Instantiate(infectedFile, t.position, t.rotation) as GameObject;
+        newProj.transform.parent = transform;
+        //newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;
+        Projectile p = newProj.GetComponent<Projectile>();
+        infectedFileList.Add(p);
         return p;
     }
 }

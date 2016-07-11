@@ -9,7 +9,11 @@ public class folder_boss : Boss {
     public GameObject headTop;
     public SpriteRenderer[] sprites;
     public AudioClip[] soundFx,cannonSounds;
-    public float mouthCooldownMax;
+    public float mouthCooldownMax=15;
+
+    [SerializeField]
+    private ProjectileData InfectedFileStats;
+    public ParticleSystem vomitParticleSystem;
     float mouthCD;
     int lastCannonSound=0;
     //2 modes, open mouth and closed
@@ -22,6 +26,9 @@ public class folder_boss : Boss {
         //base.OnSpawn(); //Mb remove this line when we're done testing
         shootCooldowns[0] = shootRate/2;
         shootCooldowns[1] = shootCooldown;
+        InfectedFileStats.projDamage = projData.defaultProjDamage;
+        InfectedFileStats.owner = this;
+        InfectedFileStats.parentTag = tag;
     }
 
     public  override void OnSpawn()
@@ -58,12 +65,35 @@ public class folder_boss : Boss {
         #endregion
         base.Update();
         CannonsCoolDown();
+        MouthCoolDown();
 
         if (mouthCD >= mouthCooldownMax)
         {
-            //Time to open the mouth
+            StartCoroutine(mouthFire());
+            mouthCD = 0;
         }
     }
+
+    IEnumerator mouthFire()
+    {
+        soundManager.instance.playSound(soundFx[Random.Range(0,soundFx.Length)]);
+        yield return StartCoroutine(mouthOpenClose(true));
+        vomitParticleSystem.Play();
+
+        float filesFired = 0;
+
+        while (filesFired < 50)
+        {
+            shootFile();
+            yield return new WaitForSeconds(0.1f);
+            filesFired++;
+        }
+
+        vomitParticleSystem.Stop();
+        yield return StartCoroutine(mouthOpenClose(false));
+        mouthCD = 0;
+    }
+
     void MouthCoolDown()
     {
         mouthCD= (mouthCD + Time.deltaTime) > mouthCooldownMax ? mouthCooldownMax : (mouthCD + Time.deltaTime);
@@ -130,6 +160,15 @@ public class folder_boss : Boss {
         return false;
     }
 
+    public void shootFile()
+    {
+        Vector3 randomDir = new Vector3(Random.Range(-6.5f,6.5f),-10, 0);
+        Projectile p = ProjectileManager.instance.PoolingInfectedFile(vomitParticleSystem.transform);
+        p.SetProjectile(InfectedFileStats, randomDir, false);
+        p.transform.position = vomitParticleSystem.transform.position;
+        p.gameObject.SetActive(true);
+    }
+
     public bool mouthInMotion;
     public IEnumerator mouthOpenClose(bool open)
     {
@@ -170,6 +209,11 @@ public class folderTester : Editor
         {
             if (!myScript.mouthInMotion)
                 myScript.StartCoroutine(myScript.mouthOpenClose(false));
+        }
+        if (GUILayout.Button("Fire File"))
+        {
+            if (!myScript.mouthInMotion)
+                myScript.shootFile();
         }
     }
 }
