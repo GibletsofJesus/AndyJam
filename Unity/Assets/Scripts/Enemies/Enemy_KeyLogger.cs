@@ -43,7 +43,8 @@ public class Enemy_KeyLogger : Enemy
     {
         if (Input.inputString!=string.Empty)
         {
-            return base.Shoot(_projData, -(transform.position - new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y)), _shootTransform);
+            return base.Shoot(_projData, -(transform.position - new Vector3(Player.instance.transform.position.x, 
+                Player.instance.transform.position.y)), _shootTransform);
         }
         else
             return false;
