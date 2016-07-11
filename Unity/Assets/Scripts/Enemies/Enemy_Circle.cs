@@ -18,6 +18,7 @@ public class Enemy_Circle : Enemy
         }
         if (Player.instance)
         {
+            player = Player.instance.gameObject;
             moveTarget = Player.instance.transform.position;
         }
 	}
