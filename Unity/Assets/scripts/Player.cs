@@ -30,6 +30,10 @@ public class Player : Actor
     private int randomAdAmount;
     private float adCool = 0;
     private float maxAdCool;
+
+    private bool backupAvailable = false;
+    [SerializeField] private PlayerBackup[] backups = null;
+
     protected override void Awake()
 	{
         maxAdCool = Random.Range(1, 3);
@@ -42,14 +46,13 @@ public class Player : Actor
         screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
         verticalBoundsBot = Camera.main.ViewportToWorldPoint(new Vector3(.5f, 0f));
         verticalBoundsTop = Camera.main.ViewportToWorldPoint(new Vector3(.5f, .5f));
-        
     }
     void Start()
     {
         if (GreenShip.instance)
         {
             spriteRenderer.sprite = GreenShip.instance.ship;
-            Destroy(GreenShip.instance.gameObject);
+            //Destroy(GreenShip.instance.gameObject);
         }
     }
 	// Update is called once per frame
@@ -202,6 +205,17 @@ public class Player : Actor
                     ps.Emit(1);
                 }
 
+                if(backupAvailable)
+                {
+                    for(int i = 0; i < backups.Length; ++i)
+                    {
+                        if(backups[i].isActiveAndEnabled)
+                        {
+                            backups[i].Shoot();
+                        }
+                    }
+                }
+
                 soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length)]);
 
                 if (CameraShake.instance.shakeDuration < 0.2f)
@@ -287,11 +301,6 @@ public class Player : Actor
         return false;
     }
 
-    void revertColour()
-    {
-        GetComponent<SpriteRenderer>().color = Color.white;
-    }
-
 	public override void Reset()
 	{
 		base.Reset ();
@@ -355,6 +364,28 @@ public class Player : Actor
         invincibleFlickerCooldown = invincibleFlickerRate;
         spriteRenderer.color = Color.white;
         flickerDown = true;
+    }
+
+    public void SpawnBackups(int _numBackups)
+    {
+        backupAvailable = true;
+        for(int i = 0; i < _numBackups; ++i)
+        {
+            backups[i].Spawn();
+        }
+    }
+
+    public bool TestBackups()
+    {
+        for (int i = 0; i < backups.Length; ++i)
+        {
+            if(backups[i].isActiveAndEnabled)
+            {
+                return true;
+            }
+        }
+        backupAvailable = false;
+        return false;
     }
 
     void AdwareAds()

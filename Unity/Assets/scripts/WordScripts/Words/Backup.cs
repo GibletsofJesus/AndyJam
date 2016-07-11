@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Backup : AbilityWord
 {
+    [SerializeField] private int[] numBackups = null;
+
 	protected override void Start ()
 	{
 		wordTiers = new string[] {"backup.exe", "backup.exe", "backup.exe"};
@@ -12,19 +14,15 @@ public class Backup : AbilityWord
 	protected override void TriggerBehavior ()
 	{
 		base.TriggerBehavior ();
+        Player.instance.SpawnBackups(numBackups[currentTier]);
 	}
 	
 	protected override void Behavior ()
 	{
-		switch (currentTier) 
-		{
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		}
+        if(!Player.instance.TestBackups())
+        {
+            EndBehavior();
+        }
 	}
 	
 	protected override void EndBehavior()
