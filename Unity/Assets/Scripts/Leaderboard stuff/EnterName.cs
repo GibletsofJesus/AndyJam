@@ -39,36 +39,41 @@ public class EnterName : MonoBehaviour
 
     void MenuInput()
     {
-        if (Input.GetAxis("Horizontal") != 0&&SelectCoolDown())
+        if (ConvertToPos())
         {
-            if (Input.GetAxis("Horizontal") > 0)
+            if (Input.GetAxis("Horizontal") != 0 && SelectCoolDown())
             {
-                if (selectBox == box.Length-1)
+                if (Input.GetAxis("Horizontal") > 0)
                 {
-                    selectBox = 0;
+                    if (selectBox == box.Length - 1)
+                    {
+                        selectBox = 0;
+                    }
+                    else
+                    {
+                        selectBox++;
+                    }
                 }
-                else
+                else if (Input.GetAxis("Horizontal") < 0)
                 {
-                    selectBox++;
+                    if (selectBox == 0)
+                    {
+                        selectBox = box.Length - 1;
+                    }
+                    else
+                    {
+                        selectBox--;
+                    }
                 }
+                selectChar = currentCharacter[selectBox];
+                coolDown = 0;
             }
-            else if(Input.GetAxis("Horizontal")<0)
-            {
-                if (selectBox ==0)
-                {
-                    selectBox = box.Length-1;
-                }
-                else
-                {
-                    selectBox--;
-                }
-            }
-            selectChar = currentCharacter[selectBox];
-            coolDown = 0;
         }
-        else if (Input.GetAxis("Vertical") != 0 && SelectCoolDown())
+        else
         {
-            if (Input.GetAxis("Vertical")<0)
+         if (Input.GetAxis("Vertical") != 0 && SelectCoolDown())
+        {
+            if (Input.GetAxis("Vertical") < 0)
             {
                 if (selectChar > 65)
                     selectChar--;
@@ -76,7 +81,7 @@ public class EnterName : MonoBehaviour
                 else
                     selectChar = 90;
             }
-            else if (Input.GetAxis("Vertical")>0)
+            else if (Input.GetAxis("Vertical") > 0)
             {
                 if (selectChar < 90)
                     selectChar++;
@@ -86,6 +91,7 @@ public class EnterName : MonoBehaviour
             }
             coolDown = 0;
             currentCharacter[selectBox] = selectChar;
+        }
         }
     }
 
@@ -128,5 +134,27 @@ public class EnterName : MonoBehaviour
         LeaderBoard.instance.AddNewScoreToLB();
         GameStateManager.instance.RunGameOver();
         transform.parent.gameObject.SetActive(false);
+    }
+
+    bool ConvertToPos()
+    {
+        float hori = Input.GetAxis("Horizontal");
+        float verti = Input.GetAxis("Vertical");
+        if (hori < 0)
+        {
+            hori -= hori * 2;
+        }
+        if (verti < 0)
+        {
+            verti -= verti * 2;
+        }
+        if (hori > verti)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
