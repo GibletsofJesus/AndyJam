@@ -62,6 +62,8 @@ public class EnemyManager : MonoBehaviour
 
     bool logicPaused = false;
 
+    [SerializeField]
+    private LevelName levelName;
     // Use this for initialization
     void Awake()
     {
@@ -79,6 +81,7 @@ public class EnemyManager : MonoBehaviour
             _e.gameObject.SetActive(false);
         }
         ++currentLevel;
+        levelName.SetText(currentLevel + 1);
         if (currentLevel == levels.Length)
         {
             GameComplete();
@@ -88,6 +91,7 @@ public class EnemyManager : MonoBehaviour
             currentWave = 0;
             currentWaveCooldown = 0;
             bossSpawned = false;
+            levelName.ShowLevelName();
         }
 }
 
