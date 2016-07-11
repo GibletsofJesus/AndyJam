@@ -13,9 +13,9 @@ public class LevelName : MonoBehaviour
 	void Awake () 
     {
         startPos = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 1.75f, 0.5f));
-        transform.position = startPos;
+        displayText.rectTransform.position = startPos;
         OffScreen = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, -0.75f,0.5f));
-        OffScreen.z = transform.position.z;
+        OffScreen.z = displayText.rectTransform.position.z;
         
     }
 	
@@ -24,9 +24,9 @@ public class LevelName : MonoBehaviour
     {
         if (dropName)
         {
-            if (transform.position.y >= OffScreen.y)
+            if (displayText.rectTransform.position.y >= OffScreen.y)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y - (50f * Time.deltaTime), transform.position.z);
+                displayText.rectTransform.position = new Vector3(displayText.rectTransform.position.x, displayText.rectTransform.position.y - (10f * Time.deltaTime), displayText.rectTransform.position.z);
                 //displayText.transform.position = transform.position;
                 //theCanvas.transform.position = transform.position;
             }
@@ -37,7 +37,7 @@ public class LevelName : MonoBehaviour
         }
         else
         {
-            transform.position = startPos;
+            displayText.rectTransform.position = startPos;
             //displayText.transform.position = startPos;
         }
         
