@@ -94,23 +94,20 @@ public class EyeBoss : Boss
 
     public override void TakeDamage(float _damage)
     {
-        if (IsInvoking("revertColour"))
+        if (IsInvoking("revertColor"))
         {
-            CancelInvoke("revertColour");
+            CancelInvoke("revertColor");
         }
         bossRenderer.color = Color.red;
-        Invoke("revertColour", .1f);
+        Invoke("revertColor", .1f);
         base.TakeDamage(_damage);
     }
-
-    //public void doDeath()
-    //{
-    //    StartCoroutine(bossDeath());
-    //}
-
+    void revertColor()
+    {
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
     protected override IEnumerator bossDeath()
     {
-        Debug.Log("triggered");
         Material m = bossRenderer.material;
         float burnAmount=0;
         
@@ -118,7 +115,6 @@ public class EyeBoss : Boss
         Explosion ex;
 
         //also do eyes and mouth transforms
-
         foreach (GameObject go in base.shootTransform)
         {
             if (Random.value > .5f)
@@ -158,7 +154,7 @@ public class EyeBoss : Boss
         yield return new WaitForSeconds(1.5f);
 
         EnemyManager.instance.NextLevel();
-
+            
         ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);
         ex.gameObject.SetActive(true);
         ex.explode();
