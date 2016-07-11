@@ -30,12 +30,19 @@ public class TheWave
 public enum EnemyTypes
 {
 	KEYLOGGER,
-	DOS,
+    KEYLOGGER_HARD,
+    DOS,
+    DOS_HARD,
     TROJAN,
+    TROJAN_HARD,
     SPYWARE,
+    SPYWARE_HARD,
 	SPAM,
+    SPAM_HARD,
 	MALWARE,
+    MALWARE_HARD,
 	ADWARE,
+    ADWARE_HARD,
     COUNT 
 }
 
@@ -113,7 +120,7 @@ public class EnemyManager : MonoBehaviour
                     {
                         TheWave wave = new TheWave();
                         wave.eTypes = PickRandomEnemy();
-                        wave.spawnAmount = Random.Range(enemyPatterns[(int)wave.eTypes].minSpawn, enemyPatterns[(int)wave.eTypes].maxSpawn);
+                        wave.spawnAmount = Random.Range(enemyPatterns[(int)wave.eTypes].minSpawn, enemyPatterns[(int)wave.eTypes].maxSpawn + 1);
                         wave.currentSpawnCool = enemyPatterns[(int)wave.eTypes].spawnRate;
                         waves.Add(wave);
 

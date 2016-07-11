@@ -55,14 +55,14 @@ public class AdManager : MonoBehaviour
     private void GenerateAd(Vector3 _pos)
 	{
 		Ad _ad = AdPooling (Random.Range (0, adPrefabs.Length));
-		_ad.SpawnAd (_pos, new Vector3(Random.Range(-15,15),Random.Range(-15,15),0.0f));
+		_ad.SpawnAd (_pos, new Vector3(Random.Range(-7.0f, 7.0f),Random.Range(-14.0f, 14.0f),0.0f));
 		activeAds.Add (_ad);
 	}
 
     private void GenerateAd(Vector3 _pos, int _index)
     {
         Ad _ad = AdPooling(_index);
-        _ad.SpawnAd(_pos, new Vector3(Random.Range(-15, 15), Random.Range(-15, 15), 0.0f));
+        _ad.SpawnAd(_pos, new Vector3(Random.Range(-5.0f, 5.0f), Random.Range(-10.0f, 10.0f), 0.0f));
         activeAds.Add(_ad);
     }
 
@@ -78,7 +78,7 @@ public class AdManager : MonoBehaviour
 		GameObject _obj = Instantiate (adPrefabs [_index]);
 		_obj.transform.SetParent (canvasParent);
 		_obj.SetActive (false);
-		//_obj.hideFlags = HideFlags.HideInHierarchy;
+		_obj.hideFlags = HideFlags.HideInHierarchy;
 		Ad _ad = _obj.GetComponent<Ad> ();
 		_ad.SetCamera (mainCam, mainCanvas);
 		pooledAds[_index].Add(_ad);
@@ -110,6 +110,14 @@ public class AdManager : MonoBehaviour
 
     public void DisableAdBlock()
     {
+        if(!adblock)
+        {
+            for (int i = 0; i < activeAds.Count; ++i)
+            {
+                activeAds[i].CloseAd(closePoint);
+            }
+            activeAds.Clear();
+        }
         adblock = false;
     }
 

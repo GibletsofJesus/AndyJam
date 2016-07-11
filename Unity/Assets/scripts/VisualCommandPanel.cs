@@ -37,9 +37,10 @@ public class VisualCommandPanel : MonoBehaviour
 
 	private void Start()
 	{
-		AddMessage ("Jam sequence Engaged", string.Empty);
-
-	}
+        AddMessage("TypeFighter sequence engaged", string.Empty);
+        AddMessage("Recommended action");
+        AddMessage("Type update.exe");
+    }
 
 	private void Update()
 	{

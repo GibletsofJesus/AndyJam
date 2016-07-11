@@ -7,6 +7,7 @@ public class Player : Actor
 	public static Player instance {get {return staticInstance;} set{}}
 
     [SerializeField] private SpriteRenderer spriteRenderer = null;
+    [SerializeField] private SpriteRenderer laserRenderer = null;
 
 	protected float updatedDefaultHealth;
 	[SerializeField] private int defaultLives = 3;
@@ -110,6 +111,7 @@ public class Player : Actor
             Color _flickerColour = spriteRenderer.color;
             _flickerColour.a = 0.25f + ((invincibleFlickerCooldown / invincibleFlickerRate) / 0.75f);
             spriteRenderer.color = _flickerColour;
+            laserRenderer.color = _flickerColour;
         }
         AdwareAds();
     }
@@ -268,7 +270,7 @@ public class Player : Actor
                 CameraShake.instance.shakeDuration += 0.2f;
             CameraShake.instance.shakeAmount = 0.5f;
 
-            GetComponent<SpriteRenderer>().color = Color.red;
+            spriteRenderer.color = Color.red;
             Invoke("revertColour", .1f);
         }
     }

@@ -32,7 +32,6 @@ public class FactoryReset : AbilityWord
         }
         Player.instance.Reset();
         UpdateBehavior.instance.FactoryReset();
-        AdManager.instance.EnableAdBlock();
         AdManager.instance.DisableAdBlock();
         base.EndBehavior();
 	}
