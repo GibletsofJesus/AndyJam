@@ -91,8 +91,6 @@ public class Boss : Enemy
         bossDefeated = true;
         Player.instance.IncreaseScore(score);
         StartCoroutine(bossDeath());
-       
-
     }
 
     protected virtual IEnumerator bossDeath()

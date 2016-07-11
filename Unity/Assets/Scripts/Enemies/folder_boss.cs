@@ -11,9 +11,10 @@ public class folder_boss : Boss {
     public AudioClip[] soundFx,cannonSounds;
     public float mouthCooldownMax=15;
 
+    Color revertCol=Color.white;
     [SerializeField]
     private ProjectileData InfectedFileStats;
-    public ParticleSystem vomitParticleSystem;
+    public ParticleSystem vomitParticleSystem,drool;
     float mouthCD;
     int lastCannonSound=0;
     //2 modes, open mouth and closed
@@ -23,7 +24,6 @@ public class folder_boss : Boss {
 	protected override void Awake ()
     {          
         base.Awake();
-        //base.OnSpawn(); //Mb remove this line when we're done testing
         shootCooldowns[0] = shootRate/2;
         shootCooldowns[1] = shootCooldown;
         InfectedFileStats.projDamage = projData.defaultProjDamage;
@@ -34,59 +34,71 @@ public class folder_boss : Boss {
     public  override void OnSpawn()
     {
         base.OnSpawn();
-        transform.position= Vector3.zero;
-        
+        transform.position= new Vector3(0, 11.75f, 0);
+
         soundManager.instance.music.enabled = false;
     }
 
 	protected override void Update ()
     {
-        //Move cannons
-        #region cannon moving
-        if (LcanDir)        
-            CannonRot(0, Cannons[0].transform.localRotation.eulerAngles.z + (Time.fixedDeltaTime*50));        
-        else
-            CannonRot(0, Cannons[0].transform.localRotation.eulerAngles.z - (Time.fixedDeltaTime*50));
+        shootRate = 1.5f -(1f-(health/defaultHealth));
 
-        if ((Cannons[0].transform.localRotation.eulerAngles.z < 330 && Cannons[0].transform.localRotation.eulerAngles.z > 300 )|| (Cannons[0].transform.localRotation.eulerAngles.z > 30 && Cannons[0].transform.localRotation.eulerAngles.z < 50))
+        revertCol = Color.Lerp(Color.white,Color.red,.6f*(1-health/defaultHealth));
+
+        if (!bossDefeated)
         {
-            LcanDir = !LcanDir;
-        }
+            //Move cannons
+            #region cannon moving
+            if (LcanDir)
+                CannonRot(0, Cannons[0].transform.localRotation.eulerAngles.z + (Time.fixedDeltaTime * 50));
+            else
+                CannonRot(0, Cannons[0].transform.localRotation.eulerAngles.z - (Time.fixedDeltaTime * 50));
 
-        if (!RcanDir)        
-            CannonRot(1, Cannons[1].transform.localRotation.eulerAngles.z + (Time.fixedDeltaTime * 50));        
-        else
-            CannonRot(1, Cannons[1].transform.localRotation.eulerAngles.z - (Time.fixedDeltaTime * 50));
+            if ((Cannons[0].transform.localRotation.eulerAngles.z < 330 && Cannons[0].transform.localRotation.eulerAngles.z > 300) || (Cannons[0].transform.localRotation.eulerAngles.z > 30 && Cannons[0].transform.localRotation.eulerAngles.z < 50))
+            {
+                LcanDir = !LcanDir;
+            }
 
-        if ((Cannons[1].transform.localRotation.eulerAngles.z < 330 && Cannons[1].transform.localRotation.eulerAngles.z > 300) || (Cannons[1].transform.localRotation.eulerAngles.z > 30 && Cannons[1].transform.localRotation.eulerAngles.z < 50))
-        {
-            RcanDir = !RcanDir;
-        }
-        #endregion
-        base.Update();
-        CannonsCoolDown();
-        MouthCoolDown();
+            if (!RcanDir)
+                CannonRot(1, Cannons[1].transform.localRotation.eulerAngles.z + (Time.fixedDeltaTime * 50));
+            else
+                CannonRot(1, Cannons[1].transform.localRotation.eulerAngles.z - (Time.fixedDeltaTime * 50));
 
-        if (mouthCD >= mouthCooldownMax)
-        {
-            StartCoroutine(mouthFire());
-            mouthCD = 0;
+            if ((Cannons[1].transform.localRotation.eulerAngles.z < 330 && Cannons[1].transform.localRotation.eulerAngles.z > 300) || (Cannons[1].transform.localRotation.eulerAngles.z > 30 && Cannons[1].transform.localRotation.eulerAngles.z < 50))
+            {
+                RcanDir = !RcanDir;
+            }
+            #endregion
+            base.Update();
+            CannonsCoolDown();
+            MouthCoolDown();
+
+            if (mouthCD >= mouthCooldownMax)
+            {
+                StartCoroutine(mouthFire());
+                mouthCD = 0;
+            }
         }
     }
 
     IEnumerator mouthFire()
     {
-        soundManager.instance.playSound(soundFx[Random.Range(0,soundFx.Length)]);
+        soundManager.instance.playSound(soundFx[Random.Range(0,1)]);
         yield return StartCoroutine(mouthOpenClose(true));
         vomitParticleSystem.Play();
 
         float filesFired = 0;
 
+        CameraShake.instance.shakeDuration = 5;
+        CameraShake.instance.shakeAmount = 1;
         while (filesFired < 50)
         {
             shootFile();
+            soundManager.instance.playSound(Player.instance.shootSounds[Random.Range(0, 3)],1.5f);
             yield return new WaitForSeconds(0.1f);
             filesFired++;
+            if (bossDefeated)
+                break;
         }
 
         vomitParticleSystem.Stop();
@@ -119,7 +131,7 @@ public class folder_boss : Boss {
     {
         foreach (SpriteRenderer sr in sprites)
         {
-            sr.color = Color.white;
+            sr.color = revertCol;
         }
     }
 
@@ -188,6 +200,36 @@ public class folder_boss : Boss {
     {
         //desiredRotation = Mathf.Clamp(desiredRotation, -30, 30);
         Cannons[cannonIndex].transform.rotation = Quaternion.Euler(new Vector3(0, 0, desiredRotation));
+    }
+
+    protected override  IEnumerator bossDeath()
+    {
+        drool.Stop();
+        drool.gameObject.SetActive(false);
+        Explosion ex;
+
+        foreach (GameObject go in base.shootTransform)
+        {
+            if (Random.value > .5f)
+                ex = ExplosionManager.instance.PoolingExplosion(go.transform, 0);
+            else
+                ex = ExplosionManager.instance.PoolingExplosion(go.transform, 1);
+
+            ex.gameObject.SetActive(true);
+            ex.explode();
+            yield return new WaitForSeconds(Random.Range(0.4f, .8f));
+        }
+        soundManager.instance.playSound(soundFx[2], 2);
+        GetComponent<Animator>().enabled = true;
+        GetComponent<Animator>().Play("boss_folder_death");
+
+        yield return new WaitForSeconds(2.5f);
+        GetComponent<Animator>().enabled = false;
+        /*ex = ExplosionManager.instance.PoolingExplosion(sprites[0].transform, 1);
+        ex.gameObject.SetActive(true);
+        ex.explode();*/
+
+        EnemyManager.instance.NextLevel();
     }
 
 }
