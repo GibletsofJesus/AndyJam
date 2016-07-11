@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WormBossSegment : Enemy
+public class WormBossSegment : BossSegment
 {
-    [SerializeField] protected WormBoss wormBoss = null;
-    [SerializeField] private SpriteRenderer spriteRenderer = null;
-
     [SerializeField] protected float minZ = 275.0f;
     [SerializeField] protected float maxZ = 315.0f;
 
@@ -22,7 +19,7 @@ public class WormBossSegment : Enemy
     {
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
-            if (!wormBoss.bossIsDefeated)
+            if (!boss.bossIsDefeated)
             {
                 Movement();
             }
@@ -37,7 +34,7 @@ public class WormBossSegment : Enemy
         }
         spriteRenderer.color = Color.red;
         Invoke("revertColour", .1f);
-        wormBoss.TakeDamageFromSegment(_damage);
+        boss.TakeDamageFromSegment(_damage);
     }
 
     protected override void Movement()
@@ -55,7 +52,7 @@ public class WormBossSegment : Enemy
 
     protected override void Death()
     {
-        if (wormBoss.bossIsDefeated)
+        if (boss.bossIsDefeated)
         {
             base.Death();
         }
@@ -91,13 +88,5 @@ public class WormBossSegment : Enemy
             previousSegment.Reset();
         }
         base.Reset();
-    }
-
-    protected override void OnTriggerEnter2D(Collider2D _col)
-    {
-        if (_col.gameObject.tag == "Player")
-        {
-            _col.gameObject.GetComponent<Actor>().TakeDamage(contactHitDamage);
-        }
     }
 }

@@ -16,10 +16,12 @@ public class EyeBoss : Boss
     int dosCount = 0;
     bool move = false;
 
+    [SerializeField] private Material deathMaterial = null;
+
     [SerializeField]
     private SpriteRenderer bossRenderer = null;
     [SerializeField]
-    private ParticleSystem spawnParticles;
+    private ParticleSystem spawnParticles = null;
 
     protected override void Awake()
     {
@@ -31,6 +33,7 @@ public class EyeBoss : Boss
     {
         Enemy e = EnemyManager.instance.EnemyPooling(_enemy);
         e.GetComponent<Enemy_Circle>().bossMode = true;
+        e.NoScore();
         e.transform.position = _spawnPoint;
         e.gameObject.SetActive(true);
         e.hideFlags = HideFlags.HideInHierarchy;
@@ -94,20 +97,23 @@ public class EyeBoss : Boss
 
     public override void TakeDamage(float _damage)
     {
-        if (IsInvoking("revertColor"))
+        if (IsInvoking("revertColour"))
         {
-            CancelInvoke("revertColor");
+            CancelInvoke("revertColour");
         }
         bossRenderer.color = Color.red;
-        Invoke("revertColor", .1f);
+        Invoke("revertColour", .1f);
         base.TakeDamage(_damage);
     }
-    void revertColor()
-    {
-        GetComponent<SpriteRenderer>().color = Color.white;
-    }
+
+    //public void doDeath()
+    //{
+    //    StartCoroutine(bossDeath());
+    //}
+
     protected override IEnumerator bossDeath()
     {
+        bossRenderer.material = deathMaterial;
         Material m = bossRenderer.material;
         float burnAmount=0;
         
@@ -115,6 +121,7 @@ public class EyeBoss : Boss
         Explosion ex;
 
         //also do eyes and mouth transforms
+
         foreach (GameObject go in base.shootTransform)
         {
             if (Random.value > .5f)
@@ -154,7 +161,7 @@ public class EyeBoss : Boss
         yield return new WaitForSeconds(1.5f);
 
         EnemyManager.instance.NextLevel();
-            
+
         ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);
         ex.gameObject.SetActive(true);
         ex.explode();

@@ -24,6 +24,12 @@ public class Boss : Enemy
         }
     }
 
+    public void TakeDamageFromSegment(float _damage)
+    {
+        TakeDamage(_damage);
+    }
+
+
     private void RevealWord()
     {
         while ((health / defaultHealth) < ((float)charactersHidden / (float)password.Length))
