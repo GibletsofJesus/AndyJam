@@ -10,7 +10,8 @@ public class splashScreen : MonoBehaviour
     public Color highLightCol;
     public Animator anim;
     public SpriteRenderer ship;
-    public Sprite ShipA, ShipB;
+    public Sprite[] Ships;
+    int shipIndex=0;
     public bool allowStart;
     public AudioSource swapShipSound;
     public AudioClip[] swapSounds;
@@ -40,15 +41,14 @@ public class splashScreen : MonoBehaviour
         DisplayLeaderBoard();
         if (Input.GetButton("Fire2")&&ButtonCoolDown())
         {
-            swapShipSound.PlayOneShot(swapSounds[(ship.sprite == ShipA) ? 0 : 1]);
-            if (ship.sprite == ShipA)
+            swapShipSound.PlayOneShot(swapSounds[(Random.value>0.5f) ? 0 : 1]);
+            shipIndex++;
+            if (shipIndex>Ships.Length-1)
             {
-                ship.sprite =ShipB;
+                shipIndex = 0;
             }
-            else
-            {
-                ship.sprite = ShipA;
-            }
+            ship.sprite = Ships[shipIndex];
+           
             buttonCool = 0;
         }
         if (Input.GetButton("Fire1") && allowStart && ButtonCoolDown() && !transitioning)
