@@ -13,7 +13,7 @@ public class WordBuffer : MonoBehaviour
 
 	[SerializeField] private List<Word> words = new List<Word>();
 
-	private float submitCooldown = 1.0f;
+	[SerializeField] private float submitCooldown = 1.0f;
 	private float currentSubmitCooldown = 0.0f;
 
 	private bool underscoreVisible = false;

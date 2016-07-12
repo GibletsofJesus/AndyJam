@@ -123,6 +123,7 @@ public class folder_boss : Boss {
         {
             sr.color = Color.red;
         }
+
         Invoke("revertSpriteColours", .1f);
         base.TakeDamage(_damage);
     }

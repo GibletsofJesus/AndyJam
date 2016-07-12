@@ -83,8 +83,10 @@ public class EnemyManager : MonoBehaviour
     {
         foreach(Enemy _e in FindObjectsOfType<Enemy>())
         {
-            _e.Death(true);
-            _e.gameObject.SetActive(false);
+            if (_e.isActiveAndEnabled)
+            {
+                _e.Death(true);
+            }
         }
         ++currentLevel;
         levelName.SetText(currentLevel + 1);
@@ -110,6 +112,7 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(Enemy.numAliveEnemies);
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             if (!logicPaused)
@@ -152,7 +155,7 @@ public class EnemyManager : MonoBehaviour
                         }
                     }
                 }
-                else if (!bossSpawned)
+                else if (!bossSpawned && Enemy.numAliveEnemies == 0)
                 {
                     Invoke("SpawnBoss", 3);
                     bossSpawned = true;
@@ -236,6 +239,7 @@ public class EnemyManager : MonoBehaviour
         b.OnSpawn();
         b.gameObject.SetActive(true);
         bossSpawned = true;
+        VisualCommandPanel.instance.AddMessage("Type the boss password to defeat it");
     }
 
     EnemyTypes PickRandomEnemy()

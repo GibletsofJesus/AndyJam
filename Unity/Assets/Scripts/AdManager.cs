@@ -15,7 +15,10 @@ public class AdManager : MonoBehaviour
 	private float adPercent = 0.0f;
 	private bool adblock = false;
 
-	[SerializeField] private Vector3 closePoint = Vector3.zero;
+    private float alertTime = 0;
+    private float alertCooldown = 10.0f;
+
+    [SerializeField] private Vector3 closePoint = Vector3.zero;
 	[SerializeField] private Canvas mainCanvas = null;
 	[SerializeField] private Camera mainCam = null;
 
@@ -87,11 +90,20 @@ public class AdManager : MonoBehaviour
 
 	public void closeAd()
 	{
-		if(activeAds.Count > 0)
-		{
-			activeAds[activeAds.Count - 1].CloseAd(closePoint);
-			activeAds.RemoveAt(activeAds.Count - 1);
-		}
+        alertTime = 0.0f;
+        int _range = Random.Range(1, 4);
+        for (int i = 0; i < _range; ++i)
+        {
+            if (activeAds.Count > 0)
+            {
+                activeAds[activeAds.Count - 1].CloseAd(closePoint);
+                activeAds.RemoveAt(activeAds.Count - 1);
+            }
+            else
+            {
+                return;
+            }
+        }
 	}
 
     public void EnableAdBlock()
@@ -105,6 +117,7 @@ public class AdManager : MonoBehaviour
             }
             activeAds.Clear();
             adblock = true;
+            alertTime = 0;
         }
     }
 
@@ -119,6 +132,23 @@ public class AdManager : MonoBehaviour
             activeAds.Clear();
         }
         adblock = false;
+        alertTime = 0;
+    }
+
+    private void Update()
+    {
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            if (activeAds.Count > 0)
+            {
+                alertTime += Time.deltaTime;
+                if (alertTime >= alertCooldown)
+                {
+                    alertTime = 0;
+                    VisualCommandPanel.instance.TryMessage("Type close to remove ads");
+                }
+            }
+        }
     }
 
 }

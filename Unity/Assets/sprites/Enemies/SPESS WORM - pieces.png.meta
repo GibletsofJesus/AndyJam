@@ -1,27 +1,20 @@
 fileFormatVersion: 2
 guid: 925edd039f3bba64c80d7ba657607322
-timeCreated: 1467802008
+timeCreated: 1468312953
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
-    21300000: worm_0
-    21300002: worm_l2
-    21300004: worm_l1
-    21300006: worm_r1
-    21300008: worm_r2
-    21300010: worm_1
-    21300012: worm_2
-    21300014: SPESS WORM - pieces_0
-    21300016: SPESS WORM - pieces_1
-    21300018: SPESS WORM - pieces_2
-    21300020: SPESS WORM - pieces_3
-    21300022: SPESS WORM - pieces_4
-    21300024: SPESS WORM - pieces_5
-    21300026: SPESS WORM - pieces_6
+    21300000: SPESS WORM - pieces_0
+    21300002: SPESS WORM - pieces_1
+    21300004: SPESS WORM - pieces_2
+    21300006: SPESS WORM - pieces_3
+    21300008: SPESS WORM - pieces_4
+    21300010: SPESS WORM - pieces_5
+    21300012: SPESS WORM - pieces_6
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -83,7 +76,7 @@ TextureImporter:
         width: 24
         height: 9
       alignment: 9
-      pivot: {x: 1, y: 0.5}
+      pivot: {x: 0.95, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: SPESS WORM - pieces_2
@@ -94,7 +87,7 @@ TextureImporter:
         width: 24
         height: 9
       alignment: 9
-      pivot: {x: 0, y: 0.5}
+      pivot: {x: 0.05, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: SPESS WORM - pieces_3
@@ -105,7 +98,7 @@ TextureImporter:
         width: 22
         height: 9
       alignment: 9
-      pivot: {x: 1.1, y: 0.5}
+      pivot: {x: 1.05, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: SPESS WORM - pieces_4
@@ -116,7 +109,7 @@ TextureImporter:
         width: 22
         height: 9
       alignment: 9
-      pivot: {x: -0.1, y: 0.5}
+      pivot: {x: -0.05, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: SPESS WORM - pieces_5

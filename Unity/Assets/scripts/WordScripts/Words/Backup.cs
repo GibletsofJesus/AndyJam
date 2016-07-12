@@ -5,6 +5,9 @@ public class Backup : AbilityWord
 {
     [SerializeField] private int[] numBackups = null;
 
+    private float backupTime = 0.0f;
+    [SerializeField] private float[] backupDuration = null;
+
 	protected override void Start ()
 	{
 		wordTiers = new string[] {"backup.exe", "backup.exe", "backup.exe"};
@@ -19,7 +22,14 @@ public class Backup : AbilityWord
 	
 	protected override void Behavior ()
 	{
-        if(!Player.instance.TestBackups())
+        backupTime += Time.deltaTime;
+        if(backupTime >= backupDuration[currentTier])
+        {
+            backupTime = 0;
+            Player.instance.DestroyBackups();
+            EndBehavior();
+        }
+        else if(!Player.instance.TestBackups())
         {
             EndBehavior();
         }
@@ -27,7 +37,8 @@ public class Backup : AbilityWord
 	
 	protected override void EndBehavior()
 	{
-		base.EndBehavior ();
+        backupTime = 0.0f;
+        base.EndBehavior ();
 	}
 
     public override void Reset()

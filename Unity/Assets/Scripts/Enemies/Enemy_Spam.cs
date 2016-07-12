@@ -34,7 +34,8 @@ public class Enemy_Spam : Enemy
     }
     public override void OnSpawn()
     {
-       startX = transform.position.x;
+        startX = transform.position.x;
+        base.OnSpawn();
     }
 
 	protected override void OnTriggerEnter2D(Collider2D _col)

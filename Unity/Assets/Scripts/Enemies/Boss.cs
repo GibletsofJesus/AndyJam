@@ -14,6 +14,9 @@ public class Boss : Enemy
     protected bool bossDefeated = false;
     public bool bossIsDefeated { get { return bossDefeated; } }
 
+    private float alertTime = 0.0f;
+    private float alertCooldown = 10.0f;
+
     public override void TakeDamage(float _damage)
     {
         soundManager.instance.playSound(0);
@@ -28,7 +31,23 @@ public class Boss : Enemy
     {
         TakeDamage(_damage);
     }
-
+    
+    protected override void Update()
+    {
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
+        {
+            if (health == 0.0f)
+            {
+                alertTime += Time.deltaTime;
+                if (alertTime >= alertCooldown)
+                {
+                    alertTime = 0;
+                    VisualCommandPanel.instance.TryMessage("Type the boss password to defeat it");
+                }
+            }
+        }
+        base.Update();
+    }
 
     private void RevealWord()
     {
@@ -68,6 +87,7 @@ public class Boss : Enemy
         }
         passwordText.text = currentPassword;
         BossWord.instance.BossActive(this, password);
+        base.OnSpawn();
     }
 
     public void PasswordEntered()

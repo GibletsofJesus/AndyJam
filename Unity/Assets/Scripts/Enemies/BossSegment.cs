@@ -21,13 +21,15 @@ public class BossSegment : Enemy
     {
         if (boss.bossIsDefeated)
         {
-            base.Death();
+            Reset();
+            gameObject.SetActive(false);
         }
     }
 
     public override void Reset()
     {
         base.Reset();
+        gameObject.SetActive(false);
     }
 
     protected override void OnTriggerEnter2D(Collider2D _col)

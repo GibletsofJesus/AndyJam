@@ -50,7 +50,7 @@ public class WormLaserSegment : WormBossSegment
                 if (repeatingLaser && repeating != 0)
                 {
                     --repeating;
-                    laser.SetParameters(1.0f, 0.1f, 1.0f);
+                    laser.SetParameters(1.0f, 0.1f, 2.0f);
                     laser.FireLaser();
                 }
                 else
@@ -88,7 +88,7 @@ public class WormLaserSegment : WormBossSegment
             startZ = transform.eulerAngles.z;
             targetZ = Quaternion.LookRotation(Vector3.forward, (-(Player.instance.transform.position - transform.position))).eulerAngles.z;
 
-            laser.SetParameters(5.0f, 3.0f, 1.0f);
+            laser.SetParameters(5.0f, 3.0f, 1.5f);
             laser.FireLaser();
             laserFired = true;
 
@@ -114,7 +114,7 @@ public class WormLaserSegment : WormBossSegment
             sweepLaser = true;
             zTime = 0.0f;
             
-            laser.SetParameters(1.0f / zSpeed, 1.0f/ 0.5f, 1.0f);
+            laser.SetParameters(1.0f / zSpeed, 1.0f/ 0.5f, 1.5f);
             laser.FireLaser();
             laserFired = true;
 

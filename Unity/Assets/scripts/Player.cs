@@ -35,6 +35,9 @@ public class Player : Actor
     private bool backupAvailable = false;
     [SerializeField] private PlayerBackup[] backups = null;
 
+    [SerializeField] private float respawnInvincibility = 0.0f;
+    private float respawnTime = 0.0f;
+
     protected override void Awake()
 	{
         maxAdCool = Random.Range(1, 3);
@@ -89,8 +92,11 @@ public class Player : Actor
 
             transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
         }
+
+        respawnTime = respawnTime + Time.deltaTime < respawnInvincibility ? respawnTime + Time.deltaTime : respawnInvincibility;
+
         //Invincible flicker logic
-        if(isInvincible)
+        if (isInvincible)
         {   
             if(flickerDown)
             {
@@ -238,30 +244,45 @@ public class Player : Actor
         }
 
         soundManager.instance.playSound(0);
-        if (!isInvincible)
+        if (!isInvincible && respawnInvincibility == respawnTime)
         {
             health -= _damage;
             if (health <= 0)
             {
-
-                health = updatedDefaultHealth;
-                --lives;
-                PlayerHUD.instance.UpdateLives(lives);
-                //Out of lives then kill player
-                if (lives == 0)
+                if (backupAvailable)
                 {
-                    Death();
+                    for(int i = 0; i < backups.Length; ++i)
+                    {
+                        if(backups[i].isActiveAndEnabled)
+                        {
+                            transform.position = backups[i].transform.position;
+                            backups[i].gameObject.SetActive(false);
+                            backups[i].Reset();
+                            health = updatedDefaultHealth / 2.0f;
+                            PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
+                        }
+                    }
                 }
-                //If not dead then reset health to the current upgraded amount
                 else
                 {
-                    Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
-                    ex.transform.position = transform.position;
-                    gameObject.SetActive(false);
-                    ex.gameObject.SetActive(true);
-                    ex.explode();
+                    health = updatedDefaultHealth;
+                    --lives;
+                    PlayerHUD.instance.UpdateLives(lives);
+                    //Out of lives then kill player
+                    if (lives == 0)
+                    {
+                        Death();
+                    }
+                    else
+                    {
+                        Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+                        ex.transform.position = transform.position;
+                        gameObject.SetActive(false);
+                        ex.gameObject.SetActive(true);
+                        ex.explode();
 
-                    Invoke("Respawn", 2);
+                        Invoke("Respawn", 2);
+                    }
                 }
             }
             PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
@@ -270,13 +291,17 @@ public class Player : Actor
                 CameraShake.instance.shakeDuration += 0.2f;
             CameraShake.instance.shakeAmount = 0.5f;
 
+            if (IsInvoking("revertColour"))
+            {
+                CancelInvoke("revertColour");
+            }
             spriteRenderer.color = Color.red;
             Invoke("revertColour", .1f);
         }
     }
 
     protected override void Death()
-    {
+    {PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
         Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
         ex.transform.position = transform.position;
         gameObject.SetActive(false);
@@ -288,6 +313,7 @@ public class Player : Actor
 
     void Respawn()
     {
+        respawnTime = 0.0f;
         transform.position = verticalBoundsBot + Vector2.up;
         gameObject.SetActive(true);
     }
@@ -306,6 +332,7 @@ public class Player : Actor
 	public override void Reset()
 	{
 		base.Reset ();
+        DestroyBackups();
 		updatedDefaultHealth = defaultHealth;
         PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
         lives = defaultLives;
@@ -388,6 +415,19 @@ public class Player : Actor
         }
         backupAvailable = false;
         return false;
+    }
+
+    public void DestroyBackups()
+    {
+        if(backupAvailable)
+        {
+            for(int i = 0; i < backups.Length; ++i)
+            {
+                backups[i].gameObject.SetActive(false);
+                backups[i].Reset();
+            }
+            backupAvailable = false;
+        }
     }
 
     void AdwareAds()

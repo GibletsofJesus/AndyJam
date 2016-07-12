@@ -9,17 +9,21 @@ public abstract class AbilityWord : Word
 
 	[Range(0.0f, 300.0f)]public float wordCooldown = 10.0f;
 	private float currentCooldown;
+    private float defaultCooldown;
 
 	[SerializeField] protected WordHUD wordHUD = null;
 
 	private const int pixels = 32;
 	protected float pixelCooldown;
 
-
+    protected void Awake()
+    {
+        defaultCooldown = wordCooldown;
+        pixelCooldown = (1.0f / (float)pixels) * 1000.0f;
+    }
 
 	protected override void Start ()
 	{
-		pixelCooldown =(1.0f / (float)pixels) * 1000.0f;
 		word = wordTiers [0];
 		currentTier = 0;
 		currentCooldown = wordCooldown;
@@ -97,12 +101,23 @@ public abstract class AbilityWord : Word
 
     public override void Reset()
     {
+        wordCooldown = defaultCooldown;
         if (behaviorActive)
         {
             EndBehavior();
         }
         wordHUD.UpdateCooldown(1.0f);
         Start();
+    }
+
+    public void BetterCooldown()
+    {
+        wordCooldown = 0.1f;
+        if (!behaviorActive)
+        {
+            currentCooldown = wordCooldown;
+            wordHUD.UpdateCooldown(1.0f);
+        }
     }
 
 

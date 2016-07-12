@@ -30,7 +30,10 @@ public class ExplosionAoe : MonoBehaviour
 		{
 			if(explosionTag == _col.tag)
 			{
-				_col.GetComponent<Actor>().TakeDamage(damage);
+                if (_col.gameObject.activeSelf)
+                {
+                    _col.GetComponent<Actor>().TakeDamage(damage);
+                }
 			}
 		}
 	}

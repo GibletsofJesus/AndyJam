@@ -17,7 +17,6 @@ public class DisplayLeaderboard : MonoBehaviour
             List<KeyValuePair<string, int>> k = LeaderBoard.instance.ReturnLeaderBoard();
             for (int i = 0; i < k.Count; i++)
             {
-                Debug.Log(rank[i].name);
 
                 rank[i].text = (i+1).ToString();
                 scores[i].text = k[i].Value.ToString();

@@ -8,6 +8,10 @@ public class Authenticate : AbilityWord
     [SerializeField] private Transform chargeCannonOriginalPosition = null;
     [SerializeField] private Transform chargeCannonNewPosition = null;
 
+    [SerializeField] private float[] chargeLaser = null;
+    [SerializeField] private float[] damageLaser = null;
+    [SerializeField] private float[] durationLaser = null;
+
     private float cannonMove = 0.0f;
 
 	protected override void Start ()
@@ -19,6 +23,7 @@ public class Authenticate : AbilityWord
 	protected override void TriggerBehavior ()
 	{
 		base.TriggerBehavior ();
+        laser.SetParameters(chargeLaser[currentTier], durationLaser[currentTier], damageLaser[currentTier]);
         laser.FireLaser();
         cannonMove = 0.0f;
 	}

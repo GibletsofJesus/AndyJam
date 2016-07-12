@@ -8,6 +8,8 @@ public class Enemy : Actor
     Vector3 screenBottom;
     public int score;
 
+    public static int numAliveEnemies = 0;
+
     protected override void Awake()
 	{
 		base.Awake ();
@@ -51,6 +53,11 @@ public class Enemy : Actor
         Vector3 posToCam = Camera.main.WorldToViewportPoint(transform.position);
         if (posToCam.y<-0.1f)
         {
+            if (isActiveAndEnabled)
+            {
+                --numAliveEnemies;
+            }
+            Reset();
             gameObject.SetActive(false);
         }
     }
@@ -68,13 +75,25 @@ public class Enemy : Actor
 
     protected override void Death()
     {
+        if (isActiveAndEnabled)
+        {
+            --numAliveEnemies;
+        }
+
         base.Death();
+        
         Player.instance.IncreaseScore(score);
     }
 
     public virtual void Death(bool _noScore)
     {
+        if (isActiveAndEnabled)
+        {
+            --numAliveEnemies;
+        }
+
         base.Death();
+        
         if (!_noScore)
         { 
             Player.instance.IncreaseScore(score);
@@ -88,7 +107,7 @@ public class Enemy : Actor
  
     public virtual void OnSpawn()
     {
-        
+        ++numAliveEnemies;
     }
 
     protected void SetStat(float mod)

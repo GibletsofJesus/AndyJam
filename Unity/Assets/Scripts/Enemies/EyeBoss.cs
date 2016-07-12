@@ -34,6 +34,7 @@ public class EyeBoss : Boss
         Enemy e = EnemyManager.instance.EnemyPooling(_enemy);
         e.GetComponent<Enemy_Circle>().bossMode = true;
         e.NoScore();
+        e.OnSpawn();
         e.transform.position = _spawnPoint;
         e.gameObject.SetActive(true);
         e.hideFlags = HideFlags.HideInHierarchy;

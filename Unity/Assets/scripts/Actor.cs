@@ -79,6 +79,10 @@ public class Actor : MonoBehaviour
         soundManager.instance.playSound(0);
         if (GetComponent<SpriteRenderer>() && tag == "Enemy")
         {
+            if (IsInvoking("revertColour"))
+            {
+                CancelInvoke("revertColour");
+            }
             GetComponent<SpriteRenderer>().color = Color.red;
             Invoke("revertColour", .1f);
         }

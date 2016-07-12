@@ -122,4 +122,12 @@ public class VisualCommandPanel : MonoBehaviour
 	{
 		messageBuffer.Add (_preMessage + _message);
 	}
+
+    public void TryMessage(string _message, string _preMessage = "\n")
+    {
+        if (messageBuffer.Count == 0)
+        {
+            messageBuffer.Add(_preMessage + _message);
+        }
+    }
 }

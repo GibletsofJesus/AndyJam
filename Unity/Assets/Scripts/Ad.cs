@@ -20,6 +20,7 @@ public class Ad : MonoBehaviour
 	private Camera cam;
 	private Canvas canvas;
 
+
 	public void SetCamera(Camera _cam, Canvas _canvas)
 	{
 		cam = _cam;

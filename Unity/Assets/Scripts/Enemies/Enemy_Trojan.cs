@@ -40,11 +40,12 @@ public class Enemy_Trojan : Enemy
     }
     protected override void Death()
     {
-       for (int i = 0; i < 2; i++)
-            {
-                Enemy e = EnemyManager.instance.EnemyPooling(miniMe);
-                e.transform.position = new Vector2(transform.position.x + (i * 1.5f), transform.position.y);
-            }
+        for (int i = 0; i < 2; i++)
+        {
+            Enemy e = EnemyManager.instance.EnemyPooling(miniMe);
+            e.transform.position = new Vector2(transform.position.x + (i * 1.5f), transform.position.y);
+            e.OnSpawn();
+        }
        
      base.Death();
 

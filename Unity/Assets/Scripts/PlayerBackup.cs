@@ -50,6 +50,10 @@ public class PlayerBackup : Actor
         }
         else
         {
+            if (IsInvoking("revertColour"))
+            {
+                CancelInvoke("revertColour");
+            }
             GetComponent<SpriteRenderer>().color = Color.red;
             Invoke("revertColour", .1f);
         }
