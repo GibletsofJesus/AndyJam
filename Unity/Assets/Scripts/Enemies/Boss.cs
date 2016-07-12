@@ -15,7 +15,7 @@ public class Boss : Enemy
     public bool bossIsDefeated { get { return bossDefeated; } }
 
     private float alertTime = 0.0f;
-    private float alertCooldown = 10.0f;
+    private float alertCooldown = 4.0f;
 
     public override void TakeDamage(float _damage)
     {
@@ -42,7 +42,7 @@ public class Boss : Enemy
                 if (alertTime >= alertCooldown)
                 {
                     alertTime = 0;
-                    VisualCommandPanel.instance.TryMessage("Type the boss password to defeat it");
+                    VisualCommandPanel.instance.TryMessage("Type the boss password to defeat it", "\n", 1);
                 }
             }
         }

@@ -43,6 +43,8 @@ public enum EnemyTypes
     MALWARE_HARD,
 	ADWARE,
     ADWARE_HARD,
+    GREEN,
+    BLACK,
     COUNT 
 }
 
@@ -112,7 +114,7 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(Enemy.numAliveEnemies);
+       // Debug.Log("Number of enemies " + Enemy.numAliveEnemies);
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             if (!logicPaused)

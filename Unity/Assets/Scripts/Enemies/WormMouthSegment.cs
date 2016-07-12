@@ -115,7 +115,7 @@ public class WormMouthSegment : WormBossSegment
     }
 
 
-    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform, bool b = false)
     {
         if (numProjs > 0)
         {

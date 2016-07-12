@@ -119,6 +119,10 @@ public class folder_boss : Boss {
 
     public override void TakeDamage(float _damage)
     {
+        if (IsInvoking("revertSpriteColours"))
+        {
+            CancelInvoke("revertSpriteColours");
+        }
         foreach (SpriteRenderer sr in sprites)
         {
             sr.color = Color.red;
@@ -138,7 +142,7 @@ public class folder_boss : Boss {
 
     float[] shootCooldowns = new float[2];
 
-    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform, bool b = false)
     {
         if (!bossDefeated)
         {

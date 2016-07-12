@@ -4,7 +4,7 @@ using System.Collections;
 public class Filter : AbilityWord
 {
     [SerializeField] private GameObject[] filters = null;
-    [SerializeField] private float filterDuration = 10.0f;
+    [SerializeField] private float[] filterDuration = null;
     private float filterCooldown = 0.0f;
 
     protected override void Start ()
@@ -27,7 +27,7 @@ public class Filter : AbilityWord
 	protected override void Behavior ()
 	{
         filterCooldown += Time.deltaTime;
-        if(filterCooldown >= filterDuration)
+        if(filterCooldown >= filterDuration[currentTier])
         {
             EndBehavior();
         }

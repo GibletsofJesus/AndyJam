@@ -13,7 +13,7 @@ public class Enemy_InfectedBlack : Enemy
     SpriteRenderer spRend;
     Collider2D col;
     #region cooldown floats
-    float moveCool = 0;
+    float moveCool = 5;
     float maxMoveCool = 5;
     float shotCool = 0;
     float maxShotCool = 0.8f;
@@ -54,17 +54,21 @@ public class Enemy_InfectedBlack : Enemy
     }
     IEnumerator Teleport()
    {
+       spRend.sortingOrder = 0;
        moveCool = 0;
        entranceOrExit.Play();
-       EnableComponents(false);
+        yield return new WaitForSeconds(0.5f);
+        EnableComponents(false);
        yield return new WaitForSeconds(1f);
        transform.position = RandomPointInSpace(screenSide, -screenSide, screenHeight[0], screenHeight[1]);
        entranceOrExit.Play();
-        Shoot(projData, -transform.up.normalized, shootTransform);
+        //Shoot(projData, -transform.up.normalized, shootTransform);
        EnableComponents(true);
        moveCool = 0;
+        yield return new WaitForSeconds(0.5f);
+        spRend.sortingOrder = 2;
    }
-    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform, bool b = false)
     {
         if (spRend.enabled&&!entranceOrExit.isPlaying)
         {

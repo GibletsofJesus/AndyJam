@@ -39,7 +39,7 @@ public class Enemy_KeyLogger : Enemy
         base.Reset();
     }
 
-    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform,bool b = false)
     {
         if (Input.inputString!=string.Empty)
         {

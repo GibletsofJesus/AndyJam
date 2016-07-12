@@ -65,7 +65,7 @@ public class Enemy_Circle : Enemy
         base.Reset();
         circleJerks = false;
     }
-    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform)
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform,bool b = false)
     {
         return false;
         //return base.Shoot(_projData, _direction, _shootTransform);

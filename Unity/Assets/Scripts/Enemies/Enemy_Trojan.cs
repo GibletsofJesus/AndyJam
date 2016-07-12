@@ -27,7 +27,7 @@ public class Enemy_Trojan : Enemy
     }
 
 
-    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform )
+    protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform, bool b = false )
     {
         Vector3 shootDir = -(transform.position - new Vector3(Player.instance.transform.position.x, Player.instance.transform.position.y));
 
@@ -36,7 +36,7 @@ public class Enemy_Trojan : Enemy
         else
             shootDir.x = Mathf.Clamp(shootDir.x, -5, 0);
 
-        return base.Shoot(_projData, shootDir, _shootTransform);
+        return base.Shoot(_projData, shootDir, _shootTransform,true);
     }
     protected override void Death()
     {

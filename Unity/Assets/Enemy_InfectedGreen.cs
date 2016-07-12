@@ -3,16 +3,14 @@ using System.Collections;
 
 public class Enemy_InfectedGreen : Enemy 
 {
-    [SerializeField] private SpriteRenderer spRend;
-    [SerializeField] private BoxCollider2D col;
-    [SerializeField] private ParticleSystem entrance;
-    [SerializeField]
-    private GameObject toSpawn;
+    [SerializeField] private SpriteRenderer spRend = null;
+    [SerializeField] private BoxCollider2D col = null;
+    [SerializeField] private ParticleSystem entrance = null;
+
     private Enemy_InfectedGreen e;
     float screenSide;
     float screenHeight;
     float screenHeightMin;
-    public Vector2 pos;
     bool oneShot = false;
     int currentAmount;
     int maxAmount = 15;
@@ -22,20 +20,20 @@ public class Enemy_InfectedGreen : Enemy
     protected override void Awake()
     {
         base.Awake();
-        screenSide = Camera.main.ViewportToWorldPoint(new Vector3(.35f, -.5f, .3f)).x;
-        screenHeight = Camera.main.ViewportToWorldPoint(new Vector3(0, 0.8f, 0)).y;
-        screenHeightMin = Camera.main.ViewportToWorldPoint(new Vector3(0, 0.5f, 0)).y;
-       pos = RandomPointInSpace(screenSide, -screenSide, screenHeight, screenHeightMin);
-       // pos = new Vector2(screenSide, screenHeight);
-        SetPosition(pos);
-        EnableComponents(false);
+        
+       
     }
 	
 	// Update is called once per frame
     protected override void Update()
     {
         base.Update();
-        if (oneShot)
+
+        if(!Cool())
+        {
+            shootCooldown = 0;
+        }
+        else if (oneShot)
         {
             Shoot(projData, -Vector2.up, shootTransform);
         }
@@ -46,8 +44,6 @@ public class Enemy_InfectedGreen : Enemy
             {
                 entrance.Play();
                 EnableComponents(true);
-                pos.x -= 5;
-                pos.y += 5;
                 if (currentAmount < maxAmount)
                 {
                     SpawnNew();
@@ -86,7 +82,8 @@ public class Enemy_InfectedGreen : Enemy
         if (!impotence)
         {
             e = (Enemy_InfectedGreen)EnemyManager.instance.EnemyPooling(this);
-            e.pos = pos;
+            e.OnSpawn();
+            e.gameObject.SetActive(true);
             e.currentAmount = currentAmount+=1;
         }
     }
@@ -116,6 +113,22 @@ public class Enemy_InfectedGreen : Enemy
                 e.impotence = true;
             }
         }
+        EnableComponents(true);
         base.Death();
+    }
+
+    public override void OnSpawn()
+    {
+        base.OnSpawn();
+        screenSide = Camera.main.ViewportToWorldPoint(new Vector3(.35f, -.5f, .3f)).x;
+        screenHeight = Camera.main.ViewportToWorldPoint(new Vector3(0, 0.8f, 0)).y;
+        screenHeightMin = Camera.main.ViewportToWorldPoint(new Vector3(0, 0.5f, 0)).y;
+        SetPosition(RandomPointInSpace(screenSide, -screenSide, screenHeight, screenHeightMin));
+        EnableComponents(false);
+        cool = 0;
+        oneShot = false;
+        impotence = false;
+        currentAmount = 0;
+            
     }
 }

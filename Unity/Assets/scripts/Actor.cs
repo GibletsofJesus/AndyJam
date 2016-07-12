@@ -39,14 +39,14 @@ public class Actor : MonoBehaviour
         }
 	}
    
-    protected virtual bool Shoot(ProjectileData _projData, Vector2 _direction,GameObject[] _shootTransform)
+    protected virtual bool Shoot(ProjectileData _projData, Vector2 _direction,GameObject[] _shootTransform,bool special = false)
     {
         if (shootCooldown >= shootRate)
         {
             for (int i = 0; i < _shootTransform.Length; i++)
             {
                 Projectile p;
-                if (gameObject.name == "trojan horse" || gameObject.name == "trojan horse(clone)")
+                if (special)
                     p = ProjectileManager.instance.PoolingEnemyProjectile(_shootTransform[i].transform);
                 else
                     p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
