@@ -115,15 +115,15 @@ public class Enemy_InfectedBlack : Enemy
            return false;
        }
    }
-
-    void ShakeABit()
-    {
-        transform.position = new Vector3(transform.position.x + Mathf.Sin(Random.Range(-0.1f, 0.1f)), transform.position.y + Mathf.Sin(Random.Range(-0.1f, 0.1f)), transform.position.z);
-    }
     void CoolDowns()
     {
         ShotCoolDown();
         MoveCooldown();
     }
    #endregion
+
+    void ShakeABit()
+    {
+        transform.position = new Vector3(transform.position.x + Mathf.Sin(Random.Range(-0.1f, 0.1f)), transform.position.y + Mathf.Sin(Random.Range(-0.1f, 0.1f)), transform.position.z);
+    }
 }
