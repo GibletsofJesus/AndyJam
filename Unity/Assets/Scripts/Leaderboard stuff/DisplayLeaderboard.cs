@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -30,17 +30,17 @@ public class DisplayLeaderboard : MonoBehaviour
     }
 }
 
-[CustomEditor(typeof(DisplayLeaderboard))]
-public class leaderboardDisplayer : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
+//[CustomEditor(typeof(DisplayLeaderboard))]
+//public class leaderboardDisplayer : Editor
+//{
+//    public override void OnInspectorGUI()
+//    {
+//        DrawDefaultInspector();
 
-        DisplayLeaderboard myScript = (DisplayLeaderboard)target;
-        if (GUILayout.Button("do it"))
-        {
-            myScript.update();
-        }
-    }
-}
+//        DisplayLeaderboard myScript = (DisplayLeaderboard)target;
+//        if (GUILayout.Button("do it"))
+//        {
+//            myScript.update();
+//        }
+//    }
+//}

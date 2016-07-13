@@ -13,7 +13,7 @@ public class WormBossSegment : BossSegment
 
     protected bool targetLocation = false;
 
-    [SerializeField] protected WormBossSegment previousSegment = null;
+    [SerializeField] public WormBossSegment previousSegment = null;
 
     protected override void Update()
     {
@@ -87,6 +87,6 @@ public class WormBossSegment : BossSegment
         {
             previousSegment.Reset();
         }
-        base.Reset();
+        //base.Reset();
     }
 }

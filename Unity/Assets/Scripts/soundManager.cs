@@ -2,24 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class soundManager : MonoBehaviour {
+public class soundManager : MonoBehaviour
+{
 
     public static soundManager instance;
     public int numberOfSources;
-    public float volumeMultiplayer=1;
+    public float volumeMultiplayer = 1;
     public AudioSource music;
     List<AudioSource> audioSrcs = new List<AudioSource>();
 
-    public AudioClip[] explosionSounds,hitSounds;
+    public AudioClip[] explosionSounds, hitSounds;
 
-	void Awake ()
+    void Awake()
     {
         for (int i = 0; i < numberOfSources; i++)
         {
             audioSrcs.Add(gameObject.AddComponent<AudioSource>());
         }
         instance = this;
-	}
+        changeVolume(.5f);
+    }
 
     public void changeVolume(float newVol)
     {

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using System.Collections;
 
 public class EyeBoss : Boss
@@ -129,7 +129,8 @@ public class EyeBoss : Boss
                 ex = ExplosionManager.instance.PoolingExplosion(go.transform, 0);
             else
                 ex = ExplosionManager.instance.PoolingExplosion(go.transform, 1);
-            
+
+            ex.transform.position = go.transform.position;
             ex.gameObject.SetActive(true);
             ex.explode();
             yield return new WaitForSeconds(Random.Range(0.4f, .8f));
@@ -143,7 +144,8 @@ public class EyeBoss : Boss
                 ex = ExplosionManager.instance.PoolingExplosion(t.transform, 0);
             else
                 ex = ExplosionManager.instance.PoolingExplosion(t.transform, 1);
-            
+
+            ex.transform.position = t.transform.position;
             ex.gameObject.SetActive(true);
             ex.explode();
             yield return new WaitForSeconds(Random.Range(0.4f, 0.75f));
@@ -153,6 +155,7 @@ public class EyeBoss : Boss
 
         yield return new WaitForSeconds(1);
         ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);
+        ex.transform.position = mouthShot.transform.position;
         ex.gameObject.SetActive(true);
         ex.explode();
         burnAmount += 0.05f;
@@ -164,6 +167,7 @@ public class EyeBoss : Boss
         EnemyManager.instance.NextLevel();
 
         ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);
+        ex.transform.position = mouthShot.transform.position;
         ex.gameObject.SetActive(true);
         ex.explode();
         bossRenderer.enabled = false;

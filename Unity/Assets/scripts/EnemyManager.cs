@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 
 [System.Serializable]
 public struct Level
@@ -51,7 +52,7 @@ public enum EnemyTypes
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager instance = null;
-    public AudioClip bossMusic;
+    public AudioClip bossMusic,standardMusic;
     List<TheWave> waves = new List<TheWave>();
     
     List<Enemy> enemyList = new List<Enemy>();
@@ -81,9 +82,20 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    void fadeInMusic()
+    {
+        soundManager.instance.music.clip = standardMusic;
+        soundManager.instance.music.enabled = false;
+        soundManager.instance.music.enabled = true;
+        soundManager.instance.music.DOFade(1, 3);
+    }
+
     public void NextLevel()
     {
-        foreach(Enemy _e in FindObjectsOfType<Enemy>())
+        soundManager.instance.music.DOFade(0, 3);
+        Invoke("fadeInMusic",3.25f);
+
+        foreach (Enemy _e in FindObjectsOfType<Enemy>())
         {
             if (_e.isActiveAndEnabled)
             {

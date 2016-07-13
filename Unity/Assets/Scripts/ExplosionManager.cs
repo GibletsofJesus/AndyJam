@@ -25,12 +25,13 @@ public class ExplosionManager : MonoBehaviour {
                     if (!smallExploList[i].isActiveAndEnabled)
                     {
                         smallExploList[i].enabled = true;
+                        smallExploList[i].transform.position = t.position;
                         return smallExploList[i];
                     }
                 }
 
                 GameObject small = Instantiate(smallExplosionPrefab, t.position, t.rotation) as GameObject;
-                small.transform.parent = transform.parent;
+                small.transform.parent = transform;
                 //newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;
                 Explosion s = small.GetComponent<Explosion>();
                 smallExploList.Add(s);
@@ -41,11 +42,12 @@ public class ExplosionManager : MonoBehaviour {
                     if (!mediumExploList[i].isActiveAndEnabled)
                     {
                         mediumExploList[i].enabled = true;
+                        mediumExploList[i].transform.position = t.position;
                         return mediumExploList[i];
                     }
                 }
                 GameObject med = Instantiate(mediumExplosionPrefab, t.position, t.rotation) as GameObject;
-                med.transform.parent = transform.parent;
+                med.transform.parent = transform;
                 //newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;
                 Explosion m = med.GetComponent<Explosion>();
                 mediumExploList.Add(m);
@@ -56,12 +58,13 @@ public class ExplosionManager : MonoBehaviour {
                     if (!bigExploList[i].isActiveAndEnabled)
                     {
                         bigExploList[i].enabled = true;
+                        bigExploList[i].transform.position = t.position;
                         return bigExploList[i];
                     }
                 }
 
                 GameObject large = Instantiate(bigExplosionPrefab, t.position, t.rotation) as GameObject;
-                large.transform.parent = transform.parent;
+                large.transform.parent = transform;
                 //newProj.gameObject.hideFlags = HideFlags.HideInHierarchy;
                 Explosion l = large.GetComponent<Explosion>();
                 bigExploList.Add(l);

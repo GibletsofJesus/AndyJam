@@ -36,16 +36,21 @@ public class PauseMenu : MenuSelect
         if (Input.GetButtonDown("Fire1"))
         {
             if (selectBox == 2)
-            {
                 DoAction(QuitToMain);
-            }
+            else if (selectBox == 3)
+                DoAction(QuitGame);
         }
     }
 
     void QuitToMain()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
+    }
+    void QuitGame()
+    {
+        Time.timeScale = 1;
+        Application.Quit();
     }
 
     void ChangeVolumeSlide(Slider _sl)

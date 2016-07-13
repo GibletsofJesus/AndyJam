@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using System.Collections;
 
 public class folder_boss : Boss {
@@ -220,6 +220,7 @@ public class folder_boss : Boss {
             else
                 ex = ExplosionManager.instance.PoolingExplosion(go.transform, 1);
 
+            ex.transform.position = go.transform.position;
             ex.gameObject.SetActive(true);
             ex.explode();
             yield return new WaitForSeconds(Random.Range(0.4f, .8f));
@@ -230,37 +231,34 @@ public class folder_boss : Boss {
 
         yield return new WaitForSeconds(2.5f);
         GetComponent<Animator>().enabled = false;
-        /*ex = ExplosionManager.instance.PoolingExplosion(sprites[0].transform, 1);
-        ex.gameObject.SetActive(true);
-        ex.explode();*/
 
         EnemyManager.instance.NextLevel();
     }
 
 }
 
-[CustomEditor(typeof(folder_boss))]
-public class folderTester : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
+//[CustomEditor(typeof(folder_boss))]
+//public class folderTester : Editor
+//{
+//    public override void OnInspectorGUI()
+//    {
+//        DrawDefaultInspector();
 
-        folder_boss myScript = (folder_boss)target;
-        if (GUILayout.Button("Open mouth"))
-        {
-            if (!myScript.mouthInMotion)
-            myScript.StartCoroutine(myScript.mouthOpenClose(true));
-        }
-        if (GUILayout.Button("Close mouth"))
-        {
-            if (!myScript.mouthInMotion)
-                myScript.StartCoroutine(myScript.mouthOpenClose(false));
-        }
-        if (GUILayout.Button("Fire File"))
-        {
-            if (!myScript.mouthInMotion)
-                myScript.shootFile();
-        }
-    }
-}
+//        folder_boss myScript = (folder_boss)target;
+//        if (GUILayout.Button("Open mouth"))
+//        {
+//            if (!myScript.mouthInMotion)
+//            myScript.StartCoroutine(myScript.mouthOpenClose(true));
+//        }
+//        if (GUILayout.Button("Close mouth"))
+//        {
+//            if (!myScript.mouthInMotion)
+//                myScript.StartCoroutine(myScript.mouthOpenClose(false));
+//        }
+//        if (GUILayout.Button("Fire File"))
+//        {
+//            if (!myScript.mouthInMotion)
+//                myScript.shootFile();
+//        }
+//    }
+//}

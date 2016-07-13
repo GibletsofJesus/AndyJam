@@ -84,17 +84,89 @@ public class WormBoss : Boss
         
         base.TakeDamage(_damage);
     }
-
-
+    
     protected override IEnumerator bossDeath()
     {
+        Explosion ex;
+
+        #region mouth segment explosion
+        ex = ExplosionManager.instance.PoolingExplosion(mouthSegment.transform, 1);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(.25f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(mouthSegment.transform, 1);
+        ex.transform.position = Vector3.Lerp(mouthSegment.transform.position, mouthSegment.previousSegment.transform.position, 0.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        mouthSegment.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.25f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(mouthSegment.previousSegment.transform, 1);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(.25f);
+        ex = ExplosionManager.instance.PoolingExplosion(mouthSegment.previousSegment.transform, 1);
+        ex.transform.position = Vector3.Lerp(mouthSegment.previousSegment.transform.position, mouthSegment.previousSegment.previousSegment.transform.position, 0.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        mouthSegment.previousSegment.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.25f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(mouthSegment.previousSegment.previousSegment.transform, 1);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(.25f);
+        ex = ExplosionManager.instance.PoolingExplosion(mouthSegment.previousSegment.previousSegment.transform, 1);
+        ex.transform.position = Vector3.Lerp(mouthSegment.previousSegment.previousSegment.transform.position, transform.position, 0.3f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        mouthSegment.previousSegment.previousSegment.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.25f);
+        #endregion
+
+        #region laser segment
+        ex = ExplosionManager.instance.PoolingExplosion(laserSegment.transform, 1);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(.25f);
+        ex = ExplosionManager.instance.PoolingExplosion(laserSegment.transform, 1);
+        ex.transform.position = Vector3.Lerp(laserSegment.transform.position, laserSegment.previousSegment.transform.position, 0.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        laserSegment.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.25f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(laserSegment.previousSegment.transform, 1);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(.25f);
+        ex = ExplosionManager.instance.PoolingExplosion(laserSegment.previousSegment.transform, 1);
+        ex.transform.position = Vector3.Lerp(laserSegment.previousSegment.transform.position, laserSegment.previousSegment.previousSegment.transform.position, 0.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        laserSegment.previousSegment.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.25f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(laserSegment.previousSegment.previousSegment.transform, 1);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(.25f);
+        ex = ExplosionManager.instance.PoolingExplosion(laserSegment.previousSegment.previousSegment.transform, 1);
+        ex.transform.position = Vector3.Lerp(laserSegment.previousSegment.previousSegment.transform.position,transform.position, 0.3f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        laserSegment.previousSegment.previousSegment.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.25f);
+        #endregion
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 2);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        bossRenderer.enabled = false;
+
         EnemyManager.instance.NextLevel();
-
-        //ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);
-        //ex.gameObject.SetActive(true);
-        //ex.explode();
-        //bossRenderer.enabled = false;
-
+        
         yield return new WaitForSeconds(0.1f);
     }
 

@@ -32,7 +32,7 @@ public class EnterName : MonoBehaviour
             MenuInput();
             box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
             ChangeTextColour();
-            score.text = "Your Score: " + Player.instance.score.ToString();
+            score.text = "Your Score:\n" + Player.instance.score.ToString();
             if (Input.GetButtonDown("Fire1"))
                 SelectName();
     }
