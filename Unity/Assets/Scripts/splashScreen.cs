@@ -15,13 +15,11 @@ public class splashScreen : MonoBehaviour
     public bool allowStart;
     public AudioSource swapShipSound;
     public AudioClip[] swapSounds;
-    [SerializeField] private Text[] options;
-    [SerializeField] private GameObject[] titles;
-    [SerializeField] Text[] scores;
-    [SerializeField] Text[] names;
-    [SerializeField] Text[] rank;
+    [SerializeField] private Text[] options = null;
+    [SerializeField] Text[] scores = null;
+    [SerializeField] Text[] names = null;
+    [SerializeField] Text[] rank = null;
     [SerializeField]
-    Canvas lBoard;
     bool once = false;
     private int menuSelect = 0;
     private float menuCool = 0.5f;
@@ -59,8 +57,10 @@ public class splashScreen : MonoBehaviour
                     anim.StopPlayback();
                     GreenShip.instance.ship = ship.sprite;
                     anim.Play("splash_out");
-                    foreach (Text t in options)
-                    allowStart = false;
+                    for (int i = 0; i < options.Length; ++i)
+                    {
+                        allowStart = false;
+                    }
                     break;
                 case 1:
                     leaderBool = !leaderBool;

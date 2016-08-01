@@ -13,7 +13,10 @@ public class GameStateManager : MonoBehaviour {
     public static GameStateManager instance;
     public GameState state;
     [SerializeField]
-    private GameObject enterName;
+    private GameObject enterName = null;
+
+    [SerializeField] private GameObject arrowFormation = null;
+
 	void Awake()
     {
         instance = this;
@@ -42,6 +45,33 @@ public class GameStateManager : MonoBehaviour {
                 _e.Death(true);
             }
         }
+
+        StartCoroutine(WinAnimation());
+
+        
+    }
+
+    IEnumerator WinAnimation()
+    {
+        while(Player.instance.transform.position != new Vector3(0.0f, -10.0f, 0.0f))
+        {
+            Player.instance.transform.position = Vector3.MoveTowards(Player.instance.transform.position, new Vector3(0.0f, -10.0f, 0.0f), Time.deltaTime * 5.0f);
+            yield return null;
+        }
+
+        while (arrowFormation.transform.position.y < -10)
+        {
+            arrowFormation.transform.position += (Vector3.up * Time.deltaTime * 7.5f);
+            yield return null;
+        }
+
+        while (arrowFormation.transform.position.y < 10)
+        {
+            Player.instance.transform.position += (Vector3.up * Time.deltaTime * 7.5f);
+            arrowFormation.transform.position += (Vector3.up * Time.deltaTime * 7.5f);
+            yield return null;
+        }
+
         gameOverText.text = "You won!";
         if (LeaderBoard.instance.CheckIfHighScore(Player.instance.score))
         {
@@ -50,6 +80,13 @@ public class GameStateManager : MonoBehaviour {
         else
         {
             StartCoroutine(gameOveranims());
+        }
+
+        while (arrowFormation.transform.position.y < 75)
+        {
+            Player.instance.transform.position += (Vector3.up * Time.deltaTime * 7.5f);
+            arrowFormation.transform.position += (Vector3.up * Time.deltaTime * 7.5f);
+            yield return null;
         }
     }
 

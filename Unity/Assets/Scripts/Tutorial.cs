@@ -10,7 +10,8 @@ public class Tutorial : MonoBehaviour
         FIREWALL,
         KEYLOGGER,
         ADS,
-        BOSS,
+        BOSS_DAMAGE,
+        BOSS_PASSWORD,
         COUNT
     }
 
@@ -26,6 +27,8 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private Enemy_KeyLogger keyloggerRef = null;
     [SerializeField] private Transform spawnRef = null;
     private Enemy tutorialEnemy = null;
+
+    private float currentTime = 0.0f;
 
     //Update.exe
 
@@ -65,7 +68,7 @@ public class Tutorial : MonoBehaviour
                 if(wordRef.isWordActive)
                 {
                     currentTutorial += 1;
-                    LevelText.instance.SetText("type firewall.exe\nto create a shield for the player", 20);
+                    LevelText.instance.SetText("type firewall.exe\nto create a shield", 20);
                     LevelText.instance.TutorialElementFinished(false);
                     LevelText.instance.ShowText();
                 }
@@ -78,7 +81,7 @@ public class Tutorial : MonoBehaviour
                     tutorialEnemy.transform.position = spawnRef.position;
                     tutorialEnemy.OnSpawn();
                     tutorialEnemy.gameObject.SetActive(true);
-                    LevelText.instance.SetText("keylogger Enemy\ndefeat enemies by shooting them", 20);
+                    LevelText.instance.SetText("keylogger\ndefeat enemies by shooting them", 20);
                     LevelText.instance.TutorialElementFinished(false);
                     LevelText.instance.ShowText();
                 }
@@ -97,11 +100,28 @@ public class Tutorial : MonoBehaviour
                 if(AdManager.instance.numActiveAds == 0)
                 {
                     currentTutorial += 1;
+                    LevelText.instance.SetText("deal damage to reveal the boss password", 20);
+                    LevelText.instance.TutorialElementFinished(false);
+                    LevelText.instance.ShowText();
+                    currentTime = 0.0f;
                 }
                 break;
-            case Tutorials.BOSS:
-                BeginGame();
-                //Track boss not active
+            case Tutorials.BOSS_DAMAGE:
+                currentTime += Time.deltaTime;
+                if(currentTime > 7.5f || !tutorialEnemy.isActiveAndEnabled)
+                {
+                    currentTutorial += 1;
+                    LevelText.instance.SetText("type the password\nto defeat the boss", 20);
+                    LevelText.instance.TutorialElementFinished(false);
+                    LevelText.instance.ShowText();
+                    currentTime = 0.0F;
+                }
+                break;
+            case Tutorials.BOSS_PASSWORD:
+                if (!tutorialEnemy.isActiveAndEnabled)
+                {
+                    BeginGame();
+                }
                 break;
             default:
                 break;

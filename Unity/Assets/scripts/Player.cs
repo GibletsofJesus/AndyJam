@@ -20,7 +20,7 @@ public class Player : Actor
     public ParticleSystem[] muzzleflash;
     Vector3 rotLerp;
     //public GameObject target;
-    Vector3 screenBottom, screenTop;
+    Vector3 screenBottom;
     Vector2 verticalBoundsBot, verticalBoundsTop;
 
     private bool isInvincible = false;
@@ -47,7 +47,6 @@ public class Player : Actor
 		updatedDefaultHealth = defaultHealth;
 		lives = defaultLives;
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f, -.5f, .3f));
-        screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
         verticalBoundsBot = Camera.main.ViewportToWorldPoint(new Vector3(.5f, 0f));
         verticalBoundsTop = Camera.main.ViewportToWorldPoint(new Vector3(.5f, .5f));
     }

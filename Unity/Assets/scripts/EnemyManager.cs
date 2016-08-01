@@ -92,6 +92,8 @@ public class EnemyManager : MonoBehaviour
     {
         LevelText.instance.TutorialElementFinished(true);
         logicPaused = false;
+        //currentLevel = levels.Length - 2;
+        //NextLevel();
     }
 
     public void NextLevel()
@@ -107,7 +109,6 @@ public class EnemyManager : MonoBehaviour
             }
         }
         ++currentLevel;
-        LevelText.instance.SetText("LEVEL " + (currentLevel + 1).ToString());
         if (currentLevel == levels.Length)
         {
             GameComplete();
@@ -117,6 +118,7 @@ public class EnemyManager : MonoBehaviour
             currentWave = 0;
             currentWaveCooldown = 0;
             bossSpawned = false;
+            LevelText.instance.SetText("LEVEL " + (currentLevel + 1).ToString());
             LevelText.instance.ShowText();
         }
 }

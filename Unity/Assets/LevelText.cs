@@ -98,8 +98,8 @@ public class LevelText : MonoBehaviour
             {
                 SetText(textBuffer, fontBuffer);
                 textBuffer = string.Empty;
+                showText = true;
             }
-            showText = true;
         }
         displayText.color = _colour;
     }
