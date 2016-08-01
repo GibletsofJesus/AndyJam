@@ -78,7 +78,10 @@ public class LaserModule : MonoBehaviour
                         laserTip.SetActive(true);
                         laserBack.SetActive(true);
                         animator.ResetTrigger("Charge");
-                        chargeParticles.Stop();
+                        if (chargeParticles.isPlaying)
+                        {
+                            chargeParticles.Stop();
+                        }
                     }
                 }
             }
@@ -94,7 +97,10 @@ public class LaserModule : MonoBehaviour
             laserTime = 0.0f;
             transform.localPosition = originalLocal;
             animator.SetTrigger("Charge");
-            chargeParticles.Play();
+            if (!chargeParticles.isPlaying)
+            {
+                chargeParticles.Play();
+            }
         }
     }
 

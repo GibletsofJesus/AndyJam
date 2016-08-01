@@ -11,6 +11,8 @@ public class Boss : Enemy
 	[SerializeField] private string[] passwordSelections = null;
 	private int charactersHidden;
 
+    protected bool isTutorialBoss = false;
+
     protected bool bossDefeated = false;
     public bool bossIsDefeated { get { return bossDefeated; } }
 
@@ -109,14 +111,17 @@ public class Boss : Enemy
     {
         //do explosions
         bossDefeated = true;
-        Player.instance.IncreaseScore(score);
+        //Player.instance.IncreaseScore(score);
         StartCoroutine(bossDeath());
     }
 
     protected virtual IEnumerator bossDeath()
     {
         base.Death();
-        EnemyManager.instance.NextLevel();
+        if (!isTutorialBoss)
+        {
+            EnemyManager.instance.NextLevel();
+        }
         yield return new WaitForSeconds(0.1f);
     }
 

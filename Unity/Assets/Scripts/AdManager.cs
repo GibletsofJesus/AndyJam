@@ -36,39 +36,39 @@ public class AdManager : MonoBehaviour
 		//TryGenerateAd (new Vector3 (25,25, 0));
 	}
 
-	public void TryGenerateAd(Vector3 _pos)
+	public void TryGenerateAd(Vector3 _pos, bool _limitToLower = false)
 	{
 		if(!adblock && !spamfilter)
 		{
 			if((100.0f - adPercent) > Random.Range(0.0f, 100.0f))
 			{
-				GenerateAd(_pos);
+				GenerateAd(_pos, _limitToLower);
 			}
 		}
 	}
 
-    public void TryGenerateAd(Vector3 _pos, int _index)
+    public void TryGenerateAd(Vector3 _pos, int _index, bool _limitToLower = false)
     {
         if (!adblock && !spamfilter)
         {
             if ((100.0f - adPercent) > Random.Range(0.0f, 100.0f))
             {
-                GenerateAd(_pos);
+                GenerateAd(_pos, _limitToLower);
             }
         }
     }
 
-    private void GenerateAd(Vector3 _pos)
+    private void GenerateAd(Vector3 _pos, bool _limitToLower)
 	{
 		Ad _ad = AdPooling (Random.Range (0, adPrefabs.Length));
-		_ad.SpawnAd (_pos, new Vector3(Random.Range(-7.0f, 7.0f),Random.Range(-14.0f, 14.0f),0.0f));
+		_ad.SpawnAd (_pos, new Vector3(Random.Range(-7.0f, 7.0f),Random.Range(-14.0f, _limitToLower ? 0.0f : 14.0f),0.0f));
 		activeAds.Add (_ad);
 	}
 
-    private void GenerateAd(Vector3 _pos, int _index)
+    private void GenerateAd(Vector3 _pos, int _index, bool _limitToLower)
     {
         Ad _ad = AdPooling(_index);
-        _ad.SpawnAd(_pos, new Vector3(Random.Range(-5.0f, 5.0f), Random.Range(-10.0f, 10.0f), 0.0f));
+        _ad.SpawnAd(_pos, new Vector3(Random.Range(-7.0f, 7.0f), Random.Range(-14.0f, _limitToLower ? 0.0f : 14.0f), 0.0f));
         activeAds.Add(_ad);
     }
 

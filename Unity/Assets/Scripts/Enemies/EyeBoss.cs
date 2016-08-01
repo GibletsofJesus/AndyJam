@@ -164,13 +164,16 @@ public class EyeBoss : Boss
         GetComponent<Animator>().Play("boss_die_idle");
         yield return new WaitForSeconds(1.5f);
 
-        EnemyManager.instance.NextLevel();
+        
+        //EnemyManager.instance.NextLevel();
 
         ex = ExplosionManager.instance.PoolingExplosion(mouthShot.transform, 2);
         ex.transform.position = mouthShot.transform.position;
         ex.gameObject.SetActive(true);
         ex.explode();
         bossRenderer.enabled = false;
+
+        StartCoroutine(base.bossDeath());
     }
     
     protected override void Movement()

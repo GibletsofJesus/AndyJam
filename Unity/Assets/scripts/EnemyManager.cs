@@ -92,6 +92,9 @@ public class EnemyManager : MonoBehaviour
     {
         LevelText.instance.TutorialElementFinished(true);
         logicPaused = false;
+        currentLevel = 0;
+        soundManager.instance.music.DOFade(0, 3);
+        Invoke("fadeInMusic", 3.25f);
         //currentLevel = levels.Length - 2;
         //NextLevel();
     }
@@ -132,7 +135,7 @@ public class EnemyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // Debug.Log("Number of enemies " + Enemy.numAliveEnemies);
+        //Debug.Log("Number of enemies " + Enemy.numAliveEnemies);
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             if (!logicPaused)

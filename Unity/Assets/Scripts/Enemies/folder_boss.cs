@@ -232,7 +232,8 @@ public class folder_boss : Boss {
         yield return new WaitForSeconds(2.5f);
         GetComponent<Animator>().enabled = false;
 
-        EnemyManager.instance.NextLevel();
+        //EnemyManager.instance.NextLevel();
+        StartCoroutine(base.bossDeath());
     }
 
 }
