@@ -69,10 +69,8 @@ public class EnemyManager : MonoBehaviour
   
     bool bossSpawned = false;
 
-    bool logicPaused = false;
+    bool logicPaused = true;
 
-    [SerializeField]
-    private LevelName levelName = null;
     // Use this for initialization
     void Awake()
     {
@@ -90,6 +88,12 @@ public class EnemyManager : MonoBehaviour
         soundManager.instance.music.DOFade(1, 3);
     }
 
+    public void Begin()
+    {
+        LevelText.instance.TutorialElementFinished(true);
+        logicPaused = false;
+    }
+
     public void NextLevel()
     {
         soundManager.instance.music.DOFade(0, 3);
@@ -103,7 +107,7 @@ public class EnemyManager : MonoBehaviour
             }
         }
         ++currentLevel;
-        levelName.SetText(currentLevel + 1);
+        LevelText.instance.SetText("LEVEL " + (currentLevel + 1).ToString());
         if (currentLevel == levels.Length)
         {
             GameComplete();
@@ -113,7 +117,7 @@ public class EnemyManager : MonoBehaviour
             currentWave = 0;
             currentWaveCooldown = 0;
             bossSpawned = false;
-            levelName.ShowLevelName();
+            LevelText.instance.ShowText();
         }
 }
 
