@@ -21,6 +21,11 @@ public class Tutorial : MonoBehaviour
 
     private Tutorials currentTutorial = Tutorials.MOVEMENT_AND_SHOOT;
 
+    [SerializeField] private Word wordRef = null;
+    [SerializeField] private GameObject firewallRef = null;
+    [SerializeField] private Enemy_KeyLogger keyloggerRef = null;
+    [SerializeField] private Transform spawnRef = null;
+    private Enemy tutorialEnemy = null;
 
     //Update.exe
 
@@ -39,7 +44,7 @@ public class Tutorial : MonoBehaviour
 
     private void Start()
     {
-        LevelText.instance.SetText("Joystick to move\nSquare to shoot", 20);
+        LevelText.instance.SetText("joystick to move\nsquare to shoot", 20);
         LevelText.instance.ShowText();
     }
 
@@ -48,25 +53,54 @@ public class Tutorial : MonoBehaviour
         switch(currentTutorial)
         {
             case Tutorials.MOVEMENT_AND_SHOOT:
-                if(Player.instance.transform.position.x > 1.0f)
+                if(Mathf.Abs(Player.instance.transform.position.x) > 3.0f)
+                {
+                    currentTutorial += 1;
+                    LevelText.instance.SetText("type update.exe\nto unlock more abilities", 20);
+                    LevelText.instance.TutorialElementFinished(false);
+                    LevelText.instance.ShowText();
+                }
+                break;
+            case Tutorials.UPDATE:
+                if(wordRef.isWordActive)
+                {
+                    currentTutorial += 1;
+                    LevelText.instance.SetText("type firewall.exe\nto create a shield for the player", 20);
+                    LevelText.instance.TutorialElementFinished(false);
+                    LevelText.instance.ShowText();
+                }
+                break;
+            case Tutorials.FIREWALL:
+                if(firewallRef.activeSelf)
+                {
+                    currentTutorial += 1;
+                    tutorialEnemy = EnemyManager.instance.EnemyPooling(keyloggerRef);
+                    tutorialEnemy.transform.position = spawnRef.position;
+                    tutorialEnemy.OnSpawn();
+                    tutorialEnemy.gameObject.SetActive(true);
+                    LevelText.instance.SetText("keylogger Enemy\ndefeat enemies by shooting them", 20);
+                    LevelText.instance.TutorialElementFinished(false);
+                    LevelText.instance.ShowText();
+                }
+                break;
+            case Tutorials.KEYLOGGER:
+                if(!tutorialEnemy.isActiveAndEnabled)
+                {
+                    currentTutorial += 1;
+                    AdManager.instance.TryGenerateAd(new Vector3(25, 25, 0));
+                    LevelText.instance.SetText("type close\nto remove ads", 20);
+                    LevelText.instance.TutorialElementFinished(false);
+                    LevelText.instance.ShowText();
+                }
+                break;
+            case Tutorials.ADS:
+                if(AdManager.instance.numActiveAds == 0)
                 {
                     currentTutorial += 1;
                 }
                 break;
-            case Tutorials.UPDATE:
-                BeginGame();
-                //Track when antivirus becomes active
-                break;
-            case Tutorials.FIREWALL:
-                //Track firewall active
-                break;
-            case Tutorials.KEYLOGGER:
-                //Track keylogger not active
-                break;
-            case Tutorials.ADS:
-                //Track when no adds
-                break;
             case Tutorials.BOSS:
+                BeginGame();
                 //Track boss not active
                 break;
             default:

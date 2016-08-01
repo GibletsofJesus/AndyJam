@@ -33,6 +33,7 @@ public class FactoryReset : AbilityWord
         Player.instance.Reset();
         UpdateBehavior.instance.FactoryReset();
         AdManager.instance.DisableAdBlock();
+        AdManager.instance.SpamFilter(false);
         base.EndBehavior();
 	}
 	

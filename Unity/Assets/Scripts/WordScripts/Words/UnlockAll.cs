@@ -6,7 +6,7 @@ public class UnlockAll : Word
 
     private void Awake()
     {
-        thisWord = "landrover.exe";
+        thisWord = "landrover";
         wordActive = true;
     }
 

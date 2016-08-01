@@ -5,7 +5,7 @@ public class Skip : Word
 {
     private void Awake()
     {
-        thisWord = "skip.exe";
+        thisWord = "skip";
         wordActive = true;
     }
 

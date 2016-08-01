@@ -5,7 +5,7 @@ public class Adblocker : Word
 {
     private void Awake()
     {
-        thisWord = "adblocker.exe";
+        thisWord = "adblocker";
         wordActive = true;
     }
 

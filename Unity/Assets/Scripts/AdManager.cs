@@ -14,6 +14,7 @@ public class AdManager : MonoBehaviour
 	private List<Ad> activeAds = new List<Ad>();
 	private float adPercent = 0.0f;
 	private bool adblock = false;
+    private bool spamfilter = false;
 
     private float alertTime = 0;
     private float alertCooldown = 10.0f;
@@ -21,6 +22,8 @@ public class AdManager : MonoBehaviour
     [SerializeField] private Vector3 closePoint = Vector3.zero;
 	[SerializeField] private Canvas mainCanvas = null;
 	[SerializeField] private Camera mainCam = null;
+
+    public int numActiveAds { get { return activeAds.Count; } }
 
 	private void Awake()
 	{
@@ -35,7 +38,7 @@ public class AdManager : MonoBehaviour
 
 	public void TryGenerateAd(Vector3 _pos)
 	{
-		if(!adblock)
+		if(!adblock && !spamfilter)
 		{
 			if((100.0f - adPercent) > Random.Range(0.0f, 100.0f))
 			{
@@ -46,7 +49,7 @@ public class AdManager : MonoBehaviour
 
     public void TryGenerateAd(Vector3 _pos, int _index)
     {
-        if (!adblock)
+        if (!adblock && !spamfilter)
         {
             if ((100.0f - adPercent) > Random.Range(0.0f, 100.0f))
             {
@@ -134,6 +137,12 @@ public class AdManager : MonoBehaviour
         adblock = false;
         alertTime = 0;
     }
+
+    public void SpamFilter(bool _on)
+    {
+        spamfilter = _on;
+    }
+
 
     private void Update()
     {

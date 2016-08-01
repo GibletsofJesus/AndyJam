@@ -5,7 +5,7 @@ public class SuperCooldowns : Word
 {
     private void Awake()
     {
-        thisWord = "administrator.exe";
+        thisWord = "administrator";
         wordActive = true;
     }
 
