@@ -26,6 +26,8 @@ public class splashScreen : MonoBehaviour
     private float maxMenuCool = 0.35f;
     private float buttonCool = 0.35f;
     private float maxButtonCool = 0.35f;
+    private float shipToggleCool = 0.35f;
+    private float shipToggleMaxCool = 0.35f;
     public bool leaderBool = false;
 
 	void Update ()
@@ -35,19 +37,37 @@ public class splashScreen : MonoBehaviour
             ChangeMenuColour();
         }
         MenuCooldown();
-        ButtonCoolDown();
+        buttonCool += Time.deltaTime;
         DisplayLeaderBoard();
-        if (Input.GetButton("Fire2")&&ButtonCoolDown())
+
+        if ((!(shipToggleCool < shipToggleMaxCool)) && allowStart)
         {
-            swapShipSound.PlayOneShot(swapSounds[(Random.value>0.5f) ? 0 : 1]);
-            shipIndex++;
-            if (shipIndex>Ships.Length-1)
+            if (Input.GetAxis("Horizontal") > 0)
             {
-                shipIndex = 0;
+                swapShipSound.PlayOneShot(swapSounds[(Random.value > 0.5f) ? 0 : 1]);
+                ++shipIndex;
+                if (shipIndex == Ships.Length)
+                {
+                    shipIndex = 0;
+                }
+                ship.sprite = Ships[shipIndex];
+                shipToggleCool = 0.0f;
             }
-            ship.sprite = Ships[shipIndex];
-           
-            buttonCool = 0;
+            else if(Input.GetAxis("Horizontal") < 0)
+            {
+                swapShipSound.PlayOneShot(swapSounds[(Random.value > 0.5f) ? 0 : 1]);
+                --shipIndex;
+                if (shipIndex == -1)
+                {
+                    shipIndex = Ships.Length - 1;
+                }
+                ship.sprite = Ships[shipIndex];
+                shipToggleCool = 0.0f;
+            }
+        }
+        else
+        {
+            shipToggleCool += Time.deltaTime;
         }
         if (Input.GetButton("Fire1") && allowStart && ButtonCoolDown() && !transitioning)
         {
@@ -209,7 +229,6 @@ public class splashScreen : MonoBehaviour
     {
         if (buttonCool<maxButtonCool)
         {
-            buttonCool += Time.deltaTime;
             return false;
         }
         else

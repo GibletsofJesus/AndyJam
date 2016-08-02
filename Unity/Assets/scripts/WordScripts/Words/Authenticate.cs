@@ -16,7 +16,8 @@ public class Authenticate : AbilityWord
 
 	protected override void Start ()
 	{
-		wordTiers = new string[] {"authenticate.exe", "authenticate.exe", "authenticate.exe"};
+        description = "laser weapon";
+        wordTiers = new string[] {"authenticate.exe", "authenticate.exe", "authenticate.exe"};
 		base.Start ();
 	}
 	

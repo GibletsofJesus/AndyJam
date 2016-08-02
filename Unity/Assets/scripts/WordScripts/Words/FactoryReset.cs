@@ -5,7 +5,8 @@ public class FactoryReset : AbilityWord
 {
 	protected override void Start ()
 	{
-		wordTiers = new string[] {"factory-reset.exe"};
+        description = "player and enemy reset";
+        wordTiers = new string[] {"factory-reset.exe"};
 		base.Start ();
 	}
 	

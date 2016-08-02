@@ -80,7 +80,7 @@ public class LevelText : MonoBehaviour
         fadeText = true;
         if(_tutorialCompleted)
         {
-            SetText("LEVEL 1", 32);
+            SetText("LEVEL 1");
         }
     }
 
@@ -104,7 +104,7 @@ public class LevelText : MonoBehaviour
         displayText.color = _colour;
     }
 
-    public void SetText(string _text, int _font = 32)
+    public void SetText(string _text, int _font = 128)
     {
         if (showText)
         {

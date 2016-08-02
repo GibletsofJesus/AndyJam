@@ -9,7 +9,8 @@ public class Scan : AbilityWord
 
 	protected override void Start ()
 	{
-		wordTiers = new string[] {"quickscan.exe", "systemscan.exe", "fullscan.exe"};
+        description = "homing projectiles";
+        wordTiers = new string[] {"quickscan.exe", "systemscan.exe", "fullscan.exe"};
 		base.Start ();
 	}
 	

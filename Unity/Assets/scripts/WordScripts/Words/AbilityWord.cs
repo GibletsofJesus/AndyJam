@@ -16,10 +16,21 @@ public abstract class AbilityWord : Word
 	private const int pixels = 32;
 	protected float pixelCooldown;
 
+    protected string description;
+
     protected void Awake()
     {
         defaultCooldown = wordCooldown;
         pixelCooldown = (1.0f / (float)pixels) * 1000.0f;
+    }
+
+    public string GetDescription()
+    {
+        if(wordActive)
+        {
+            return word + " : " + description;
+        }
+        return string.Empty;
     }
 
 	protected override void Start ()

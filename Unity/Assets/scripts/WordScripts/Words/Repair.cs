@@ -9,7 +9,8 @@ public class Repair : AbilityWord
 
     protected override void Start ()
 	{
-		wordTiers = new string[] {"repair.exe", "restore.exe", "systemrestore.exe"};
+        description = "player heal";
+        wordTiers = new string[] {"repair.exe", "restore.exe", "systemrestore.exe"};
 		base.Start ();
 	}
 	

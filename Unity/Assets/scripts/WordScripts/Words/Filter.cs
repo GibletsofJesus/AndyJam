@@ -9,7 +9,8 @@ public class Filter : AbilityWord
 
     protected override void Start ()
 	{
-		wordTiers = new string[] {"spamfilter.exe", "spamfilter.exe", "spamfilter.exe"};
+        description = "moving defensive barrier";
+        wordTiers = new string[] {"spamfilter.exe", "spamfilter.exe", "spamfilter.exe"};
 		base.Start ();
 	}
 	

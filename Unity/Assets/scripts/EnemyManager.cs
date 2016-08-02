@@ -132,6 +132,17 @@ public class EnemyManager : MonoBehaviour
         logicPaused = true;
     }
 
+    public void ShortCut()
+    {
+        if (!logicPaused)
+        {
+            if (currentWave < levels[currentLevel].numWavesTillBoss)
+            {
+                currentWave = levels[currentLevel].numWavesTillBoss;
+            }
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
