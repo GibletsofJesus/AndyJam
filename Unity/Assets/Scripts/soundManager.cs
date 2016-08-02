@@ -9,6 +9,7 @@ public class soundManager : MonoBehaviour
     public int numberOfSources;
     public float volumeMultiplayer = 1;
     public AudioSource music;
+
     List<AudioSource> audioSrcs = new List<AudioSource>();
 
     public AudioClip[] explosionSounds, hitSounds;
@@ -49,6 +50,22 @@ public class soundManager : MonoBehaviour
             {
                 c++;
             }
+        }
+    }
+
+    public void PauseAll()
+    {
+        foreach(AudioSource _s in audioSrcs)
+        {
+            _s.Pause();
+        }
+    }
+
+    public void UnPauseAll()
+    {
+        foreach (AudioSource _s in audioSrcs)
+        {
+            _s.UnPause();
         }
     }
 

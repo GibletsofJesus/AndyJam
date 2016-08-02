@@ -130,6 +130,7 @@ public class GameStateManager : MonoBehaviour {
                 pauseUI.SetActive(true);
                 Time.timeScale = 0;
                 state = GameState.Paused;
+                soundManager.instance.PauseAll();
             }
             else
             {
@@ -137,6 +138,7 @@ public class GameStateManager : MonoBehaviour {
                 Time.timeScale = 1;
                 //Resume game
                 state = GameState.Gameplay;
+                soundManager.instance.UnPauseAll();
             }
         }
 	}
