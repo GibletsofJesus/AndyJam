@@ -80,14 +80,17 @@ public class soundManager : MonoBehaviour
                 {
                     case 0:
                         audioSrcs[c].PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length)]);
-                audioSrcs[c].volume = volumeMultiplayer * .4f;
+                        audioSrcs[c].pitch = pitchMod;
+                        audioSrcs[c].volume = volumeMultiplayer * .4f;
                         break;
                     case 1:
                         audioSrcs[c].PlayOneShot(explosionSounds[Random.Range(0,explosionSounds.Length-1)]);
-                audioSrcs[c].volume = volumeMultiplayer * .8f;
+                        audioSrcs[c].pitch = pitchMod;
+                        audioSrcs[c].volume = volumeMultiplayer * .8f;
                         break;
                     case 2:
                         audioSrcs[c].PlayOneShot(winSound);
+                        audioSrcs[c].pitch = pitchMod;
                         audioSrcs[c].volume = volumeMultiplayer * 2.0f;
                         break;
                     case 3:

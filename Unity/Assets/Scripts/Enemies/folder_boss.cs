@@ -85,7 +85,10 @@ public class folder_boss : Boss {
     {
         soundManager.instance.playSound(soundFx[Random.Range(0,1)]);
         yield return StartCoroutine(mouthOpenClose(true));
-        vomitParticleSystem.Play();
+        if (!bossDefeated)
+        {
+            vomitParticleSystem.Play();
+        }
 
         float filesFired = 0;
 

@@ -109,7 +109,6 @@ public class Boss : Enemy
 
     protected override void Death()
     {
-        StopAllCoroutines();
         //do explosions
         bossDefeated = true;
         //Player.instance.IncreaseScore(score);
