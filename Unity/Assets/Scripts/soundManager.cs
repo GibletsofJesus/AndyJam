@@ -12,6 +12,10 @@ public class soundManager : MonoBehaviour
     List<AudioSource> audioSrcs = new List<AudioSource>();
 
     public AudioClip[] explosionSounds, hitSounds;
+    [SerializeField] private AudioClip winSound = null;
+
+    [SerializeField] private AudioClip laserCharge = null;
+    [SerializeField] private AudioClip laserFire = null;
 
     void Awake()
     {
@@ -48,7 +52,7 @@ public class soundManager : MonoBehaviour
         }
     }
 
-    public void playSound(int type)//1 for explosions,0 for hit sounds.
+    public void playSound(int type, float pitchMod = 1.0f)//1 for explosions,0 for hit sounds.
     {
         int c = 0;
         while (c < audioSrcs.Count)
@@ -64,6 +68,20 @@ public class soundManager : MonoBehaviour
                     case 1:
                         audioSrcs[c].PlayOneShot(explosionSounds[Random.Range(0,explosionSounds.Length-1)]);
                 audioSrcs[c].volume = volumeMultiplayer * .8f;
+                        break;
+                    case 2:
+                        audioSrcs[c].PlayOneShot(winSound);
+                        audioSrcs[c].volume = volumeMultiplayer * 2.0f;
+                        break;
+                    case 3:
+                        audioSrcs[c].PlayOneShot(laserCharge);
+                        audioSrcs[c].pitch = 1.0f / (pitchMod / 2.0f);
+                        audioSrcs[c].volume = volumeMultiplayer * 2.5f;
+                        break;
+                    case 4:
+                        audioSrcs[c].PlayOneShot(laserFire);
+                        audioSrcs[c].pitch = 1.0f / (pitchMod / 4.0f);
+                        audioSrcs[c].volume = volumeMultiplayer * 1.0f;
                         break;
                 }
                 break;

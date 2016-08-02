@@ -58,7 +58,7 @@ public class GameStateManager : MonoBehaviour {
             Player.instance.transform.position = Vector3.MoveTowards(Player.instance.transform.position, new Vector3(0.0f, -10.0f, 0.0f), Time.deltaTime * 5.0f);
             yield return null;
         }
-
+        soundManager.instance.playSound(2);
         while (arrowFormation.transform.position.y < -10)
         {
             arrowFormation.transform.position += (Vector3.up * Time.deltaTime * 7.5f);

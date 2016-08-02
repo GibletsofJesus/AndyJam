@@ -34,16 +34,6 @@ public class Tutorial : MonoBehaviour
 
     private float currentTime = 0.0f;
 
-    //Update.exe
-
-    //Firewall.exe
-
-    //Keylogger
-
-    //Closing Ads
-
-    //Boss
-
 	private void Awake()
     {
         tutorial = this;
@@ -51,7 +41,7 @@ public class Tutorial : MonoBehaviour
 
     private void Start()
     {
-        LevelText.instance.SetText("joystick to move\nsquare to shoot", 20);
+        LevelText.instance.SetText("joystick to move\npress to shoot", 20);
         LevelText.instance.ShowText();
     }
 
@@ -122,7 +112,7 @@ public class Tutorial : MonoBehaviour
                 break;
             case Tutorials.BOSS_DAMAGE:
                 currentTime += Time.deltaTime;
-                if(currentTime > 7.5f || !tutorialBoss.isActiveAndEnabled)
+                if(currentTime > 10.0f || !tutorialBoss.isActiveAndEnabled)
                 {
                     currentTutorial += 1;
                     LevelText.instance.SetText("type the password\nto defeat the boss", 20);
@@ -143,7 +133,7 @@ public class Tutorial : MonoBehaviour
                 break;
             case Tutorials.TUTORIAL_COMPLETE:
                 currentTime += Time.deltaTime;
-                if (currentTime > 7.5f)
+                if (currentTime > 5.0f)
                 {
                     VisualCommandPanel.instance.AddMessage("Type skip to skip the tutorial in future playthroughs");
                     BeginGame();
@@ -157,13 +147,19 @@ public class Tutorial : MonoBehaviour
     public void Skip()
     {
         BeginGame();
-        if(tutorialEnemy.isActiveAndEnabled)
+        if (tutorialEnemy)
         {
-            tutorialEnemy.Death(false);
+            if (tutorialEnemy.isActiveAndEnabled)
+            {
+                tutorialEnemy.Death(false);
+            }
         }
-        else if(tutorialBoss.isActiveAndEnabled)
+        if (tutorialBoss)
         {
-            BossWord.instance.ForceBossDeath();
+            if (tutorialBoss.isActiveAndEnabled)
+            {
+                BossWord.instance.ForceBossDeath();
+            }
         }
     }
 
