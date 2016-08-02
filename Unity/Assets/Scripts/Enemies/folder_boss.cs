@@ -210,6 +210,7 @@ public class folder_boss : Boss {
     protected override  IEnumerator bossDeath()
     {
         drool.Stop();
+        vomitParticleSystem.Stop();
         drool.gameObject.SetActive(false);
         Explosion ex;
 
@@ -225,15 +226,73 @@ public class folder_boss : Boss {
             ex.explode();
             yield return new WaitForSeconds(Random.Range(0.4f, .8f));
         }
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+        ex.transform.position = transform.position + (Random.onUnitSphere * 7.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.1f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+        ex.transform.position = transform.position + (Random.onUnitSphere * 7.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.15f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+        ex.transform.position = transform.position + (Random.onUnitSphere * 7.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.2f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+        ex.transform.position = transform.position + (Random.onUnitSphere * 7.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.2f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+        ex.transform.position = transform.position + (Random.onUnitSphere * 7.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.1f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+        ex.transform.position = transform.position + (Random.onUnitSphere * 7.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.1f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 2);
+        ex.transform.position = transform.position + (Random.onUnitSphere * 7.5f);
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.1f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 2);
+        ex.transform.position = transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.1f);
+
         soundManager.instance.playSound(soundFx[2], 2);
         GetComponent<Animator>().enabled = true;
         GetComponent<Animator>().Play("boss_folder_death");
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(4.0f);
         GetComponent<Animator>().enabled = false;
 
-        //EnemyManager.instance.NextLevel();
-        StartCoroutine(base.bossDeath());
+        if (isActiveAndEnabled)
+        {
+            --numAliveEnemies;
+        }
+        Reset();
+        gameObject.SetActive(false);
+        Player.instance.IncreaseScore(score);
+        if (!isTutorialBoss)
+        {
+            EnemyManager.instance.NextLevel();
+        }
     }
 
 }

@@ -6,7 +6,8 @@ public class TutorialBoss : Boss
     [SerializeField] private SpriteRenderer bossRenderer = null;
 
     private bool movingLeft = false;
-   
+
+    private bool leftShot = true;
 
     protected override void Awake()
     {
@@ -20,16 +21,14 @@ public class TutorialBoss : Boss
         {
             if (shootCooldown >= shootRate)
             {
-                for (int i = 0; i < _shootTransform.Length; i++)
-                {
-                    Vector3 shootDir = Vector3.down;
-                    Projectile p = ProjectileManager.instance.PoolingProjectile(_shootTransform[i].transform);
-                    p.SetProjectile(_projData, shootDir);
-                    p.transform.position = _shootTransform[i].transform.position;
-                    p.gameObject.SetActive(true);
-                    shootCooldown = 0;
-                    p.GetComponentInChildren<ParticleSystem>().startLifetime = .1f;
-                }
+                Vector3 shootDir = Vector3.down;
+                Projectile p = ProjectileManager.instance.PoolingEnemyProjectile(transform);
+                p.SetProjectile(_projData, shootDir);
+                p.transform.position = _shootTransform[leftShot ? 0 : 1].transform.position;
+                leftShot = !leftShot;
+                p.gameObject.SetActive(true);
+                shootCooldown = 0;
+                p.GetComponentInChildren<ParticleSystem>().startLifetime = .1f;
                 return true;
             }
         }
@@ -62,12 +61,25 @@ public class TutorialBoss : Boss
     protected override IEnumerator bossDeath()
     {
         Explosion ex;
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+        ex.transform.position = shootTransform[0].transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.5f);
+
+        ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
+        ex.transform.position = shootTransform[1].transform.position;
+        ex.gameObject.SetActive(true);
+        ex.explode();
+        yield return new WaitForSeconds(0.2f);
+
         ex = ExplosionManager.instance.PoolingExplosion(transform, 2);
         ex.transform.position = transform.position;
         ex.gameObject.SetActive(true);
         ex.explode();
+
         StartCoroutine(base.bossDeath());
-        yield return new WaitForSeconds(0.1f);
+        
     }
 
     protected override void Movement()
@@ -81,9 +93,11 @@ public class TutorialBoss : Boss
         {
             movingLeft = true;
         }
-        if(transform.position.y > 5.0f)
-        {
-            transform.position += Vector3.down * Time.deltaTime * speed;
-        }
+    }
+
+    public override void OnSpawn()
+    {
+        base.OnSpawn();
+        transform.position = Camera.main.ViewportToWorldPoint(new Vector3(0.2f, 0.65f, 5.0f));
     }
 }
