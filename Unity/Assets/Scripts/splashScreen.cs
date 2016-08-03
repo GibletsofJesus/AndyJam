@@ -40,7 +40,7 @@ public class splashScreen : MonoBehaviour
         buttonCool += Time.deltaTime;
         DisplayLeaderBoard();
 
-        if ((!(shipToggleCool < shipToggleMaxCool)) && allowStart)
+        if ((!(shipToggleCool < shipToggleMaxCool)) && allowStart&&ConvertToPos())
         {
             if (Input.GetAxis("Horizontal") > 0)
             {
@@ -108,26 +108,29 @@ public class splashScreen : MonoBehaviour
 
     void OptionSelect()
     {
-        if (Input.GetAxis("Vertical") != 0 && MenuCooldown() && !leaderBool)
+        if (!ConvertToPos())
         {
-            if (Input.GetAxis("Vertical")<0)
+            if (Input.GetAxis("Vertical") != 0 && MenuCooldown() && !leaderBool)
             {
-                menuSelect++;
-                if (menuSelect>options.Length-1)
+                if (Input.GetAxis("Vertical") < 0)
                 {
-                    menuSelect = 0;
+                    menuSelect++;
+                    if (menuSelect > options.Length - 1)
+                    {
+                        menuSelect = 0;
+                    }
                 }
-            }
-            if (Input.GetAxis("Vertical")>0)
-            {
-                menuSelect--;
-                if (menuSelect<0)
+                if (Input.GetAxis("Vertical") > 0)
                 {
-                    menuSelect = options.Length-1;
+                    menuSelect--;
+                    if (menuSelect < 0)
+                    {
+                        menuSelect = options.Length - 1;
+                    }
                 }
+                menuCool = 0;
+                soundManager.instance.playSound(swapSounds[1]);
             }
-            menuCool = 0;
-            soundManager.instance.playSound(swapSounds[1]);
         }
     }
 
@@ -234,6 +237,27 @@ public class splashScreen : MonoBehaviour
         else
         {
             return true;
+        }
+    }
+    bool ConvertToPos()
+    {
+        float hori = Input.GetAxis("Horizontal");
+        float verti = Input.GetAxis("Vertical");
+        if (hori < 0)
+        {
+            hori -= hori * 2;
+        }
+        if (verti < 0)
+        {
+            verti -= verti * 2;
+        }
+        if (hori > verti)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
