@@ -17,6 +17,7 @@ public class soundManager : MonoBehaviour
 
     [SerializeField] private AudioClip laserCharge = null;
     [SerializeField] private AudioClip laserFire = null;
+    [SerializeField] private AudioClip star = null;
 
     void Awake()
     {
@@ -102,6 +103,11 @@ public class soundManager : MonoBehaviour
                         audioSrcs[c].PlayOneShot(laserFire);
                         audioSrcs[c].pitch = 1.0f / (pitchMod / 4.0f);
                         audioSrcs[c].volume = volumeMultiplayer * 1.0f;
+                        break;
+                    case 5:
+                        audioSrcs[c].PlayOneShot(star);
+                        audioSrcs[c].pitch = pitchMod;
+                        audioSrcs[c].volume = volumeMultiplayer * 2.0f;
                         break;
                 }
                 break;

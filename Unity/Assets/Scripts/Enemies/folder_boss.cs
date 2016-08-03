@@ -20,6 +20,9 @@ public class folder_boss : Boss {
     //2 modes, open mouth and closed
     //When mouth is open, stretch a bit on the Y axis
     //Fire LOADS of infected files outwards
+    private bool mouthFiring = false;
+
+    [SerializeField] private Animator anim = null;
     
 	protected override void Awake ()
     {          
@@ -41,54 +44,59 @@ public class folder_boss : Boss {
 
 	protected override void Update ()
     {
-        shootRate = 1.5f -(1f-(health/defaultHealth));
-
-        revertCol = Color.Lerp(Color.white,Color.red,.6f*(1-health/defaultHealth));
-
-        if (!bossDefeated)
+        if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
-            //Move cannons
-            #region cannon moving
-            if (LcanDir)
-                CannonRot(0, Cannons[0].transform.localRotation.eulerAngles.z + (Time.fixedDeltaTime * 50));
-            else
-                CannonRot(0, Cannons[0].transform.localRotation.eulerAngles.z - (Time.fixedDeltaTime * 50));
+            shootRate = 1.5f - (1f - (health / defaultHealth));
 
-            if ((Cannons[0].transform.localRotation.eulerAngles.z < 330 && Cannons[0].transform.localRotation.eulerAngles.z > 300) || (Cannons[0].transform.localRotation.eulerAngles.z > 30 && Cannons[0].transform.localRotation.eulerAngles.z < 50))
+            revertCol = Color.Lerp(Color.white, Color.red, 0.6f * (1 - (health / defaultHealth)));
+
+            if (!bossDefeated)
             {
-                LcanDir = !LcanDir;
-            }
+                //Move cannons
+                #region cannon moving
+                if (LcanDir)
+                    CannonRot(0, Cannons[0].transform.localRotation.eulerAngles.z + (Time.fixedDeltaTime * 50));
+                else
+                    CannonRot(0, Cannons[0].transform.localRotation.eulerAngles.z - (Time.fixedDeltaTime * 50));
 
-            if (!RcanDir)
-                CannonRot(1, Cannons[1].transform.localRotation.eulerAngles.z + (Time.fixedDeltaTime * 50));
-            else
-                CannonRot(1, Cannons[1].transform.localRotation.eulerAngles.z - (Time.fixedDeltaTime * 50));
+                if ((Cannons[0].transform.localRotation.eulerAngles.z < 330 && Cannons[0].transform.localRotation.eulerAngles.z > 300) || (Cannons[0].transform.localRotation.eulerAngles.z > 30 && Cannons[0].transform.localRotation.eulerAngles.z < 50))
+                {
+                    LcanDir = !LcanDir;
+                }
 
-            if ((Cannons[1].transform.localRotation.eulerAngles.z < 330 && Cannons[1].transform.localRotation.eulerAngles.z > 300) || (Cannons[1].transform.localRotation.eulerAngles.z > 30 && Cannons[1].transform.localRotation.eulerAngles.z < 50))
-            {
-                RcanDir = !RcanDir;
-            }
-            #endregion
-            base.Update();
-            CannonsCoolDown();
-            MouthCoolDown();
+                if (!RcanDir)
+                    CannonRot(1, Cannons[1].transform.localRotation.eulerAngles.z + (Time.fixedDeltaTime * 50));
+                else
+                    CannonRot(1, Cannons[1].transform.localRotation.eulerAngles.z - (Time.fixedDeltaTime * 50));
 
-            if (mouthCD >= mouthCooldownMax)
-            {
-                StartCoroutine(mouthFire());
-                mouthCD = 0;
+                if ((Cannons[1].transform.localRotation.eulerAngles.z < 330 && Cannons[1].transform.localRotation.eulerAngles.z > 300) || (Cannons[1].transform.localRotation.eulerAngles.z > 30 && Cannons[1].transform.localRotation.eulerAngles.z < 50))
+                {
+                    RcanDir = !RcanDir;
+                }
+                #endregion
+                base.Update();
+                CannonsCoolDown();
+                if (!mouthFiring)
+                {
+                    MouthCoolDown();
+                    if (mouthCD >= mouthCooldownMax)
+                    {
+                        StartCoroutine(mouthFire());
+                        mouthCD = 0;
+                    }
+                }
             }
         }
     }
 
     IEnumerator mouthFire()
     {
+        mouthFiring = true;
         soundManager.instance.playSound(soundFx[Random.Range(0,1)]);
         yield return StartCoroutine(mouthOpenClose(true));
-        if (!bossDefeated)
-        {
-            vomitParticleSystem.Play();
-        }
+    
+        vomitParticleSystem.Play();
+        
 
         float filesFired = 0;
 
@@ -107,11 +115,12 @@ public class folder_boss : Boss {
         vomitParticleSystem.Stop();
         yield return StartCoroutine(mouthOpenClose(false));
         mouthCD = 0;
+        mouthFiring = false;
     }
 
     void MouthCoolDown()
     {
-        mouthCD= (mouthCD + Time.deltaTime) > mouthCooldownMax ? mouthCooldownMax : (mouthCD + Time.deltaTime);
+        mouthCD= (mouthCD + Time.deltaTime) < mouthCooldownMax ? (mouthCD + Time.deltaTime) : mouthCooldownMax;
     }
 
     void CannonsCoolDown()
@@ -283,8 +292,12 @@ public class folder_boss : Boss {
         GetComponent<Animator>().enabled = true;
         GetComponent<Animator>().Play("boss_folder_death");
 
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(2.1f);
+        anim.gameObject.SetActive(true);
+        soundManager.instance.playSound(5);
+        yield return new WaitForSeconds(2.85f);
         GetComponent<Animator>().enabled = false;
+        anim.gameObject.SetActive(false);
 
         if (isActiveAndEnabled)
         {
