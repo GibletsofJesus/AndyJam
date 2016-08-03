@@ -74,6 +74,7 @@ public class EnemyManager : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        Enemy.numAliveEnemies = 0;
         if (instance == null)
         {
             instance = this;
