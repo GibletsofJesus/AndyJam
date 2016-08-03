@@ -215,6 +215,7 @@ public class folder_boss : Boss {
         drool.Stop();
         vomitParticleSystem.Stop();
         drool.gameObject.SetActive(false);
+        vomitParticleSystem.gameObject.SetActive(false);
         Explosion ex;
 
         foreach (GameObject go in base.shootTransform)
