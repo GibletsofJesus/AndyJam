@@ -29,4 +29,9 @@ public class Skip : Word
     {
 
     }
+
+    public override void Reset()
+    {
+        //This is needed to override base behavior to prevent if from happening
+    }
 }

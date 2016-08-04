@@ -17,7 +17,7 @@ public class CloseWord : Word
 	
 	protected override void TriggerBehavior ()
 	{
-		base.TriggerBehavior ();
+		//base.TriggerBehavior ();
 		AdManager.instance.closeAd ();
 	}
 	
@@ -28,6 +28,6 @@ public class CloseWord : Word
 	
 	protected override void EndBehavior()
 	{
-		base.EndBehavior ();
+		//base.EndBehavior ();
 	}
 }

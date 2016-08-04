@@ -49,4 +49,10 @@ public class Enemy_KeyLogger : Enemy
         else
             return false;
     }
+
+    public bool OverrideShoot()
+    {
+        return base.Shoot(projData, -(transform.position - new Vector3(Player.instance.transform.position.x,
+                Player.instance.transform.position.y)), shootTransform);
+    }
 }

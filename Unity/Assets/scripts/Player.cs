@@ -12,6 +12,7 @@ public class Player : Actor
 	protected float updatedDefaultHealth;
 	[SerializeField] private int defaultLives = 3;
 	private int lives;
+    public int numLives { get { return lives; } }
 
     public int score = 0;
     public bool advertAttack = false;
@@ -299,6 +300,11 @@ public class Player : Actor
             spriteRenderer.color = Color.red;
             Invoke("revertColour", .1f);
         }
+    }
+
+    public override float ActorHealthPercent()
+    {
+        return health / updatedDefaultHealth;
     }
 
     protected override void Death()

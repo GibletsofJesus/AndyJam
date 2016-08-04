@@ -47,26 +47,7 @@ public class WordBuffer : MonoBehaviour
                     }
                     else if (_c == '\r')
                     {
-                        underscoreAppearCooldown = 0.0f;
-                        underscoreVisible = InputHUD.instance.UpdateUnderscore(false);
-                        bool _match = false;
-                        //Test to see if any words match
-                        foreach (Word _w in words)
-                        {
-                            if (_w.Match(currentWord))
-                            {
-                                _match = true;
-                                InputHUD.instance.Success();
-                                currentSubmitCooldown = submitCooldown;
-                                break;
-                            }
-                        }
-                        if (!_match)
-                        {
-                            InputHUD.instance.Fail();
-                            VisualCommandPanel.instance.AddMessage("Unrecognised Command");
-                            currentSubmitCooldown = submitCooldown;
-                        }
+                        EnterCommand();
                     }
                     //Else other empty space value then do nothing
                     else if ((int)_c < 33 || (int)_c > 126)
@@ -75,19 +56,7 @@ public class WordBuffer : MonoBehaviour
                     //Add to word string
                     else
                     {
-                        if (currentWord.Length <= MaxCharacters)
-                        {
-                            underscoreAppearCooldown = 0.0f;
-                            underscoreVisible = InputHUD.instance.UpdateUnderscore(false);
-                            currentWord += char.ToLower(_c);
-                            InputHUD.instance.UpdateText(currentWord);
-                            //If max word reached
-                            if (currentWord.Length == MaxCharacters)
-                            {
-                                InputHUD.instance.Fail();
-                                currentSubmitCooldown = submitCooldown;
-                            }
-                        }
+                        AddCharacter(_c);
                     }
                 }
                 underscoreAppearCooldown += Time.deltaTime;
@@ -117,6 +86,52 @@ public class WordBuffer : MonoBehaviour
 	{
 		(words [_index] as AbilityWord).SetTier (_tier);
 	}
+
+    public void EnterCommand()
+    {
+        underscoreAppearCooldown = 0.0f;
+        underscoreVisible = InputHUD.instance.UpdateUnderscore(false);
+        bool _match = false;
+        //Test to see if any words match
+        foreach (Word _w in words)
+        {
+            if (_w.Match(currentWord))
+            {
+                _match = true;
+                InputHUD.instance.Success();
+                currentSubmitCooldown = submitCooldown;
+                break;
+            }
+        }
+        if (!_match)
+        {
+            InputHUD.instance.Fail();
+            VisualCommandPanel.instance.AddMessage("Unrecognised Command");
+            currentSubmitCooldown = submitCooldown;
+        }
+    }
+
+    public bool AddCharacter(char _c)
+    {
+        if (currentSubmitCooldown == 0.0f)
+        {
+            //if (currentWord.Length <= MaxCharacters)
+            //{
+                underscoreAppearCooldown = 0.0f;
+                underscoreVisible = InputHUD.instance.UpdateUnderscore(false);
+                currentWord += char.ToLower(_c);
+                InputHUD.instance.UpdateText(currentWord);
+                //If max word reached
+                if (currentWord.Length == MaxCharacters)
+                {
+                    InputHUD.instance.Fail();
+                    currentSubmitCooldown = submitCooldown;
+                }
+                return true;
+            //}
+        }
+        return false;
+    }
 
 
 

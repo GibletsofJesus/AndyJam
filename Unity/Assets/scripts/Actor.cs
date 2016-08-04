@@ -93,6 +93,11 @@ public class Actor : MonoBehaviour
 		}
     }
 
+    public virtual float ActorHealthPercent()
+    {
+        return health / defaultHealth;
+    }
+
     protected void revertColour()
     {
         GetComponent<SpriteRenderer>().color = Color.white;

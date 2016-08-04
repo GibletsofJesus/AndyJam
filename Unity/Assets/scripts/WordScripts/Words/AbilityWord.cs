@@ -18,6 +18,11 @@ public abstract class AbilityWord : Word
 
     protected string description;
 
+    public override bool WordAvailable()
+    {
+        return (wordActive && (!behaviorActive) && currentCooldown == wordCooldown);
+    }
+
     protected void Awake()
     {
         defaultCooldown = wordCooldown;
@@ -72,23 +77,29 @@ public abstract class AbilityWord : Word
 
 	protected override void TriggerBehavior ()
 	{
-		//Activate behavior
-		if(!behaviorActive)
+        //Activate behavior
+        if (!behaviorActive)
 		{
-			currentTier = updatedTier;
-			currentCooldown = 0.0f;
-			wordHUD.TriggerSuccess();
-			VisualCommandPanel.instance.AddMessage("Running " + wordTiers[currentTier]);
-			base.TriggerBehavior();
+            if (currentCooldown != wordCooldown)
+            {
+                VisualCommandPanel.instance.AddMessage(wordTiers[currentTier] + " on cooldown");
+            }
+            else
+            {
+                currentTier = updatedTier;
+                currentCooldown = 0.0f;
+                wordHUD.TriggerSuccess();
+                VisualCommandPanel.instance.AddMessage("Running " + wordTiers[currentTier]);
+                base.TriggerBehavior();
+            }
 		}
-		//Behavior on cooldown, do something to show this (flicker red?)
-		else
-		{
-			VisualCommandPanel.instance.AddMessage(wordTiers[currentTier] + " already running");
-		}
+        else
+        {
+            VisualCommandPanel.instance.AddMessage(wordTiers[currentTier] + " already running");
+        }
 	}
 
-	protected override void Behavior ()
+    protected override void Behavior ()
 	{
 	}
 

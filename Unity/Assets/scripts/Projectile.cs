@@ -95,11 +95,11 @@ public class Projectile : MonoBehaviour
 
 					//I hate myself
 					int radius = 2;
-					if(projData.explosionRadius < 2)
+					if(projData.explosionRadius < 3)
 					{
 						radius = 0;
 					}
-					else if(projData.explosionRadius < 3)
+					else if(projData.explosionRadius < 5)
 					{
 						radius = 1;
 					}

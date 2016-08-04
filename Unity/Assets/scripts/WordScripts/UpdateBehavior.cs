@@ -37,6 +37,7 @@ public class UpdateBehavior : MonoBehaviour
 
 	private int nextUpdate = 0;
 	private int numUpdates = 0;
+    public int updatesAvailable { get { return updating ? 0 : numUpdates; } }
 	private int startingScore = 0;
 	[SerializeField] private UpdateLog[] updateLog = null;
 	private bool updating = false;
@@ -136,11 +137,13 @@ public class UpdateBehavior : MonoBehaviour
 
     public void UnlockAll()
     {
+        numUpdates = 0;
         while(!everythingUpdated)
         {
             ApplyNextUpdate();
+            ++numUpdates;
         }
-        updating = false;
+        FinishUpdate();
         updateWord.Reset();
     }
 

@@ -10,6 +10,12 @@ public abstract class Word : MonoBehaviour
     public bool isWordActive { get { return wordActive; } }
 
 	protected bool behaviorActive = false;
+    public bool isBehaviourActive { get { return behaviorActive; } }
+
+    public virtual bool WordAvailable()
+    {
+        return (wordActive && (!behaviorActive));
+    }
 
 	protected virtual void Start()
 	{

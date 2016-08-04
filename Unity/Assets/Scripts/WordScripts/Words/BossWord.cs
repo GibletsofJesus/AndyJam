@@ -17,10 +17,9 @@ public class BossWord : Word
 	{
         if (boss)
         {
-            base.TriggerBehavior();
             wordActive = false;
             boss.PasswordEntered();
-            base.EndBehavior();
+            boss = null;
         }
 	}
 	
@@ -49,6 +48,15 @@ public class BossWord : Word
     public void ForceBossDeath()
     {
         TriggerBehavior();
+    }
+
+    public float GetBossHealth()
+    {
+        if (boss)
+        {
+            return boss.ActorHealthPercent();
+        }
+        return 1.0f;
     }
 
 }
