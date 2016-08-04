@@ -35,7 +35,7 @@ public class AI : Word
 
     private void Awake()
     {
-        thisWord = "ai-enabled";
+        thisWord = "ai-typer";
         wordActive = true;
     }
 

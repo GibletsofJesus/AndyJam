@@ -91,7 +91,8 @@ public class Projectile : MonoBehaviour
 			{
 				if(projData.explodingBullets)
 				{
-					aoe.ActivateExplosion("Enemy", projData.explosionDamage, projData.explosionRadius);
+                    col.gameObject.GetComponent<Actor>().TakeDamage(projData.projDamage);
+                    aoe.ActivateExplosion("Enemy", projData.explosionDamage, projData.explosionRadius);
 
 					//I hate myself
 					int radius = 2;
