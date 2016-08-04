@@ -8,7 +8,7 @@ public class planet : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        speed = Random.Range(1, 10);
+        speed = Random.Range(0.1f, 2);
         killPos = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, -0.1f));
     }
 

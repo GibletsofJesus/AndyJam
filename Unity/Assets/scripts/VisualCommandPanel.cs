@@ -44,6 +44,7 @@ public class VisualCommandPanel : MonoBehaviour
 
 	private void Update()
 	{
+        
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             //Determine if should be typing out current message
@@ -63,7 +64,6 @@ public class VisualCommandPanel : MonoBehaviour
                         //To get the text to scroll need to force create new updated text generator
                         TextGenerator generator = new TextGenerator();
                         generator.Populate(textField.text, settings);
-
                         if (generator.lineCount > 20)//should find the realtime amount of possible lines
                         {
                             textField.text = textField.text.Substring(textField.cachedTextGenerator.GetLinesArray()[1].startCharIdx);
@@ -122,6 +122,16 @@ public class VisualCommandPanel : MonoBehaviour
 	{
 		messageBuffer.Add (_preMessage + _message);
 	}
+
+    public void AddLine(char _symbol, string _preMessage = "\n")
+    {
+        string _message = string.Empty;
+        for(int i = 0; i < 44; ++i)
+        {
+            _message += _symbol;
+        }
+        messageBuffer.Add(_preMessage + _message);
+    }
 
     public void TryMessage(string _message, string _preMessage = "\n", int _buffer = 0)
     {

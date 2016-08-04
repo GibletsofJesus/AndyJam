@@ -43,9 +43,7 @@ public class UpdateBehavior : MonoBehaviour
 
     private bool everythingUpdated = false;
 
-	/// <summary>
-	/// Temp
-	/// </summary>
+	[SerializeField] private UpdateWord updateWord = null;
 
 	private void Awake()
 	{
@@ -142,6 +140,8 @@ public class UpdateBehavior : MonoBehaviour
         {
             ApplyNextUpdate();
         }
+        updating = false;
+        updateWord.Reset();
     }
 
     public bool EverythingUnlocked()

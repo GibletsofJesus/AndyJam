@@ -11,6 +11,7 @@ public class Antivirus : AbilityWord
 
 	protected override void Start ()
 	{
+        description = "explosive projectiles";
 		wordTiers = new string[] {"antivirus.exe", "antivirus.exe", "antivirus.exe"};
 		base.Start ();
 	}

@@ -4,7 +4,7 @@ using System.Collections;
 public class folderboss_animator : MonoBehaviour {
 
     [SerializeField]
-    private AudioClip RoarSound,GulpSound,GrowSound;
+    private AudioClip RoarSound = null, GulpSound = null, GrowSound = null;
 
     public void shake()
     {

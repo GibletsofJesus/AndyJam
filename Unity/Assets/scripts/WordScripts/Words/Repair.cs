@@ -9,13 +9,19 @@ public class Repair : AbilityWord
 
     protected override void Start ()
 	{
-		wordTiers = new string[] {"repair.exe", "restore.exe", "systemrestore.exe"};
+        description = "player heal";
+        wordTiers = new string[] {"repair.exe", "restore.exe", "systemrestore.exe"};
 		base.Start ();
 	}
 	
 	protected override void TriggerBehavior ()
 	{
 		base.TriggerBehavior ();
+        int _toRemove = (currentTier + 1) * (currentTier + 1);
+        for (int i = 0; i < _toRemove; ++i)
+        {
+            AdManager.instance.closeAd();
+        }
         totalHealAmount = totalHeal[currentTier];
 	}
 	

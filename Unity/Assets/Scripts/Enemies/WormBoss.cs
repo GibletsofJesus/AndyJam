@@ -165,7 +165,8 @@ public class WormBoss : Boss
         ex.explode();
         bossRenderer.enabled = false;
 
-        EnemyManager.instance.NextLevel();
+        //EnemyManager.instance.NextLevel();
+        StartCoroutine(base.bossDeath());
         
         yield return new WaitForSeconds(0.1f);
     }

@@ -10,7 +10,8 @@ public class Backup : AbilityWord
 
 	protected override void Start ()
 	{
-		wordTiers = new string[] {"backup.exe", "backup.exe", "backup.exe"};
+        description = "additional players";
+        wordTiers = new string[] {"backup.exe", "backup.exe", "backup.exe"};
 		base.Start ();
 	}
 	

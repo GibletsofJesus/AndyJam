@@ -69,13 +69,12 @@ public class EnemyManager : MonoBehaviour
   
     bool bossSpawned = false;
 
-    bool logicPaused = false;
+    bool logicPaused = true;
 
-    [SerializeField]
-    private LevelName levelName = null;
     // Use this for initialization
     void Awake()
     {
+        Enemy.numAliveEnemies = 0;
         if (instance == null)
         {
             instance = this;
@@ -88,6 +87,17 @@ public class EnemyManager : MonoBehaviour
         soundManager.instance.music.enabled = false;
         soundManager.instance.music.enabled = true;
         soundManager.instance.music.DOFade(1, 3);
+    }
+
+    public void Begin()
+    {
+        LevelText.instance.TutorialElementFinished(true);
+        logicPaused = false;
+        currentLevel = 0;
+        soundManager.instance.music.DOFade(0, 3);
+        Invoke("fadeInMusic", 3.25f);
+        //currentLevel = levels.Length - 2;
+        //NextLevel();
     }
 
     public void NextLevel()
@@ -103,7 +113,6 @@ public class EnemyManager : MonoBehaviour
             }
         }
         ++currentLevel;
-        levelName.SetText(currentLevel + 1);
         if (currentLevel == levels.Length)
         {
             GameComplete();
@@ -113,7 +122,8 @@ public class EnemyManager : MonoBehaviour
             currentWave = 0;
             currentWaveCooldown = 0;
             bossSpawned = false;
-            levelName.ShowLevelName();
+            LevelText.instance.SetText("LEVEL " + (currentLevel + 1).ToString());
+            LevelText.instance.ShowText();
         }
 }
 
@@ -123,10 +133,21 @@ public class EnemyManager : MonoBehaviour
         logicPaused = true;
     }
 
+    public void ShortCut()
+    {
+        if (!logicPaused)
+        {
+            if (currentWave < levels[currentLevel].numWavesTillBoss)
+            {
+                currentWave = levels[currentLevel].numWavesTillBoss;
+            }
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-       // Debug.Log("Number of enemies " + Enemy.numAliveEnemies);
+        //Debug.Log("Number of enemies " + Enemy.numAliveEnemies);
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             if (!logicPaused)

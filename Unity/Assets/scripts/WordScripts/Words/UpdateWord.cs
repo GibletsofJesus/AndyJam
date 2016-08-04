@@ -17,7 +17,8 @@ public class UpdateWord : AbilityWord
 
 	protected override void Start ()
 	{
-		wordTiers = new string[] {"update.exe"};
+        description = "unlocks and upgrades abilities";
+        wordTiers = new string[] {"update.exe"};
 		base.Start ();
 		wordActive = true;
 		wordHUD.Activate ();

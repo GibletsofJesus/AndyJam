@@ -37,7 +37,7 @@ public class WordHUD : MonoBehaviour
 
 	public void Deactivate()
 	{
-        text.text = "unknown-command";
+        text.text = "";
 		text.color = HUDData.instance.deactivateColour;
 		backgroundImage.sprite = HUDData.instance.deactivateBackground;
 		cooldownImage.sprite = HUDData.instance.deactivateCooldown;

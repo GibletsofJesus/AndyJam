@@ -10,7 +10,8 @@ public class Encrypt : AbilityWord
 
 	protected override void Start ()
 	{
-		wordTiers = new string[] {"encrypt.exe", "encrypt.exe", "encrypt.exe"};
+        description = "invincibility";
+        wordTiers = new string[] {"encrypt.exe", "encrypt.exe", "encrypt.exe"};
 		base.Start ();
 	}
 	

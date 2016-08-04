@@ -9,7 +9,8 @@ public class Filter : AbilityWord
 
     protected override void Start ()
 	{
-		wordTiers = new string[] {"spamfilter.exe", "spamfilter.exe", "spamfilter.exe"};
+        description = "moving defensive barrier";
+        wordTiers = new string[] {"spamfilter.exe", "spamfilter.exe", "spamfilter.exe"};
 		base.Start ();
 	}
 	
@@ -21,6 +22,7 @@ public class Filter : AbilityWord
             filters[i].transform.rotation = Quaternion.Euler(0.0f,0.0f, i * (360.0f / (currentTier + 1)));
             filters[i].SetActive(true);
         }
+        AdManager.instance.SpamFilter(true);
         filterCooldown = 0.0f;
     }
 	
@@ -36,6 +38,7 @@ public class Filter : AbilityWord
 	protected override void EndBehavior()
 	{
 		base.EndBehavior ();
+        AdManager.instance.SpamFilter(false);
         for (int i = 0; i < currentTier + 1; ++i)
         {
             filters[i].SetActive(false);

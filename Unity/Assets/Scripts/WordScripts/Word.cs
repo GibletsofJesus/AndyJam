@@ -7,6 +7,7 @@ public abstract class Word : MonoBehaviour
 	public string word {get {return thisWord;} set{ thisWord = value;}}
 
 	protected bool wordActive = false;
+    public bool isWordActive { get { return wordActive; } }
 
 	protected bool behaviorActive = false;
 

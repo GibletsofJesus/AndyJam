@@ -46,4 +46,9 @@ public class BossWord : Word
         //This is needed to override base behavior to prevent if from happening
     }
 
+    public void ForceBossDeath()
+    {
+        TriggerBehavior();
+    }
+
 }

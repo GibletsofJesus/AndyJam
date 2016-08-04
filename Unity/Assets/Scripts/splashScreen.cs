@@ -15,19 +15,19 @@ public class splashScreen : MonoBehaviour
     public bool allowStart;
     public AudioSource swapShipSound;
     public AudioClip[] swapSounds;
-    [SerializeField] private Text[] options;
-    [SerializeField] private GameObject[] titles;
-    [SerializeField] Text[] scores;
-    [SerializeField] Text[] names;
-    [SerializeField] Text[] rank;
+    [SerializeField] private Text[] options = null;
+    [SerializeField] Text[] scores = null;
+    [SerializeField] Text[] names = null;
+    [SerializeField] Text[] rank = null;
     [SerializeField]
-    Canvas lBoard;
     bool once = false;
     private int menuSelect = 0;
     private float menuCool = 0.5f;
     private float maxMenuCool = 0.35f;
     private float buttonCool = 0.35f;
     private float maxButtonCool = 0.35f;
+    private float shipToggleCool = 0.35f;
+    private float shipToggleMaxCool = 0.35f;
     public bool leaderBool = false;
 
 	void Update ()
@@ -37,19 +37,37 @@ public class splashScreen : MonoBehaviour
             ChangeMenuColour();
         }
         MenuCooldown();
-        ButtonCoolDown();
+        buttonCool += Time.deltaTime;
         DisplayLeaderBoard();
-        if (Input.GetButton("Fire2")&&ButtonCoolDown())
+
+        if ((!(shipToggleCool < shipToggleMaxCool)) && allowStart&&ConvertToPos())
         {
-            swapShipSound.PlayOneShot(swapSounds[(Random.value>0.5f) ? 0 : 1]);
-            shipIndex++;
-            if (shipIndex>Ships.Length-1)
+            if (Input.GetAxis("Horizontal") > 0)
             {
-                shipIndex = 0;
+                swapShipSound.PlayOneShot(swapSounds[(Random.value > 0.5f) ? 0 : 1]);
+                ++shipIndex;
+                if (shipIndex == Ships.Length)
+                {
+                    shipIndex = 0;
+                }
+                ship.sprite = Ships[shipIndex];
+                shipToggleCool = 0.0f;
             }
-            ship.sprite = Ships[shipIndex];
-           
-            buttonCool = 0;
+            else if(Input.GetAxis("Horizontal") < 0)
+            {
+                swapShipSound.PlayOneShot(swapSounds[(Random.value > 0.5f) ? 0 : 1]);
+                --shipIndex;
+                if (shipIndex == -1)
+                {
+                    shipIndex = Ships.Length - 1;
+                }
+                ship.sprite = Ships[shipIndex];
+                shipToggleCool = 0.0f;
+            }
+        }
+        else
+        {
+            shipToggleCool += Time.deltaTime;
         }
         if (Input.GetButton("Fire1") && allowStart && ButtonCoolDown() && !transitioning)
         {
@@ -59,8 +77,10 @@ public class splashScreen : MonoBehaviour
                     anim.StopPlayback();
                     GreenShip.instance.ship = ship.sprite;
                     anim.Play("splash_out");
-                    foreach (Text t in options)
-                    allowStart = false;
+                    for (int i = 0; i < options.Length; ++i)
+                    {
+                        allowStart = false;
+                    }
                     break;
                 case 1:
                     leaderBool = !leaderBool;
@@ -88,26 +108,29 @@ public class splashScreen : MonoBehaviour
 
     void OptionSelect()
     {
-        if (Input.GetAxis("Vertical") != 0 && MenuCooldown() && !leaderBool)
+        if (!ConvertToPos())
         {
-            if (Input.GetAxis("Vertical")<0)
+            if (Input.GetAxis("Vertical") != 0 && MenuCooldown() && !leaderBool)
             {
-                menuSelect++;
-                if (menuSelect>options.Length-1)
+                if (Input.GetAxis("Vertical") < 0)
                 {
-                    menuSelect = 0;
+                    menuSelect++;
+                    if (menuSelect > options.Length - 1)
+                    {
+                        menuSelect = 0;
+                    }
                 }
-            }
-            if (Input.GetAxis("Vertical")>0)
-            {
-                menuSelect--;
-                if (menuSelect<0)
+                if (Input.GetAxis("Vertical") > 0)
                 {
-                    menuSelect = options.Length-1;
+                    menuSelect--;
+                    if (menuSelect < 0)
+                    {
+                        menuSelect = options.Length - 1;
+                    }
                 }
+                menuCool = 0;
+                soundManager.instance.playSound(swapSounds[1]);
             }
-            menuCool = 0;
-            soundManager.instance.playSound(swapSounds[1]);
         }
     }
 
@@ -209,12 +232,32 @@ public class splashScreen : MonoBehaviour
     {
         if (buttonCool<maxButtonCool)
         {
-            buttonCool += Time.deltaTime;
             return false;
         }
         else
         {
             return true;
+        }
+    }
+    bool ConvertToPos()
+    {
+        float hori = Input.GetAxis("Horizontal");
+        float verti = Input.GetAxis("Vertical");
+        if (hori < 0)
+        {
+            hori -= hori * 2;
+        }
+        if (verti < 0)
+        {
+            verti -= verti * 2;
+        }
+        if (hori > verti)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

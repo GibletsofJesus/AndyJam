@@ -7,7 +7,8 @@ public class Firewall : AbilityWord
 
     protected override void Start ()
 	{
-		wordTiers = new string[] {"firewall.exe", "firewall.exe", "firewall.exe"};
+        description = "stationary defensive barrier";
+        wordTiers = new string[] {"firewall.exe", "firewall.exe", "firewall.exe"};
 		base.Start ();
 	}
 
