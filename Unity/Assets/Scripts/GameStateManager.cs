@@ -53,12 +53,15 @@ public class GameStateManager : MonoBehaviour {
 
     IEnumerator WinAnimation()
     {
+        Player.instance.ForceChildObjectsOff();
         while(Player.instance.transform.position != new Vector3(0.0f, -10.0f, 0.0f))
         {
             Player.instance.transform.position = Vector3.MoveTowards(Player.instance.transform.position, new Vector3(0.0f, -10.0f, 0.0f), Time.deltaTime * 5.0f);
             yield return null;
         }
+        yield return new WaitForSeconds(0.25f);
         soundManager.instance.playSound(2);
+        yield return new WaitForSeconds(0.5f);
         while (arrowFormation.transform.position.y < -10)
         {
             arrowFormation.transform.position += (Vector3.up * Time.deltaTime * 7.5f);

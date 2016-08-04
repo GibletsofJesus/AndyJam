@@ -295,7 +295,7 @@ public class folder_boss : Boss {
         yield return new WaitForSeconds(2.1f);
         anim.gameObject.SetActive(true);
         soundManager.instance.playSound(5);
-        yield return new WaitForSeconds(2.85f);
+        yield return new WaitForSeconds(3.35f);
         GetComponent<Animator>().enabled = false;
         anim.gameObject.SetActive(false);
 
