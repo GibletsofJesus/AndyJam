@@ -20,12 +20,12 @@ public class GameOverMenu : MenuSelect
         {
             case 0:
                 {
-                    SceneManager.LoadScene(3);
+                    SceneManager.LoadScene(4);
                     break;
                 }
             case 1:
                 {
-                    SceneManager.LoadScene(2);
+                    SceneManager.LoadScene(3);
                     break; 
                 }
             case 2:

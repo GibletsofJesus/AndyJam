@@ -31,6 +31,8 @@ public class AI : Word
     [SerializeField] private Word[] aiWords = null;
     private AIWords lastWord = AIWords.COUNT;
 
+    private bool frameTriggered = false;
+
     private void Awake()
     {
         thisWord = "ai-enabled";
@@ -49,22 +51,30 @@ public class AI : Word
         ChooseWord();
         typeTime = 0.0f;
         VisualCommandPanel.instance.AddMessage("A.I. typer enabled");
+        frameTriggered = true;
     }
 
     protected override void Behavior()
     {
-        foreach (char _c in Input.inputString)
+        if(frameTriggered)
         {
-            //If player starts typing turn off
-            if(_c == '\b' || _c == '\r')
+            frameTriggered = false;
+        }
+        else
+        {
+            foreach (char _c in Input.inputString)
             {
-                EndBehavior();
-                return;
-            }
-            else if((int)_c >32 && (int)_c < 127)
-            {
-                EndBehavior();
-                return;
+                //If player starts typing turn off
+                if (_c == '\b' || _c == '\r')
+                {
+                    EndBehavior();
+                    return;
+                }
+                else if ((int)_c > 32 && (int)_c < 127)
+                {
+                    EndBehavior();
+                    return;
+                }
             }
         }
 
@@ -82,20 +92,19 @@ public class AI : Word
             if (typeTime >= typeRate)
             {
                 typeTime = 0.0f;
-                if (WordBuffer.instance.AddCharacter(currentWord[currentIndex]))
+                if (currentIndex == currentWord.Length)
+                {
+                    WordBuffer.instance.EnterCommand();
+                    currentWord = string.Empty;
+                    waitRate = waitRateSucceed;
+                }
+                else if (WordBuffer.instance.AddCharacter(currentWord[currentIndex]))
                 {
                     foreach (Enemy_KeyLogger _logger in FindObjectsOfType<Enemy_KeyLogger>())
                     {
                         _logger.OverrideShoot();
                     }
-                    
                     ++currentIndex;
-                    if (currentIndex == currentWord.Length)
-                    {
-                        WordBuffer.instance.EnterCommand();
-                        currentWord = string.Empty;
-                        waitRate = waitRateSucceed;
-                    }
                 }
             }
         }
@@ -207,14 +216,8 @@ public class AI : Word
         {
             return;
         }
-        if (UpdateBehavior.instance.updatesAvailable > 1)
-        {
-            if (TryWord(AIWords.UPDATE))
-            {
-                return;
-            }
-        }
-        if (Player.instance.ActorHealthPercent() < 0.95f && Enemy.numAliveEnemies == 0)
+
+        if (Player.instance.ActorHealthPercent() < 0.95f && Enemy.numAliveEnemies < 2 && (!BossWord.instance.WordAvailable()))
         {
             if (TryWord(AIWords.REPAIR))
             {
@@ -222,6 +225,14 @@ public class AI : Word
             }
         }
 
+        if (UpdateBehavior.instance.updatesAvailable > 1)
+        {
+            if (TryWord(AIWords.UPDATE))
+            {
+                return;
+            }
+        }
+        
         lastWord = AIWords.COUNT;
         currentWord = string.Empty;
         waitRate = waitRateNoWord;

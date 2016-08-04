@@ -45,7 +45,7 @@ public class PauseMenu : MenuSelect
     void QuitToMain()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(3);
     }
     void QuitGame()
     {

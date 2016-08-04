@@ -103,7 +103,7 @@ public class splashScreen : MonoBehaviour
     
     public void loadLevel()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(4);
     }
 
     void OptionSelect()
