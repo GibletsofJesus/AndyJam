@@ -79,7 +79,4 @@ public class RadiusObjectFinder : MonoBehaviour
 	{
 		return closestObject;
 	}
-
-
-
 }
