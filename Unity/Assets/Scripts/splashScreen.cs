@@ -30,8 +30,9 @@ public class splashScreen : MonoBehaviour
     private float shipToggleMaxCool = 0.35f;
     public bool leaderBool = false;
 
-	void Update ()
-    {        if (allowStart)
+	void Update()
+    {
+        if (allowStart)
         {
             OptionSelect();
             ChangeMenuColour();
@@ -40,7 +41,7 @@ public class splashScreen : MonoBehaviour
         buttonCool += Time.deltaTime;
         DisplayLeaderBoard();
 
-        if ((!(shipToggleCool < shipToggleMaxCool)) && allowStart&&ConvertToPos())
+        if ((!(shipToggleCool < shipToggleMaxCool)) && allowStart && ConvertToPos())
         {
             if (Input.GetAxis("Horizontal") > 0)
             {
@@ -91,13 +92,24 @@ public class splashScreen : MonoBehaviour
                 case 2:
                     if (Input.GetButton("Fire1") && allowStart && MenuCooldown())
                     {
-                        Application.Quit();
-                        soundManager.instance.playSound(swapSounds[0]);
+                        //Application.Quit();
+                        //soundManager.instance.playSound(swapSounds[0]);
                     }
                     break;
             }
         }
+        if (!Input.anyKey && Input.GetAxis("Horizontal") < 0.1f)
+        {
+            idletime += Time.deltaTime;
+        }
+        else
+            idletime = 0;
+
+        if (idletime > 180)
+            SceneManager.LoadScene(0);
     }
+
+    float idletime;
 
     bool transitioning;
     
@@ -115,7 +127,7 @@ public class splashScreen : MonoBehaviour
                 if (Input.GetAxis("Vertical") < 0)
                 {
                     menuSelect++;
-                    if (menuSelect > options.Length - 1)
+                    if (menuSelect > options.Length - 2)
                     {
                         menuSelect = 0;
                     }
@@ -125,7 +137,7 @@ public class splashScreen : MonoBehaviour
                     menuSelect--;
                     if (menuSelect < 0)
                     {
-                        menuSelect = options.Length - 1;
+                        menuSelect = options.Length - 2;
                     }
                 }
                 menuCool = 0;
@@ -159,6 +171,7 @@ public class splashScreen : MonoBehaviour
                 options[i].color = Color.white;
             }
         }
+        options[2].color = Color.grey;
     }
 
     void ShowMenu()
@@ -168,9 +181,9 @@ public class splashScreen : MonoBehaviour
 
     IEnumerator FadeMenu()
     {
-        while (options[0].color.a < 1)
+        foreach (Text t in options)
         {
-            foreach (Text t in options)
+            while (t.color.a < 1)
             {
                 Color col = t.color;
                 col.a += Time.deltaTime;
