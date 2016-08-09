@@ -40,6 +40,11 @@ public class EyeBoss : Boss
         e.hideFlags = HideFlags.HideInHierarchy;
     }
 
+    public void fireNow()
+    {
+        shootCooldown = 30;
+    }
+
     protected override bool Shoot(ProjectileData _projData, Vector2 _direction, GameObject[] _shootTransform, bool b = false)
     {
         if (!bossDefeated)
@@ -190,7 +195,10 @@ public class EyeBoss : Boss
         if (dosCount < 30 && cool >= maxCool)
         {
             if (!spawnParticles.isPlaying)
+            {
+                GetComponent<Animator>().Play("boss_spawn_spam");
                 spawnParticles.Play();
+            }
 
             if (MiniCool())
             {
@@ -201,6 +209,7 @@ public class EyeBoss : Boss
         }
         else
         {
+            GetComponent<Animator>().Play("boss_wiggle");
             spawnParticles.Stop();
             dosCount = 0;
         }

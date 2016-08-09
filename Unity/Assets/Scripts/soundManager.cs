@@ -35,7 +35,7 @@ public class soundManager : MonoBehaviour
         //nothing atm
     }
 
-    public void playSound(AudioClip sound,float pitch = 1)
+    public void playSound(AudioClip sound, float pitch = 1, float volume = 1)
     {
         int c = 0;
         while (c < audioSrcs.Count)
@@ -44,7 +44,7 @@ public class soundManager : MonoBehaviour
             {
                 audioSrcs[c].pitch = pitch;
                 audioSrcs[c].PlayOneShot(sound);
-                audioSrcs[c].volume = volumeMultiplayer * .6f;
+                audioSrcs[c].volume = volumeMultiplayer*volume;
                 break;
             }
             if (audioSrcs[c].isPlaying && c == (audioSrcs.Count - 1))
@@ -86,7 +86,7 @@ public class soundManager : MonoBehaviour
                     case 0:
                         audioSrcs[c].PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length)]);
                         audioSrcs[c].pitch = pitchMod;
-                        audioSrcs[c].volume = volumeMultiplayer * .4f;
+                        audioSrcs[c].volume = volumeMultiplayer * .33f;
                         break;
                     case 1:
                         audioSrcs[c].PlayOneShot(explosionSounds[Random.Range(0,explosionSounds.Length-1)]);

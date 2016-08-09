@@ -15,7 +15,10 @@ public class UpdateWord : AbilityWord
 	[SerializeField] private float updateTextRate = 0.1f;
 	private float updateTextCooldown = 0.0f;
 
-	protected override void Start ()
+    [SerializeField]
+    AudioClip updateSound;
+
+    protected override void Start ()
 	{
         description = "unlocks and upgrades abilities";
         wordTiers = new string[] {"update.exe"};
@@ -33,8 +36,9 @@ public class UpdateWord : AbilityWord
 			UpdateBehavior.instance.UnneccessaryUpdate();
 		}
 		else
-		{
-			base.TriggerBehavior ();
+        {
+            soundManager.instance.playSound(updateSound, Random.Range(0.975f, 1.025f));
+            base.TriggerBehavior ();
 			updateTextCooldown = 0.0f;
 			wordHUD.UpdateWord (updateText[updateTextIndex]);
 		}

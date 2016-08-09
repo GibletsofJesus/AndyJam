@@ -324,7 +324,7 @@ public class folder_boss : Boss {
     }
 }
 
-[CustomEditor(typeof(folder_boss))]
+[CustomEditor(typeof(folder_boss))] 
 public class folderTester : Editor
 {
     public override void OnInspectorGUI()

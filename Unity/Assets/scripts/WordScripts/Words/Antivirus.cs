@@ -8,6 +8,8 @@ public class Antivirus : AbilityWord
 	[SerializeField] private float[] rocketRadius = null;
 	[SerializeField] private float[] antivirusDuration = null;
 	private float antivirusCooldown = 0.0f;
+    [SerializeField]
+    AudioClip activateSound;
 
 	protected override void Start ()
 	{
@@ -19,6 +21,7 @@ public class Antivirus : AbilityWord
 	protected override void TriggerBehavior ()
 	{
 		base.TriggerBehavior ();
+        soundManager.instance.playSound(activateSound,1,2);
 		antivirusCooldown = 0.0f;
 		Player.instance.ExplodingProjectiles(true, rocketDamage[currentTier], rocketRadius [currentTier]);
 	}

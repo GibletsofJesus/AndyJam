@@ -44,7 +44,7 @@ public class UpdateBehavior : MonoBehaviour
 
     private bool everythingUpdated = false;
 
-	[SerializeField] private UpdateWord updateWord = null;
+	[SerializeField] private UpdateWord updateWord = null;  
 
 	private void Awake()
 	{

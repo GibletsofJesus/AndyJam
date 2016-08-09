@@ -6,6 +6,8 @@ public class Enemy_KeyLogger : Enemy
     float screenSide;
 	// Use this for initialization
     Vector2 moveHere = Vector2.zero;
+    [SerializeField]
+    AudioClip shootSound;
 
 	void Start () 
     {
@@ -43,6 +45,7 @@ public class Enemy_KeyLogger : Enemy
     {
         if (Input.inputString!=string.Empty)
         {
+        soundManager.instance.playSound(shootSound,Random.Range(0.95f,1.05f));
             return base.Shoot(_projData, -(transform.position - new Vector3(Player.instance.transform.position.x, 
                 Player.instance.transform.position.y)), _shootTransform);
         }

@@ -225,8 +225,13 @@ public class Player : Actor
                         }
                     }
                 }
+                if (projData.explodingBullets)
+                    soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length)], 0.65f);
+                else
+                {
 
-                soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length)]);
+                }
+                    soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length)]);
 
                 if (CameraShake.instance.shakeDuration < 0.2f)
                 {
