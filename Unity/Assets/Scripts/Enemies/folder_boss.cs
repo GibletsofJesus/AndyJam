@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-//using UnityEditor;
+using UnityEditor;
 using System.Collections;
 
 public class folder_boss : Boss {
@@ -240,6 +240,8 @@ public class folder_boss : Boss {
             yield return new WaitForSeconds(Random.Range(0.4f, .8f));
         }
 
+        #region explosions
+
         ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
         ex.transform.position = transform.position + (Random.onUnitSphere * 7.5f);
         ex.gameObject.SetActive(true);
@@ -288,15 +290,19 @@ public class folder_boss : Boss {
         ex.explode();
         yield return new WaitForSeconds(0.1f);
 
+        #endregion
+
         soundManager.instance.playSound(soundFx[2], 2);
         GetComponent<Animator>().enabled = true;
         GetComponent<Animator>().Play("boss_folder_death");
 
-        yield return new WaitForSeconds(2.1f);
+        yield return new WaitForSeconds(2.5f);
         anim.gameObject.SetActive(true);
         soundManager.instance.playSound(5);
-        yield return new WaitForSeconds(3.35f);
         GetComponent<Animator>().enabled = false;
+
+        yield return new WaitForSeconds(.95f);
+
         anim.gameObject.SetActive(false);
 
         if (isActiveAndEnabled)
@@ -311,31 +317,24 @@ public class folder_boss : Boss {
             EnemyManager.instance.NextLevel();
         }
     }
-
+    public void i()
+    {
+        bossDefeated = true;
+        StartCoroutine(bossDeath());
+    }
 }
 
-//[CustomEditor(typeof(folder_boss))]
-//public class folderTester : Editor
-//{
-//    public override void OnInspectorGUI()
-//    {
-//        DrawDefaultInspector();
+[CustomEditor(typeof(folder_boss))]
+public class folderTester : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
 
-//        folder_boss myScript = (folder_boss)target;
-//        if (GUILayout.Button("Open mouth"))
-//        {
-//            if (!myScript.mouthInMotion)
-//            myScript.StartCoroutine(myScript.mouthOpenClose(true));
-//        }
-//        if (GUILayout.Button("Close mouth"))
-//        {
-//            if (!myScript.mouthInMotion)
-//                myScript.StartCoroutine(myScript.mouthOpenClose(false));
-//        }
-//        if (GUILayout.Button("Fire File"))
-//        {
-//            if (!myScript.mouthInMotion)
-//                myScript.shootFile();
-//        }
-//    }
-//}
+        folder_boss myScript = (folder_boss)target;
+        if (GUILayout.Button("ded"))
+        {
+            myScript.i();
+        }
+    }
+}
