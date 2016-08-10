@@ -226,12 +226,11 @@ public class Player : Actor
                     }
                 }
                 if (projData.explodingBullets)
-                    soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length)], 0.65f);
+                    soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length)], 0.6f);
                 else
                 {
-
+                    soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length)],pitchModifier);
                 }
-                    soundManager.instance.playSound(shootSounds[Random.Range(0, shootSounds.Length)]);
 
                 if (CameraShake.instance.shakeDuration < 0.2f)
                 {
@@ -242,7 +241,8 @@ public class Player : Actor
         }
         #endregion
     }
-
+    [Range(0,2)]
+    public float pitchModifier = 1;
     public override void TakeDamage(float _damage)
     {
         if(GameStateManager.instance.state == GameStateManager.GameState.GameOver)

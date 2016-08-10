@@ -7,7 +7,7 @@ public class soundManager : MonoBehaviour
 
     public static soundManager instance;
     public int numberOfSources;
-    public float volumeMultiplayer = 1;
+    public float volumeMultiplayer = 1,musicVolume;
     public AudioSource music;
 
     List<AudioSource> audioSrcs = new List<AudioSource>();
@@ -32,7 +32,11 @@ public class soundManager : MonoBehaviour
     public void changeVolume(float newVol)
     {
         volumeMultiplayer = newVol;
-        //nothing atm
+    }
+    public void changeMusicVolume(float newVol)
+    {
+        musicVolume = newVol;
+        music.volume = musicVolume;
     }
 
     public void playSound(AudioClip sound, float pitch = 1, float volume = 1)

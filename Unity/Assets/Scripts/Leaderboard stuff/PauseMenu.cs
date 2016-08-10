@@ -36,8 +36,16 @@ public class PauseMenu : MenuSelect
         if (Input.GetButtonDown("Fire1"))
         {
             if (selectBox == 2)
-                DoAction(QuitToMain);
+            {
+                frameHolder.instance.enabled = !frameHolder.instance.enabled;
+                if (frameHolder.instance.enabled)
+                    box[2].text = "Frame hold: ON";
+                else
+                    box[2].text = "Frame hold: OFF";
+            }
             else if (selectBox == 3)
+                DoAction(QuitToMain);
+            else if (selectBox == 4)
                 DoAction(QuitGame);
         }
     }

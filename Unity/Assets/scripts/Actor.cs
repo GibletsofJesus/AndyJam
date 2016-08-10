@@ -105,6 +105,7 @@ public class Actor : MonoBehaviour
 
     protected virtual void Death()
     {
+        frameHolder.instance.holdFrame(0.1f);
         Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 0);
         ex.transform.position = transform.position;
         Reset();

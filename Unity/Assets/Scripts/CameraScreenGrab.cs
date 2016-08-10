@@ -11,7 +11,8 @@ public class CameraScreenGrab : MonoBehaviour {
 	public FilterMode filterMode = FilterMode.Point;
 	public Camera[] otherCameras;
 	public Material mat;
-	Texture2D tex;
+    public Canvas canvas;
+    Texture2D tex;
 	
 	void Start () {
         oldPixelSize = pixelSize;
@@ -22,16 +23,13 @@ public class CameraScreenGrab : MonoBehaviour {
 	
     void Update()
     {
-        //if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
-        //{
-            if (oldPixelSize != pixelSize && pixelSize > 0)
-            {
-                GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
-                for (int i = 0; i < otherCameras.Length; i++)
-                    otherCameras[i].pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
-                oldPixelSize = pixelSize;
-            }
-        //}
+        if (oldPixelSize != pixelSize && pixelSize > 0)
+        {
+            GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
+            for (int i = 0; i < otherCameras.Length; i++)
+                otherCameras[i].pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
+            oldPixelSize = pixelSize;
+        }
     }
 
     public void setPixelScale(float f)
@@ -47,7 +45,12 @@ public class CameraScreenGrab : MonoBehaviour {
             if (Event.current.type == EventType.Repaint)
                 Graphics.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), tex);
         }
-	}
+        else
+        {
+            if (canvas.renderMode != RenderMode.ScreenSpaceOverlay)
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        }
+    }
     void OnPostRender()
     {
         if (pixelSize > 1)
@@ -66,8 +69,6 @@ public class CameraScreenGrab : MonoBehaviour {
                 GL.End();
             }
             GL.PopMatrix();
-
-
             DestroyImmediate(tex);
 
             tex = new Texture2D(Mathf.FloorToInt(GetComponent<Camera>().pixelWidth), Mathf.FloorToInt(GetComponent<Camera>().pixelHeight));
