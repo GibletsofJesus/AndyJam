@@ -4,7 +4,9 @@ using System.Collections;
 
 //Attach this to a camera
 public class CameraScreenGrab : MonoBehaviour {
-		
+
+    public static CameraScreenGrab instance;
+
 	//how chunky to make the screen
 	public int pixelSize = 4;
     int oldPixelSize;
@@ -13,9 +15,11 @@ public class CameraScreenGrab : MonoBehaviour {
 	public Material mat;
     public Canvas canvas;
     Texture2D tex;
+    public bool retroMode;
 	
 	void Start ()
     {
+        instance = this;
         oldPixelSize = pixelSize;
         GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
         for (int i = 0; i < otherCameras.Length; i++)
@@ -24,6 +28,11 @@ public class CameraScreenGrab : MonoBehaviour {
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SwitchMode(!retroMode);
+        }
+
         if (oldPixelSize != pixelSize && pixelSize > 0)
         {
             GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
@@ -48,14 +57,16 @@ public class CameraScreenGrab : MonoBehaviour {
         }
         else
         {
-            if (canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            if (canvas.renderMode != RenderMode.ScreenSpaceCamera)
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
         }
     }
 
-    public void SwitchMode(bool retroMode)
+    public void SwitchMode(bool newRetroMode)
     {
-
+        retroMode = newRetroMode;
+        pixelSize= newRetroMode ? 4 : 1;
+        canvas.renderMode = newRetroMode ? RenderMode.WorldSpace : RenderMode.ScreenSpaceCamera;
     }
 
     void OnPostRender()

@@ -15,7 +15,7 @@ public class ScreenAnimator : MonoBehaviour {
     {
         if (once)
         {
-            if (screenEffect.pixelSize > 4)
+            if (screenEffect.pixelSize > (screenEffect.retroMode ? 4 : 1))
             {
                 screenEffect.pixelSize = (int)Mathf.Lerp(screenEffect.pixelSize, 1, Time.fixedDeltaTime);
             }

@@ -44,8 +44,16 @@ public class PauseMenu : MenuSelect
                     box[2].text = "Frame hold: OFF";
             }
             else if (selectBox == 3)
-                DoAction(QuitToMain);
+            {
+                CameraScreenGrab.instance.SwitchMode(!CameraScreenGrab.instance.retroMode);
+                if (CameraScreenGrab.instance.retroMode)
+                    box[3].text = "Retro mode hold: ON";
+                else
+                    box[3].text = "Retro mode: OFF";
+            }
             else if (selectBox == 4)
+                DoAction(QuitToMain);
+            else if (selectBox == 5)
                 DoAction(QuitGame);
         }
     }
