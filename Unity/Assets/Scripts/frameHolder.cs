@@ -7,11 +7,11 @@ public class frameHolder : MonoBehaviour {
 
     public static frameHolder instance;
 
-    public bool enabled = true;
+    public bool enableFrameholding = true;
 
     public void holdFrame(float time)
     {
-        if (enabled)
+        if (enableFrameholding)
         {
             holdDuration += time;
             if (Time.timeScale > 0)
@@ -23,7 +23,7 @@ public class frameHolder : MonoBehaviour {
     float holdDuration;
     IEnumerator hold()
     {
-        if (enabled)
+        if (enableFrameholding)
         {
             Time.timeScale = 0.1f;
 

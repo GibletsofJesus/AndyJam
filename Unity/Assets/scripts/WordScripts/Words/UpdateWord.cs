@@ -15,9 +15,6 @@ public class UpdateWord : AbilityWord
 	[SerializeField] private float updateTextRate = 0.1f;
 	private float updateTextCooldown = 0.0f;
 
-    [SerializeField]
-    AudioClip updateSound;
-
     protected override void Start ()
 	{
         description = "unlocks and upgrades abilities";
@@ -28,8 +25,8 @@ public class UpdateWord : AbilityWord
         wordHUD.UpdateWord(wordTiers[0]);
 	}
 
-	protected override void TriggerBehavior ()
-	{
+	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+    {
 		numUpdates = UpdateBehavior.instance.PrepareUpdates ();
 		if(numUpdates == 0)
 		{
@@ -37,7 +34,6 @@ public class UpdateWord : AbilityWord
 		}
 		else
         {
-            soundManager.instance.playSound(updateSound, Random.Range(0.975f, 1.025f));
             base.TriggerBehavior ();
 			updateTextCooldown = 0.0f;
 			wordHUD.UpdateWord (updateText[updateTextIndex]);

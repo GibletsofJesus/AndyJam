@@ -17,24 +17,23 @@ public class EnterName : MonoBehaviour
     // Use this for initialization
 	void Awake () 
     {
-
         coolDown = maxCool;
         currentCharacter = new int[box.Length];
-        for (int i = 0; i < currentCharacter.Length;i++ )
+        for (int i = 0; i < currentCharacter.Length; i++)
         {
             currentCharacter[i] = 65;
         }
-	}
-	
-	// Update is called once per frame
-	void Update () 
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-            MenuInput();
-            box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
-            ChangeTextColour();
-            score.text = "Your Score:\n" + Player.instance.score.ToString();
-            if (Input.GetButtonDown("Fire1"))
-                SelectName();
+        MenuInput();
+        box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
+        ChangeTextColour();
+        score.text = "Your Score:\n" + Player.instance.score.ToString();
+        if (Input.GetButtonDown("Fire1"))
+            SelectName();
     }
 
     void MenuInput()

@@ -14,7 +14,7 @@ public class Adblocker : Word
 
     }
 
-    protected override void TriggerBehavior()
+    protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
     {
         AdManager.instance.EnableAdBlock();
     }

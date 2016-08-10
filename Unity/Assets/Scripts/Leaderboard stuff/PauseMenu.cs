@@ -37,8 +37,8 @@ public class PauseMenu : MenuSelect
         {
             if (selectBox == 2)
             {
-                frameHolder.instance.enabled = !frameHolder.instance.enabled;
-                if (frameHolder.instance.enabled)
+                frameHolder.instance.enableFrameholding = !frameHolder.instance.enableFrameholding;
+                if (frameHolder.instance.enableFrameholding)
                     box[2].text = "Frame hold: ON";
                 else
                     box[2].text = "Frame hold: OFF";

@@ -15,7 +15,7 @@ public class UnlockAll : Word
 
     }
 
-    protected override void TriggerBehavior()
+    protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
     {
         UpdateBehavior.instance.UnlockAll();
     }

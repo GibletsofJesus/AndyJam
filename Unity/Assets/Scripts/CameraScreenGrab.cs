@@ -14,13 +14,14 @@ public class CameraScreenGrab : MonoBehaviour {
     public Canvas canvas;
     Texture2D tex;
 	
-	void Start () {
+	void Start ()
+    {
         oldPixelSize = pixelSize;
-		GetComponent<Camera>().pixelRect = new Rect(0,0,Screen.width/pixelSize,Screen.height/pixelSize);
-		for (int i = 0; i < otherCameras.Length; i++)
-			otherCameras[i].pixelRect = new Rect(0,0,Screen.width/pixelSize,Screen.height/pixelSize);
-	}
-	
+        GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
+        for (int i = 0; i < otherCameras.Length; i++)
+            otherCameras[i].pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
+    }
+
     void Update()
     {
         if (oldPixelSize != pixelSize && pixelSize > 0)
@@ -32,10 +33,10 @@ public class CameraScreenGrab : MonoBehaviour {
         }
     }
 
-    public void setPixelScale(float f)
+    public void setPixelScale(int i)
     {
-        pixelSize = (int)f;
-        oldPixelSize = (int)f;
+        pixelSize = i;
+        oldPixelSize = i;
     }
 
 	void OnGUI()
@@ -51,6 +52,12 @@ public class CameraScreenGrab : MonoBehaviour {
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         }
     }
+
+    public void SwitchMode(bool retroMode)
+    {
+
+    }
+
     void OnPostRender()
     {
         if (pixelSize > 1)
