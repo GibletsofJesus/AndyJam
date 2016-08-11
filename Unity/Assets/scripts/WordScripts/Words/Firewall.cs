@@ -12,8 +12,8 @@ public class Firewall : AbilityWord
 		base.Start ();
 	}
 
-	protected override void TriggerBehavior ()
-	{
+	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+    {
 		base.TriggerBehavior ();
         for(int i = 0; i < currentTier + 1; ++i)
         {

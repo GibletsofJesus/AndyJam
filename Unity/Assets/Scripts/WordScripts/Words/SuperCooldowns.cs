@@ -14,7 +14,7 @@ public class SuperCooldowns : Word
 
     }
 
-    protected override void TriggerBehavior()
+    protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
     {
         foreach(AbilityWord _w in FindObjectsOfType<AbilityWord>())
         {

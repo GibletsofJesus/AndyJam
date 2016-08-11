@@ -44,6 +44,7 @@ public class CameraShake : MonoBehaviour
             else
             {
                 shakeDuration = 0f;
+                shakeAmount = 0;
 
                 for (int i = 0; i < camTransforms.Length; i++)
                 {

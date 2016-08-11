@@ -15,7 +15,7 @@ public class UpdateWord : AbilityWord
 	[SerializeField] private float updateTextRate = 0.1f;
 	private float updateTextCooldown = 0.0f;
 
-	protected override void Start ()
+    protected override void Start ()
 	{
         description = "unlocks and upgrades abilities";
         wordTiers = new string[] {"update.exe"};
@@ -25,16 +25,16 @@ public class UpdateWord : AbilityWord
         wordHUD.UpdateWord(wordTiers[0]);
 	}
 
-	protected override void TriggerBehavior ()
-	{
+	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+    {
 		numUpdates = UpdateBehavior.instance.PrepareUpdates ();
 		if(numUpdates == 0)
 		{
 			UpdateBehavior.instance.UnneccessaryUpdate();
 		}
 		else
-		{
-			base.TriggerBehavior ();
+        {
+            base.TriggerBehavior ();
 			updateTextCooldown = 0.0f;
 			wordHUD.UpdateWord (updateText[updateTextIndex]);
 		}

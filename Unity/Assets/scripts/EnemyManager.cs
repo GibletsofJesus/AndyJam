@@ -86,7 +86,7 @@ public class EnemyManager : MonoBehaviour
         soundManager.instance.music.clip = standardMusic;
         soundManager.instance.music.enabled = false;
         soundManager.instance.music.enabled = true;
-        soundManager.instance.music.DOFade(1, 3);
+        soundManager.instance.music.DOFade(soundManager.instance.musicVolume, 3);
     }
 
     public void Begin()

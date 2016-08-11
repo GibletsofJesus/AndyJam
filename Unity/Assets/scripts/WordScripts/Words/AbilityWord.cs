@@ -17,6 +17,8 @@ public abstract class AbilityWord : Word
 	protected float pixelCooldown;
 
     protected string description;
+    [SerializeField]
+    AudioClip activationSound;
 
     public override bool WordAvailable()
     {
@@ -75,7 +77,7 @@ public abstract class AbilityWord : Word
         }
 	}
 
-	protected override void TriggerBehavior ()
+    protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
 	{
         //Activate behavior
         if (!behaviorActive)
@@ -86,6 +88,8 @@ public abstract class AbilityWord : Word
             }
             else
             {
+                if (activationSound)
+                    soundManager.instance.playSound(activationSound, pitchMod, volumeMod);
                 currentTier = updatedTier;
                 currentCooldown = 0.0f;
                 wordHUD.TriggerSuccess();

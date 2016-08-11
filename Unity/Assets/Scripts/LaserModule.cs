@@ -52,6 +52,10 @@ public class LaserModule : MonoBehaviour
                 {
                     if (laserTime < laserDuration)
                     {
+                        if (CameraShake.instance.shakeAmount < 1)
+                            CameraShake.instance.shakeAmount = 1;   
+                        CameraShake.instance.shakeDuration += Time.deltaTime / 2f;
+
                         laserCore.transform.localScale = new Vector3(1,Mathf.Min(laserCore.transform.localScale.y + (Time.deltaTime * laserSpeed),50.0f),1);
                     }
                     else
@@ -70,6 +74,13 @@ public class LaserModule : MonoBehaviour
                 }
                 else
                 {
+                    //charging state
+                    
+                    if (CameraShake.instance.shakeAmount < laserTime/5 && CameraShake.instance.shakeDuration < 0.2f)
+                        CameraShake.instance.shakeAmount = laserTime/5;
+                    Debug.Log(laserTime / 100f);
+                    CameraShake.instance.shakeDuration += Time.deltaTime/1.5f;
+
                     if (laserTime >= chargeTime)
                     {
                         laserTime = 0.0f;

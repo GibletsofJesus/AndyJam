@@ -15,8 +15,8 @@ public class Encrypt : AbilityWord
 		base.Start ();
 	}
 	
-	protected override void TriggerBehavior ()
-	{
+	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+    {
 		base.TriggerBehavior ();
         lockedHealth.gameObject.SetActive(true);
         Player.instance.SetInvincible(true);

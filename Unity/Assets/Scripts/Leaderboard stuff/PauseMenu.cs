@@ -36,8 +36,24 @@ public class PauseMenu : MenuSelect
         if (Input.GetButtonDown("Fire1"))
         {
             if (selectBox == 2)
-                DoAction(QuitToMain);
+            {
+                frameHolder.instance.enableFrameholding = !frameHolder.instance.enableFrameholding;
+                if (frameHolder.instance.enableFrameholding)
+                    box[2].text = "Frame hold: ON";
+                else
+                    box[2].text = "Frame hold: OFF";
+            }
             else if (selectBox == 3)
+            {
+                CameraScreenGrab.instance.SwitchMode(!CameraScreenGrab.instance.retroMode);
+                if (CameraScreenGrab.instance.retroMode)
+                    box[3].text = "Retro mode hold: ON";
+                else
+                    box[3].text = "Retro mode: OFF";
+            }
+            else if (selectBox == 4)
+                DoAction(QuitToMain);
+            else if (selectBox == 5)
                 DoAction(QuitGame);
         }
     }

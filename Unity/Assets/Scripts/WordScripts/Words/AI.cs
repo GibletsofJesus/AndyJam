@@ -43,8 +43,8 @@ public class AI : Word
     {
 
     }
-
-    protected override void TriggerBehavior()
+    
+    protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
     {
         base.TriggerBehavior();
         currentWord = string.Empty;

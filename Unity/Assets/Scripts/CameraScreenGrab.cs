@@ -4,40 +4,48 @@ using System.Collections;
 
 //Attach this to a camera
 public class CameraScreenGrab : MonoBehaviour {
-		
+
+    public static CameraScreenGrab instance;
+
 	//how chunky to make the screen
 	public int pixelSize = 4;
     int oldPixelSize;
 	public FilterMode filterMode = FilterMode.Point;
 	public Camera[] otherCameras;
 	public Material mat;
-	Texture2D tex;
+    public Canvas canvas;
+    Texture2D tex;
+    public bool retroMode;
 	
-	void Start () {
-        oldPixelSize = pixelSize;
-		GetComponent<Camera>().pixelRect = new Rect(0,0,Screen.width/pixelSize,Screen.height/pixelSize);
-		for (int i = 0; i < otherCameras.Length; i++)
-			otherCameras[i].pixelRect = new Rect(0,0,Screen.width/pixelSize,Screen.height/pixelSize);
-	}
-	
-    void Update()
+	void Start ()
     {
-        //if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
-        //{
-            if (oldPixelSize != pixelSize && pixelSize > 0)
-            {
-                GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
-                for (int i = 0; i < otherCameras.Length; i++)
-                    otherCameras[i].pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
-                oldPixelSize = pixelSize;
-            }
-        //}
+        instance = this;
+        oldPixelSize = pixelSize;
+        GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
+        for (int i = 0; i < otherCameras.Length; i++)
+            otherCameras[i].pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
     }
 
-    public void setPixelScale(float f)
+    void Update()
     {
-        pixelSize = (int)f;
-        oldPixelSize = (int)f;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SwitchMode(!retroMode);
+        }
+
+        if (oldPixelSize != pixelSize && pixelSize > 0)
+        {
+            GetComponent<Camera>().pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
+            for (int i = 0; i < otherCameras.Length; i++)
+                otherCameras[i].pixelRect = new Rect(0, 0, Screen.width / pixelSize, Screen.height / pixelSize);
+            oldPixelSize = pixelSize;
+        }
+    }
+
+    public void setPixelScale(int i)
+    {
+        pixelSize = i;
+        oldPixelSize = i;
     }
 
 	void OnGUI()
@@ -47,7 +55,20 @@ public class CameraScreenGrab : MonoBehaviour {
             if (Event.current.type == EventType.Repaint)
                 Graphics.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), tex);
         }
-	}
+        else
+        {
+            if (canvas.renderMode != RenderMode.ScreenSpaceCamera)
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        }
+    }
+
+    public void SwitchMode(bool newRetroMode)
+    {
+        retroMode = newRetroMode;
+        pixelSize= newRetroMode ? 4 : 1;
+        canvas.renderMode = newRetroMode ? RenderMode.WorldSpace : RenderMode.ScreenSpaceCamera;
+    }
+
     void OnPostRender()
     {
         if (pixelSize > 1)
@@ -66,8 +87,6 @@ public class CameraScreenGrab : MonoBehaviour {
                 GL.End();
             }
             GL.PopMatrix();
-
-
             DestroyImmediate(tex);
 
             tex = new Texture2D(Mathf.FloorToInt(GetComponent<Camera>().pixelWidth), Mathf.FloorToInt(GetComponent<Camera>().pixelHeight));

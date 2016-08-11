@@ -13,7 +13,10 @@ public class InputHUD : MonoBehaviour
 	public Color failColour;
 	private Color defaultColour;
 
-	private bool underscoreVisible = false;
+    [SerializeField]
+    AudioClip failSound;
+
+    private bool underscoreVisible = false;
 
 	private void Awake()
 	{
@@ -22,8 +25,8 @@ public class InputHUD : MonoBehaviour
 	}
 
 	public void UpdateText(string _text)
-	{
-		inputText.text = _text;
+    {
+        inputText.text = _text;
 	}
 
 	public void Success()
@@ -32,8 +35,9 @@ public class InputHUD : MonoBehaviour
 	}
 
 	public void Fail()
-	{
-		inputText.color = failColour;
+    {
+        soundManager.instance.playSound(failSound, 1);// Random.Range(0.9f, 1.1f));
+        inputText.color = failColour;
 	}
 
 	public void Reset()
