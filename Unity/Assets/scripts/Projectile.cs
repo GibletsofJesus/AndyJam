@@ -37,7 +37,7 @@ public class Projectile : MonoBehaviour
     {
 		aoe.deactivateProj = DeactivateProj;
         screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f ,-.5f, .3f));
-        screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.5f, .3f));
+        screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.1f, .3f));
     }
   
     void Alive()

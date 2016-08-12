@@ -47,9 +47,9 @@ public class PauseMenu : MenuSelect
             {
                 CameraScreenGrab.instance.SwitchMode(!CameraScreenGrab.instance.retroMode);
                 if (CameraScreenGrab.instance.retroMode)
-                    box[3].text = "Retro mode hold: ON";
+                    box[3].text = "Nostalgia mode: ON";
                 else
-                    box[3].text = "Retro mode: OFF";
+                    box[3].text = "Nostalgia mode: OFF";
             }
             else if (selectBox == 4)
                 DoAction(QuitToMain);

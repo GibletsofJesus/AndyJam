@@ -23,15 +23,32 @@ public class frameHolder : MonoBehaviour {
     float holdDuration;
     IEnumerator hold()
     {
+        while (GameStateManager.instance.state == GameStateManager.GameState.Paused)
+        {
+            Time.timeScale = 0;
+            yield return null;
+        }
+
         if (enableFrameholding)
         {
             Time.timeScale = 0.1f;
+
+            while (GameStateManager.instance.state == GameStateManager.GameState.Paused)
+            {
+                Time.timeScale = 0;
+                yield return null;
+            }
 
             while (holdDuration > 0)
             {
                 holdDuration -= Time.fixedDeltaTime;
                 yield return new WaitForEndOfFrame();
             }
+        }
+        while (GameStateManager.instance.state == GameStateManager.GameState.Paused)
+        {
+            Time.timeScale = 0;
+            yield return null;
         }
         Time.timeScale = 1;
     }
