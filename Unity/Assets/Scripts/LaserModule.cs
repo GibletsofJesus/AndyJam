@@ -89,7 +89,8 @@ public class LaserModule : MonoBehaviour
                         laserTip.SetActive(true);
                         laserBack.SetActive(true);
                         animator.ResetTrigger("Charge");
-                        soundManager.instance.playSound(4, laserDuration);
+                        soundManager.instance.playSound(soundManager.instance.laserRelease);
+                        soundManager.instance.playSound(4, laserDuration+0.5f,.8f);
                         if (chargeParticles.isPlaying)
                         {
                             chargeParticles.Stop();
@@ -112,7 +113,7 @@ public class LaserModule : MonoBehaviour
             if (!chargeParticles.isPlaying)
             {
                 chargeParticles.Play();
-                soundManager.instance.playSound(3, chargeTime);
+                soundManager.instance.playSound(3, chargeTime+0.2f);
             }
         }
     }

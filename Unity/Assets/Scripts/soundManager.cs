@@ -15,6 +15,7 @@ public class soundManager : MonoBehaviour
     public AudioClip[] explosionSounds, hitSounds;
     [SerializeField] private AudioClip winSound = null;
 
+  public  AudioClip laserRelease= null;
     [SerializeField] private AudioClip laserCharge = null;
     [SerializeField] private AudioClip laserFire = null;
     [SerializeField] private AudioClip star = null;
@@ -78,7 +79,7 @@ public class soundManager : MonoBehaviour
         }
     }
 
-    public void playSound(int type, float pitchMod = 1.0f)//1 for explosions,0 for hit sounds.
+    public void playSound(int type, float pitchMod = 1.0f,float volume =1)//1 for explosions,0 for hit sounds.
     {
         int c = 0;
         while (c < audioSrcs.Count)
@@ -105,12 +106,12 @@ public class soundManager : MonoBehaviour
                     case 3:
                         audioSrcs[c].PlayOneShot(laserCharge);
                         audioSrcs[c].pitch = 1.0f / (pitchMod / 2.0f);
-                        audioSrcs[c].volume = volumeMultiplayer * 2.5f;
+                        audioSrcs[c].volume = volumeMultiplayer * volume;
                         break;
                     case 4:
                         audioSrcs[c].PlayOneShot(laserFire);
                         audioSrcs[c].pitch = 1.0f / (pitchMod / 4.0f);
-                        audioSrcs[c].volume = volumeMultiplayer * 1.0f;
+                        audioSrcs[c].volume = volumeMultiplayer * volume;
                         break;
                     case 5:
                         audioSrcs[c].PlayOneShot(star);

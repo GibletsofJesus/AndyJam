@@ -111,12 +111,12 @@ public class GameStateManager : MonoBehaviour {
     {
         yield return new WaitForSeconds(2);
 
-            GameOverUI.SetActive(true);
-            yield return new WaitForSeconds(1.5f);
-            soundManager.instance.playSound(gameOverSounds);
-            youScored.text = "You scored <color=red> " + Player.instance.score + "</color>";
-            yield return new WaitForSeconds(2);
-         buttons.SetActive(true);
+        GameOverUI.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        soundManager.instance.playSound(gameOverSounds);
+        youScored.text = "You scored <color=red> " + Player.instance.score + "</color>";
+        yield return new WaitForSeconds(2);
+        buttons.SetActive(true);
     }
 
     void Update()

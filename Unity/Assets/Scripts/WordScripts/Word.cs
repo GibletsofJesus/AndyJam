@@ -45,13 +45,13 @@ public abstract class Word : MonoBehaviour
             switch (_word)
             {
                 case "update.exe":
-                    TriggerBehavior(Random.Range(0.975f, 1.025f));
+                    TriggerBehavior(Random.Range(0.975f, 1.025f),2);
                     break;
                 case "antivirus.exe":
                     TriggerBehavior(.85f, 2);
                     break;
                 default:
-                    TriggerBehavior();
+                    TriggerBehavior(1,2);
                     break;
             }
             return true;
