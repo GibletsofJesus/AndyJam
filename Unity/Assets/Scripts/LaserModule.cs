@@ -3,7 +3,7 @@
 public class LaserModule : MonoBehaviour
 {
     [SerializeField] private LaserDamage damageModule = null;
-
+    float damage;
     [SerializeField] private Animator animator = null;
     [SerializeField] private ParticleSystem chargeParticles = null;
 
@@ -30,6 +30,7 @@ public class LaserModule : MonoBehaviour
         animator.SetFloat("Speed", 1.0f / chargeTime);
         laserDuration = _duration;
         damageModule.SetDamage(_damage);
+        damage = _damage;
     }
 
     private void Awake()
@@ -78,7 +79,6 @@ public class LaserModule : MonoBehaviour
                     
                     if (CameraShake.instance.shakeAmount < laserTime/5 && CameraShake.instance.shakeDuration < 0.2f)
                         CameraShake.instance.shakeAmount = laserTime/5;
-                    Debug.Log(laserTime / 100f);
                     CameraShake.instance.shakeDuration += Time.deltaTime/1.5f;
 
                     if (laserTime >= chargeTime)
@@ -89,8 +89,23 @@ public class LaserModule : MonoBehaviour
                         laserTip.SetActive(true);
                         laserBack.SetActive(true);
                         animator.ResetTrigger("Charge");
-                        soundManager.instance.playSound(soundManager.instance.laserRelease);
-                        soundManager.instance.playSound(4, laserDuration+0.5f,.8f);
+
+                        if (tag == "Player")
+                        {
+                            float tier = (damage - 15f) / 5f;
+
+                            Debug.Log(tier);
+                            for (int i = 0; i < tier; i++)
+                            {
+                                soundManager.instance.playSound(soundManager.instance.laserRelease);
+                            }
+                        }
+                        else
+                        {
+                            soundManager.instance.playSound(soundManager.instance.laserRelease);
+                            soundManager.instance.playSound(soundManager.instance.laserRelease);
+                        }
+                        soundManager.instance.playSound(4, laserDuration + 0.5f, .8f);
                         if (chargeParticles.isPlaying)
                         {
                             chargeParticles.Stop();
