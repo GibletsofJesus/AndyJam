@@ -78,7 +78,6 @@ public class Boss : Enemy
             }
         }
     }
-
     public override void OnSpawn()
     {
         password = passwordSelections[Random.Range(0, passwordSelections.Length)];
@@ -114,6 +113,7 @@ public class Boss : Enemy
         //Player.instance.IncreaseScore(score);
         StartCoroutine(bossDeath());
     }
+    
 
     protected virtual IEnumerator bossDeath()
     {

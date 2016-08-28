@@ -368,7 +368,11 @@ public class Player : Actor
 	{
 		projData.homingBullets = _homing;
 		projData.homingRadius = _radius;
-	}
+        foreach (PlayerBackup backup in backups)
+        {
+            backup.HomingProjectiles(_homing, _radius);
+        }
+    }
 
 	public void ExplodingProjectiles(bool _rocket, float _damage, float _radius)
 	{

@@ -32,10 +32,10 @@ public class LevelText : MonoBehaviour
 
     private void Start () 
     {
-        aboveScreen = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 1.25f, 0.5f));
+        aboveScreen = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 1.15f, 0.5f));
         displayText.rectTransform.position = aboveScreen;
         belowScreen = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, -0.25f,0.5f));
-        tutorialScreen = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.9f, 0.5f));
+        tutorialScreen = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.95f, 0.5f));
         //OffScreen.z = displayText.rectTransform.position.z; 
     }
 

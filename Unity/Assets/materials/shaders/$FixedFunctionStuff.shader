@@ -4,6 +4,7 @@ Properties {
 	_Fade ("Fade", Range(0, 1)) = 0
 	_MainTex ("Texture A", 2D) = "white" {}
 	_TexB ("Texture B", 2D) = "white" {}
+	_Tint("Tint Colour", color) = (1,1,1,1)
 }
 
 Category {
@@ -35,7 +36,8 @@ Category {
 				
 				uniform float4	_MainTex_ST,
 								_TexB_ST;
-				
+				fixed4 _Tint;
+
 				v2f vert (appdata_tiny v)
 				{
 					v2f o;
@@ -53,8 +55,8 @@ Category {
 				{
 					half4	tA = tex2D(_MainTex, i.uv),
 							tB = tex2D(_TexB, i.uv2);
-					fixed3 sum = lerp(tA.rgb * tA.a, tB.rgb * tB.a, _Fade);
-					fixed alpha = lerp(tA.a, tB.a, _Fade);
+					fixed3 sum = lerp(tA.rgb * tA.a*_Tint.a, tB.rgb * tB.a*_Tint.a, _Fade);
+					fixed alpha = lerp(tA.a*_Tint.a, tB.a*_Tint.a, _Fade);
 					return fixed4(sum, alpha);
 				}
 			ENDCG

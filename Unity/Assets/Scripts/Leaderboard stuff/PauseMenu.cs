@@ -33,29 +33,39 @@ public class PauseMenu : MenuSelect
             ChangeVolumeSlide(slide2);
             soundManager.instance.music.volume = slide2.value;
         }
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.End))
         {
             if (selectBox == 2)
             {
-                frameHolder.instance.enableFrameholding = !frameHolder.instance.enableFrameholding;
-                if (frameHolder.instance.enableFrameholding)
-                    box[2].text = "Frame hold: ON";
-                else
-                    box[2].text = "Frame hold: OFF";
+                toggleFrameHolding();
             }
             else if (selectBox == 3)
             {
-                CameraScreenGrab.instance.SwitchMode(!CameraScreenGrab.instance.retroMode);
-                if (CameraScreenGrab.instance.retroMode)
-                    box[3].text = "Nostalgia mode: ON";
-                else
-                    box[3].text = "Nostalgia mode: OFF";
+                toggleRetroMode();
             }
             else if (selectBox == 4)
                 DoAction(QuitToMain);
             else if (selectBox == 5)
                 DoAction(QuitGame);
         }
+    }
+
+    public void toggleFrameHolding()
+    {
+        frameHolder.instance.enableFrameholding = !frameHolder.instance.enableFrameholding;
+        if (frameHolder.instance.enableFrameholding)
+            box[2].text = "Frame hold: ON";
+        else
+            box[2].text = "Frame hold: OFF";
+    }
+
+    public void toggleRetroMode()
+    {
+        CameraScreenGrab.instance.SwitchMode(!CameraScreenGrab.instance.retroMode);
+        if (CameraScreenGrab.instance.retroMode)
+            box[3].text = "Nostalgia mode: ON";
+        else
+            box[3].text = "Nostalgia mode: OFF";
     }
 
     void QuitToMain()
@@ -83,7 +93,16 @@ public class PauseMenu : MenuSelect
             else
             {
                 _sl.value += Input.GetAxis("Horizontal") * 10;
-            }       
+            }
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                _sl.value -= Time.fixedDeltaTime;
+            }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                _sl.value += Time.fixedDeltaTime;
+            }
         }
     }
 }

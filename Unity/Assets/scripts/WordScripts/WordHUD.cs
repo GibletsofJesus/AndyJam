@@ -9,6 +9,8 @@ public class WordHUD : MonoBehaviour
 	[SerializeField] private Image cooldownImage = null;
     [SerializeField] private Image iconImage = null;
     [SerializeField] private Transform originalIconPosition = null;
+    [SerializeField]
+    Animator shimmerAnimator;
 
     private bool displayIcon = true;
     private float lerpValue = 0;
@@ -33,6 +35,7 @@ public class WordHUD : MonoBehaviour
     public void CooldownFinished()
     {
          displayIcon = true;
+        shimmerAnimator.Play("shimmer_right");
     }
 
 	public void Deactivate()
@@ -49,7 +52,7 @@ public class WordHUD : MonoBehaviour
 		text.color = HUDData.instance.activateColour;
 		backgroundImage.sprite = HUDData.instance.activateBackground;
 		cooldownImage.sprite = HUDData.instance.activateCooldown;
-        displayIcon = true;
+        CooldownFinished();
     }
 
 	public void UpdateWord(string _word)

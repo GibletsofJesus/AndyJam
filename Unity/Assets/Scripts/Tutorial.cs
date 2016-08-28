@@ -44,7 +44,7 @@ public class Tutorial : MonoBehaviour
 
     private void Start()
     {
-        LevelText.instance.SetText("joystick to move\npress to shoot", 80);
+        LevelText.instance.SetText("Use the arrow keys to move\npress END to shoot", 80);
         LevelText.instance.ShowText();
     }
 
@@ -80,7 +80,7 @@ public class Tutorial : MonoBehaviour
                         tutorialEnemy.transform.position = spawntopRef.position;
                         tutorialEnemy.OnSpawn();
                         tutorialEnemy.gameObject.SetActive(true);
-                        LevelText.instance.SetText("defeat enemies by shooting them", 80);
+                        LevelText.instance.SetText("press END to shoot enemies", 80);
                         LevelText.instance.TutorialElementFinished(false);
                         LevelText.instance.ShowText();
                     }

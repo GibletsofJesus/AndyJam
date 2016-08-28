@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class BossWord : Word
@@ -17,7 +18,7 @@ public class BossWord : Word
     {
         if (boss)
         {
-            wordActive = false;
+               wordActive = false;
             boss.PasswordEntered();
             boss = null;
         }

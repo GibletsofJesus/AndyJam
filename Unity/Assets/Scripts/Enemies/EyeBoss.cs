@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 //using UnityEditor;
 using System.Collections;
 
@@ -111,12 +112,7 @@ public class EyeBoss : Boss
         Invoke("revertColour", .1f);
         base.TakeDamage(_damage);
     }
-
-    //public void doDeath()
-    //{
-    //    StartCoroutine(bossDeath());
-    //}
-
+    
     protected override IEnumerator bossDeath()
     {
         bossRenderer.material = deathMaterial;

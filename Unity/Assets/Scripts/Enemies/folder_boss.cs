@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using System.Collections;
 
 public class folder_boss : Boss {
@@ -317,14 +317,9 @@ public class folder_boss : Boss {
             EnemyManager.instance.NextLevel();
         }
     }
-    public void i()
-    {
-        bossDefeated = true;
-        StartCoroutine(bossDeath());
-    }
 }
 
-[CustomEditor(typeof(folder_boss))] 
+/*[CustomEditor(typeof(folder_boss))] 
 public class folderTester : Editor
 {
     public override void OnInspectorGUI()
@@ -337,4 +332,4 @@ public class folderTester : Editor
             myScript.i();
         }
     }
-}
+}*/

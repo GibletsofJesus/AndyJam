@@ -26,9 +26,9 @@ public class MenuSelect : MonoBehaviour
 
     void MenuInput()
     {
-        if (Input.GetAxis("Vertical") != 0 && SelectCoolDown())
+        if ((Input.GetKeyDown(KeyCode.DownArrow) || (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxis("Vertical") != 0) && SelectCoolDown()))
         {
-            if (Input.GetAxis("Vertical") < 0)
+            if (Input.GetAxis("Vertical") < 0 || Input.GetKeyDown(KeyCode.DownArrow))
             {
                 selectBox++;
                 if (selectBox == box.Length)
@@ -36,18 +36,24 @@ public class MenuSelect : MonoBehaviour
                     selectBox = 0;
                 }
             }
-            else if (Input.GetAxis("Vertical") > 0)
+            else if (Input.GetAxis("Vertical") > 0 || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 selectBox--;
                 if (selectBox < 0)
                 {
-                    selectBox = box.Length-1;
+                    selectBox = box.Length - 1;
                 }
             }
             coolDown = 0;
             soundManager.instance.playSound(0);
         }
     }
+
+    public void SetSelection(int _select)
+    {
+        selectBox = _select;
+    }
+
    protected virtual void SetFunctionToButton()
     {
 

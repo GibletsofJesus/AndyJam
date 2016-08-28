@@ -39,7 +39,7 @@ public class splashScreen : MonoBehaviour
         }
         MenuCooldown();
         buttonCool += Time.deltaTime;
-        DisplayLeaderBoard();
+        //DisplayLeaderBoard();
 
         if ((!(shipToggleCool < shipToggleMaxCool)) && allowStart && ConvertToPos())
         {
@@ -171,7 +171,7 @@ public class splashScreen : MonoBehaviour
                 options[i].color = Color.white;
             }
         }
-        options[2].color = Color.grey;
+        //options[2].color = Color.grey;
     }
 
     void ShowMenu()

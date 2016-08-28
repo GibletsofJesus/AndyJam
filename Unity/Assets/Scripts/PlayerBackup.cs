@@ -4,13 +4,18 @@ using System.Collections;
 public class PlayerBackup : Actor
 {
     [SerializeField] private SpriteRenderer spriteRenderer = null;
-
     [SerializeField] public AudioClip[] shootSounds;
     [SerializeField] public ParticleSystem[] muzzleflash;
   
     protected override void Awake()
     {
         base.Awake();
+    }
+    
+    public void HomingProjectiles(bool _homing, float _radius)
+    {
+        base.projData.homingBullets = _homing;
+        base.projData.homingRadius = _radius;
     }
 
     void Start()
