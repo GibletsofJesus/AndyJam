@@ -9,12 +9,17 @@ public class RadiusObjectFinder : MonoBehaviour
 	private bool finderActive = false;
 	private string findTag = string.Empty;
 
-	private GameObject closestObject = null;
+    private GameObject closestObject = null;
 
-	private bool targetAcquired = false;
+    private bool targetAcquired = false;
 
-	private void Update()
-	{
+    private void Update()
+    {
+        search();
+    }
+
+    void search()
+    {
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             if (closestObject)
@@ -32,7 +37,7 @@ public class RadiusObjectFinder : MonoBehaviour
                 }
             }
         }
-	}
+    }
 
 	private void OnTriggerStay2D(Collider2D _col)
 	{
@@ -77,6 +82,7 @@ public class RadiusObjectFinder : MonoBehaviour
 
 	public GameObject GetClosestObject()
 	{
+        //search();
 		return closestObject;
 	}
 }

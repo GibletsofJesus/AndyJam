@@ -36,8 +36,8 @@ public class Projectile : MonoBehaviour
     protected virtual void Start()
     {
 		aoe.deactivateProj = DeactivateProj;
-        screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f ,-.5f, .3f));
-        screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.3f, 1.1f, .3f));
+        screenBottom = Camera.main.ViewportToWorldPoint(new Vector3(.3f ,-0.1f, .3f));
+        screenTop = Camera.main.ViewportToWorldPoint(new Vector3(.7f, 1.15f, .3f));
     }
   
     void Alive()
@@ -54,13 +54,11 @@ public class Projectile : MonoBehaviour
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay || GameStateManager.instance.state == GameStateManager.GameState.GameOver)
         {
             GameObject _target = finder.GetClosestObject();
-            if (projData.homingBullets && _target)
+            if (projData.homingBullets && _target && aliveCooldown < .75f)
             {
                 //Turn z axis
                 Quaternion rot = new Quaternion();
                 float z = Mathf.Atan2((_target.transform.position.x - transform.position.x), (_target.transform.position.y - transform.position.y)) * Mathf.Rad2Deg;
-                rot.eulerAngles = new Vector3(0, 0, z);
-
                 rot.eulerAngles = new Vector3(0, 0, -z);
 
                 if (projData.owner.gameObject.tag == "Enemy")
@@ -87,7 +85,7 @@ public class Projectile : MonoBehaviour
     {
 		if (col.gameObject.tag != projData.parentTag)
 		{
-			if(col.gameObject.GetComponent<Actor>())
+			if(col.gameObject.GetComponent<Actor>() && transform.position.y < Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0)).y)
 			{
 				if(projData.explodingBullets)
 				{
@@ -123,6 +121,10 @@ public class Projectile : MonoBehaviour
     void OffScreen()
     {
         if (transform.position.y > screenTop.y || transform.position.y < screenBottom.y)
+        {
+            DeactivateProj();
+        }
+        else if (transform.position.x > screenTop.x || transform.position.x < screenBottom.x)
         {
             DeactivateProj();
         }
