@@ -16,6 +16,8 @@ public class Adblocker : Word
 
     protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
     {
+        Player.instance.IncreaseScore(-1337);
+        GameStateManager.instance.cheat = true;
         AdManager.instance.EnableAdBlock();
     }
 

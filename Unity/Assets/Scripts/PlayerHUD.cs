@@ -46,8 +46,20 @@ public class PlayerHUD : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (scoreToAdd > 0)
+        {
+            scoreToAdd -= 10;
+            currentScore += 10;
+        }
+        scoreText.text = currentScore.ToString();
+    }
+
+    int currentScore, scoreToAdd;
+
     public void UpdateScore(int _score)
     {
-        scoreText.text = _score.ToString();
+        scoreToAdd = _score - currentScore;
     }
 }

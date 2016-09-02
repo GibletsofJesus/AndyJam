@@ -46,6 +46,7 @@ public class AI : Word
     
     protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
     {
+        GameStateManager.instance.cheat = true;
         base.TriggerBehavior();
         currentWord = string.Empty;
         ChooseWord();

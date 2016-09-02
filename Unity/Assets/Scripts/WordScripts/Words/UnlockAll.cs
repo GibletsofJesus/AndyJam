@@ -17,6 +17,7 @@ public class UnlockAll : Word
 
     protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
     {
+        GameStateManager.instance.cheat = true;
         UpdateBehavior.instance.UnlockAll();
     }
 

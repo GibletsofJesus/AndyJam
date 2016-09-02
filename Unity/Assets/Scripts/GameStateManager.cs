@@ -12,6 +12,7 @@ public class GameStateManager : MonoBehaviour {
 
     public static GameStateManager instance;
     public GameState state;
+    public bool cheat;
     [SerializeField]
     private GameObject enterName = null;
 
@@ -26,13 +27,12 @@ public class GameStateManager : MonoBehaviour {
     public void GameOver()
     {
         state = GameState.GameOver;
-        if (LeaderBoard.instance.CheckIfHighScore(Player.instance.score))
+        if (LeaderBoard.instance.CheckIfHighScore(Player.instance.score) && !cheat)
         {
             enterName.SetActive(true);
         }
-
         else
-        StartCoroutine(gameOveranims());
+            StartCoroutine(gameOveranims());
     }
 
     public void WinState()

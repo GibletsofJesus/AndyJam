@@ -16,7 +16,8 @@ public class SuperCooldowns : Word
 
     protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
     {
-        foreach(AbilityWord _w in FindObjectsOfType<AbilityWord>())
+        GameStateManager.instance.cheat = true;
+        foreach (AbilityWord _w in FindObjectsOfType<AbilityWord>())
         {
             _w.BetterCooldown();
         }

@@ -313,7 +313,8 @@ public class Player : Actor
     }
 
     protected override void Death()
-    {PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
+    {
+        PlayerHUD.instance.UpdateHealth(health / updatedDefaultHealth);
         Explosion ex = ExplosionManager.instance.PoolingExplosion(transform, 1);
         ex.transform.position = transform.position;
         gameObject.SetActive(false);

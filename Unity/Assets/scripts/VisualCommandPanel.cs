@@ -43,8 +43,7 @@ public class VisualCommandPanel : MonoBehaviour
     }
 
 	private void Update()
-	{
-        
+	{        
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay)
         {
             //Determine if should be typing out current message
@@ -131,6 +130,14 @@ public class VisualCommandPanel : MonoBehaviour
             _message += _symbol;
         }
         messageBuffer.Add(_preMessage + _message);
+    }
+
+    public void ClearPanel()
+    {
+        messageBuffer.Clear();
+        charReader = 0;
+        currentMessage = string.Empty;
+        textField.text = " ";
     }
 
     public void TryMessage(string _message, string _preMessage = "\n", int _buffer = 0)
