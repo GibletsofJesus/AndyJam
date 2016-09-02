@@ -53,32 +53,42 @@ public class Projectile : MonoBehaviour
     {
         if (GameStateManager.instance.state == GameStateManager.GameState.Gameplay || GameStateManager.instance.state == GameStateManager.GameState.GameOver)
         {
-            GameObject _target = finder.GetClosestObject();
-            if (projData.homingBullets && _target && aliveCooldown < .75f)
+            if (projData.homingBullets)
             {
-                //Turn z axis
-                Quaternion rot = new Quaternion();
-                float z = Mathf.Atan2((_target.transform.position.x - transform.position.x), (_target.transform.position.y - transform.position.y)) * Mathf.Rad2Deg;
-                rot.eulerAngles = new Vector3(0, 0, -z);
-
-                if (projData.owner.gameObject.tag == "Enemy")
-                {
-                    if (aliveCooldown < .35f)
-                        transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / projData.aliveTime) * Time.deltaTime * 200);
-                }
-                else
-                    transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / projData.aliveTime) * Time.deltaTime * 200);
-
-                rig.velocity = transform.up * projData.speed;
+                if (!findingTarget)
+                    StartCoroutine(alterTrajectory());
             }
-            else
-            {
-                rig.velocity = transform.up * projData.speed;
-            }
+            rig.velocity = transform.up * projData.speed;
 
             Alive();
             OffScreen();
         }
+    }
+
+    bool findingTarget;
+
+    IEnumerator alterTrajectory()
+    {
+        findingTarget = true;
+        GameObject _target = finder.GetClosestObject();
+        if (_target && aliveCooldown < .75f)
+        {
+
+            //Turn z axis
+            Quaternion rot = new Quaternion();
+            float z = Mathf.Atan2((_target.transform.position.x - transform.position.x), (_target.transform.position.y - transform.position.y)) * Mathf.Rad2Deg;
+            rot.eulerAngles = new Vector3(0, 0, -z);
+
+            if (projData.owner.gameObject.tag == "Enemy")
+            {
+                if (aliveCooldown < .35f)
+                    transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / projData.aliveTime) * Time.deltaTime * 200);
+            }
+            else
+                transform.rotation = Quaternion.Lerp(transform.rotation, rot, (1 / projData.aliveTime) * Time.deltaTime * 200);
+        }
+        findingTarget = false;
+        yield return new WaitForEndOfFrame();
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D col)

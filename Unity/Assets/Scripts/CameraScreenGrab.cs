@@ -28,10 +28,10 @@ public class CameraScreenGrab : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SwitchMode(!retroMode);
-        }
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        SwitchMode(!retroMode);
+    //    }
 
         if (oldPixelSize != pixelSize && pixelSize > 0)
         {
