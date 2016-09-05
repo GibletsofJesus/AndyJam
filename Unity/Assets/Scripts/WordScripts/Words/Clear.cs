@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SuperCooldowns : Word
+public class Clear : Word
 {
     private void Awake()
     {
-        thisWord = "administrator";
+        thisWord = "clear";
         wordActive = true;
     }
 
@@ -16,11 +16,7 @@ public class SuperCooldowns : Word
 
     protected override void TriggerBehavior()
     {
-        GameStateManager.instance.cheat = true;
-        foreach (AbilityWord _w in FindObjectsOfType<AbilityWord>())
-        {
-            _w.BetterCooldown();
-        }
+        VisualCommandPanel.instance.ClearPanel();
     }
 
     protected override void Behavior()

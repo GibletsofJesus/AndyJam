@@ -136,8 +136,10 @@ public class VisualCommandPanel : MonoBehaviour
     {
         messageBuffer.Clear();
         charReader = 0;
+        underscoreVisible = false;
         currentMessage = string.Empty;
-        textField.text = " ";
+        textField.text = currentMessage;
+        AddMessage("Log Cleared", string.Empty);
     }
 
     public void TryMessage(string _message, string _preMessage = "\n", int _buffer = 0)

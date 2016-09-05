@@ -33,6 +33,9 @@ public class AI : Word
 
     private bool frameTriggered = false;
 
+    private bool aiActivatedOnce = false;
+    public bool hasAIActivatedOnce { get { return aiActivatedOnce; } }
+
     private void Awake()
     {
         thisWord = "ai-typer";
@@ -44,7 +47,7 @@ public class AI : Word
 
     }
     
-    protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+    protected override void TriggerBehavior()
     {
         GameStateManager.instance.cheat = true;
         base.TriggerBehavior();
@@ -53,6 +56,7 @@ public class AI : Word
         typeTime = 0.0f;
         VisualCommandPanel.instance.AddMessage("A.I. typer enabled");
         frameTriggered = true;
+        aiActivatedOnce = true;
     }
 
     protected override void Behavior()

@@ -16,7 +16,7 @@ public class Help : Word
 
     }
 
-    protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+    protected override void TriggerBehavior()
     {
         VisualCommandPanel.instance.AddLine('-');
         foreach (AbilityWord _w in abilityWords)

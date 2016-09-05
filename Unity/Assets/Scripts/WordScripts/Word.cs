@@ -42,24 +42,13 @@ public abstract class Word : MonoBehaviour
 		}
 		if(thisWord == _word)
         {
-            switch (_word)
-            {
-                case "update.exe":
-                    TriggerBehavior(Random.Range(0.975f, 1.025f),2);
-                    break;
-                case "antivirus.exe":
-                    TriggerBehavior(.85f, 2);
-                    break;
-                default:
-                    TriggerBehavior(1,2);
-                    break;
-            }
+            TriggerBehavior();
             return true;
 		}
 		return false;
 	}
 
-	protected virtual void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+	protected virtual void TriggerBehavior()
     {
 		behaviorActive = true;
 	}

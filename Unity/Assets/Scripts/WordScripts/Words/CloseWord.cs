@@ -15,7 +15,7 @@ public class CloseWord : Word
 		base.Update ();
 	}
 	
-	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+	protected override void TriggerBehavior()
     {
 		//base.TriggerBehavior ();
 		AdManager.instance.closeAd ();

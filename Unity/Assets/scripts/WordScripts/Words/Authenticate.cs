@@ -21,7 +21,7 @@ public class Authenticate : AbilityWord
 		base.Start ();
 	}
 	
-	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+	protected override void TriggerBehavior()
     {
 		base.TriggerBehavior ();
         laser.SetParameters(chargeLaser[currentTier], durationLaser[currentTier], damageLaser[currentTier]);

@@ -14,11 +14,11 @@ public class BossWord : Word
         staticInstance = this;
 	}
 	
-	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+	protected override void TriggerBehavior()
     {
         if (boss)
         {
-               wordActive = false;
+            wordActive = false;
             boss.PasswordEntered();
             boss = null;
         }

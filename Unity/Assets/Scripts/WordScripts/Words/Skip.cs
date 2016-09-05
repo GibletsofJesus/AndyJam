@@ -14,7 +14,7 @@ public class Skip : Word
 
     }
 
-    protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+    protected override void TriggerBehavior()
     {
         Tutorial.instance.Skip();
         EndBehavior();

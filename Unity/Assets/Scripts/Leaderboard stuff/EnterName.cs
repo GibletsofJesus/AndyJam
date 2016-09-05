@@ -13,6 +13,7 @@ public class EnterName : MonoBehaviour
     float coolDown = 0;
     float maxCool = 0.2f;
     string theName = string.Empty;
+    [SerializeField] private AI aiRef = null;
 	
     // Use this for initialization
 	void Awake () 
@@ -70,27 +71,39 @@ public class EnterName : MonoBehaviour
         }
         else
         {
-         if (Input.GetAxis("Vertical") != 0 && SelectCoolDown())
-        {
-            if (Input.GetAxis("Vertical") < 0)
+            if (Input.GetAxis("Vertical") != 0 && SelectCoolDown())
             {
-                if (selectChar > 65)
-                    selectChar--;
+                if (Input.GetAxis("Vertical") < 0)
+                {
+                    if (selectChar > 64)
+                        selectChar--;
 
-                else
-                    selectChar = 90;
+                    else
+                        selectChar = 90;
+                }
+                else if (Input.GetAxis("Vertical") > 0)
+                {
+                    if (selectChar < 91)
+                        selectChar++;
+
+                    else
+                        selectChar = 65;
+                }
+                coolDown = 0;
+                currentCharacter[selectBox] = selectChar;
             }
-            else if (Input.GetAxis("Vertical") > 0)
+            if(Input.inputString.Length > 0)
             {
-                if (selectChar < 90)
-                    selectChar++;
-
-                else
-                    selectChar = 65;
+                int _charInt = (int)char.ToUpper(Input.inputString[0]);
+                if (_charInt > 64 && _charInt < 91)
+                {
+                    selectChar = _charInt;
+                    currentCharacter[selectBox] = selectChar;
+                    box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
+                    selectBox = selectBox == box.Length - 1 ? selectBox : selectBox + 1;
+                    selectChar = currentCharacter[selectBox];
+                }
             }
-            coolDown = 0;
-            currentCharacter[selectBox] = selectChar;
-        }
         }
     }
 

@@ -25,7 +25,7 @@ public class UpdateWord : AbilityWord
         wordHUD.UpdateWord(wordTiers[0]);
 	}
 
-	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+	protected override void TriggerBehavior()
     {
 		numUpdates = UpdateBehavior.instance.PrepareUpdates ();
 		if(numUpdates == 0)

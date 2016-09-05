@@ -14,7 +14,7 @@ public class Scan : AbilityWord
 		base.Start ();
 	}
 	
-	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+	protected override void TriggerBehavior()
     {
 		base.TriggerBehavior ();
 		scanCooldown = 0.0f;

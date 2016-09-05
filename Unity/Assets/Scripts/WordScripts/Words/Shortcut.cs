@@ -14,7 +14,7 @@ public class Shortcut : Word
 
     }
 
-    protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+    protected override void TriggerBehavior()
     {
         GameStateManager.instance.cheat = true;
         EnemyManager.instance.ShortCut();

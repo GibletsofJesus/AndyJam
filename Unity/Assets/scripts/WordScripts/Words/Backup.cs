@@ -15,7 +15,7 @@ public class Backup : AbilityWord
 		base.Start ();
 	}
 	
-	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+	protected override void TriggerBehavior()
     {
 		base.TriggerBehavior ();
         Player.instance.SpawnBackups(numBackups[currentTier]);

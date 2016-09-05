@@ -10,7 +10,7 @@ public class FactoryReset : AbilityWord
 		base.Start ();
 	}
 	
-	protected override void TriggerBehavior(float pitchMod = 1, float volumeMod = 1)
+	protected override void TriggerBehavior()
     {
 		base.TriggerBehavior ();
         foreach(Enemy _e in FindObjectsOfType<Enemy>())

@@ -94,7 +94,6 @@ public class LaserModule : MonoBehaviour
                         {
                             float tier = (damage - 15f) / 5f;
 
-                            Debug.Log(tier);
                             for (int i = 0; i < tier; i++)
                             {
                                 soundManager.instance.playSound(soundManager.instance.laserRelease);
