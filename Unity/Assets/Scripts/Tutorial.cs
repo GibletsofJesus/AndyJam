@@ -44,7 +44,7 @@ public class Tutorial : MonoBehaviour
 
     private void Start()
     {
-        LevelText.instance.SetText("Use the       to move\npress       to shoot", 80);
+        LevelText.instance.SetText("Use       to move\npress       to shoot", 80);
         LevelText.instance.ShowText();
     }
 
