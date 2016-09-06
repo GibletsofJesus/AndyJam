@@ -6,6 +6,11 @@ public class Ident : MonoBehaviour
  public   AudioClip[] honks;
     public AudioSource honkSound;
     
+    public void Start()
+    {
+        Cursor.visible = false;
+    }
+
 	public void loadLevel(int level)
     {
         SceneManager.LoadScene(level);
