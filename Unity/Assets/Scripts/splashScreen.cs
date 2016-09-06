@@ -39,7 +39,7 @@ public class splashScreen : MonoBehaviour
         }
         MenuCooldown();
         buttonCool += Time.deltaTime;
-        //DisplayLeaderBoard();
+        DisplayLeaderBoard();
 
         if ((!(shipToggleCool < shipToggleMaxCool)) && allowStart && ConvertToPos())
         {

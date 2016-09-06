@@ -10,7 +10,7 @@ public class DisplayLeaderboard : MonoBehaviour
     public Text[] names;
     public Text[] rank;
     bool once;
-    public void update()
+    public void Update()
     {
         if (once)
         {
