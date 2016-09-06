@@ -23,6 +23,10 @@ public class LevelText : MonoBehaviour
     private string textBuffer = string.Empty;
     private int fontBuffer = 32;
 
+    private bool iconsVisible = true;
+    [SerializeField] private Image buttonIcon = null;
+    [SerializeField] private Image joystickIcon = null;
+
     private bool fadeText = false;
 
     private void Awake()
@@ -100,6 +104,14 @@ public class LevelText : MonoBehaviour
                 textBuffer = string.Empty;
                 showText = true;
             }
+            iconsVisible = false;
+            buttonIcon.gameObject.SetActive(false);
+            joystickIcon.gameObject.SetActive(false);
+        }
+        if(iconsVisible)
+        {
+            buttonIcon.color = _colour;
+            joystickIcon.color = _colour;
         }
         displayText.color = _colour;
     }

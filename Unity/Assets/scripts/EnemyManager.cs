@@ -96,8 +96,6 @@ public class EnemyManager : MonoBehaviour
         currentLevel = 0;
         soundManager.instance.music.DOFade(0, 3);
         Invoke("fadeInMusic", 3.25f);
-        //currentLevel = levels.Length - 2;
-        //NextLevel();
     }
 
     public void NextLevel()

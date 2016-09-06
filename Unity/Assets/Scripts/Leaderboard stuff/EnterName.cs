@@ -13,9 +13,10 @@ public class EnterName : MonoBehaviour
     float coolDown = 0;
     float maxCool = 0.2f;
     string theName = string.Empty;
-	
+    [SerializeField] private Image[] charArrows = null;
+
     // Use this for initialization
-	void Awake () 
+    void Awake () 
     {
         coolDown = maxCool;
         currentCharacter = new int[box.Length];
@@ -26,11 +27,15 @@ public class EnterName : MonoBehaviour
         if(GameStateManager.instance.aiTyper)
         {
             currentCharacter[3] = 65; //A
-            box[3].text = ((char)currentCharacter[3]).ToString();
             currentCharacter[4] = 45; //-
-            box[4].text = ((char)currentCharacter[4]).ToString();
             currentCharacter[5] = 73; //I
-            box[5].text = ((char)currentCharacter[5]).ToString();
+
+            for(int i = 3; i < 6; ++i)
+            {
+                box[i].text = ((char)currentCharacter[i]).ToString();
+                charArrows[i * 2].gameObject.SetActive(false);
+                charArrows[(i * 2) + 1].gameObject.SetActive(false);
+            }
         }
     }
 
@@ -90,6 +95,10 @@ public class EnterName : MonoBehaviour
             {
                 if (Input.GetAxis("Vertical") < 0)
                 {
+                    charArrows[(selectBox * 2) + 1].color = Color.grey;
+                    charArrows[(selectBox * 2) + 1].rectTransform.sizeDelta = new Vector2(60, 200);
+                    StartCoroutine(revertImageColour(charArrows[(selectBox * 2) + 1]));
+
                     if (selectChar > 65)
                         selectChar--;
 
@@ -98,6 +107,10 @@ public class EnterName : MonoBehaviour
                 }
                 else if (Input.GetAxis("Vertical") > 0)
                 {
+                    charArrows[selectBox * 2].color = Color.grey;
+                    charArrows[selectBox * 2].rectTransform.sizeDelta = new Vector2(60, 200);
+                    StartCoroutine(revertImageColour(charArrows[selectBox * 2]));
+
                     if (selectChar < 90)
                         selectChar++;
 
@@ -121,6 +134,14 @@ public class EnterName : MonoBehaviour
             }
         }
     }
+
+    IEnumerator revertImageColour(Image i)
+    {
+        yield return new WaitForSeconds(0.075f);
+        i.color = Color.white;
+        i.rectTransform.sizeDelta = new Vector2(42, 200);
+    }
+
 
     bool SelectCoolDown()
     {
