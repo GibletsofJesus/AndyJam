@@ -13,6 +13,7 @@ public class GameStateManager : MonoBehaviour {
     public static GameStateManager instance;
     public GameState state;
     public bool cheat;
+    public bool aiTyper;
     [SerializeField]
     private GameObject enterName = null;
 

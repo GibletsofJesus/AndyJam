@@ -13,7 +13,6 @@ public class EnterName : MonoBehaviour
     float coolDown = 0;
     float maxCool = 0.2f;
     string theName = string.Empty;
-    [SerializeField] private AI aiRef = null;
 	
     // Use this for initialization
 	void Awake () 
@@ -23,6 +22,15 @@ public class EnterName : MonoBehaviour
         for (int i = 0; i < currentCharacter.Length; i++)
         {
             currentCharacter[i] = 65;
+        }
+        if(GameStateManager.instance.aiTyper)
+        {
+            currentCharacter[3] = 65; //A
+            box[3].text = ((char)currentCharacter[3]).ToString();
+            currentCharacter[4] = 45; //-
+            box[4].text = ((char)currentCharacter[4]).ToString();
+            currentCharacter[5] = 73; //I
+            box[5].text = ((char)currentCharacter[5]).ToString();
         }
     }
 
@@ -45,7 +53,7 @@ public class EnterName : MonoBehaviour
             {
                 if (Input.GetAxis("Horizontal") > 0)
                 {
-                    if (selectBox == box.Length - 1)
+                    if (selectBox == (GameStateManager.instance.aiTyper ? box.Length - 4 : box.Length - 1))
                     {
                         selectBox = 0;
                     }
@@ -58,7 +66,14 @@ public class EnterName : MonoBehaviour
                 {
                     if (selectBox == 0)
                     {
-                        selectBox = box.Length - 1;
+                        if (GameStateManager.instance.aiTyper)
+                        {
+                            selectBox = box.Length - 4;
+                        }
+                        else
+                        {
+                            selectBox = box.Length - 1;
+                        }
                     }
                     else
                     {
@@ -75,7 +90,7 @@ public class EnterName : MonoBehaviour
             {
                 if (Input.GetAxis("Vertical") < 0)
                 {
-                    if (selectChar > 64)
+                    if (selectChar > 65)
                         selectChar--;
 
                     else
@@ -83,7 +98,7 @@ public class EnterName : MonoBehaviour
                 }
                 else if (Input.GetAxis("Vertical") > 0)
                 {
-                    if (selectChar < 91)
+                    if (selectChar < 90)
                         selectChar++;
 
                     else
@@ -100,7 +115,7 @@ public class EnterName : MonoBehaviour
                     selectChar = _charInt;
                     currentCharacter[selectBox] = selectChar;
                     box[selectBox].text = ((char)currentCharacter[selectBox]).ToString();
-                    selectBox = selectBox == box.Length - 1 ? selectBox : selectBox + 1;
+                    selectBox = selectBox == (GameStateManager.instance.aiTyper ? box.Length - 4 : box.Length - 1) ? selectBox : selectBox + 1;
                     selectChar = currentCharacter[selectBox];
                 }
             }

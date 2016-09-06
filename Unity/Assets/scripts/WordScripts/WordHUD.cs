@@ -8,7 +8,7 @@ public class WordHUD : MonoBehaviour
 	[SerializeField] private Image backgroundImage = null;
 	[SerializeField] private Image cooldownImage = null;
     [SerializeField] private Image iconImage = null;
-    [SerializeField] private Transform originalIconPosition = null;
+    [SerializeField] private RectTransform originalIconPosition = null;
     [SerializeField]
     Animator shimmerAnimator;
 
@@ -18,7 +18,7 @@ public class WordHUD : MonoBehaviour
 
     private void Start()
     {
-        originalIconPosition.position = iconImage.rectTransform.position;
+        //originalIconPosition.position = iconImage.rectTransform.position;
     }
 
     public void UpdateCooldown(float _fill)
@@ -74,7 +74,7 @@ public class WordHUD : MonoBehaviour
                 lerpValue += Time.deltaTime * lerpSpeed;
                 lerpValue = lerpValue >= 1 ? 1 : lerpValue;
             }
-            iconImage.rectTransform.position = Vector3.Lerp(originalIconPosition.position + (Vector3.left * iconImage.rectTransform.rect.width), originalIconPosition.position, lerpValue);
+            iconImage.rectTransform.localPosition = Vector3.Lerp((Vector3.left * iconImage.rectTransform.rect.width), Vector3.zero, lerpValue);
         }
     }
 }
