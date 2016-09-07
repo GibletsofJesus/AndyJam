@@ -37,14 +37,27 @@ public class Tutorial : MonoBehaviour
 
     private float currentTime = 0.0f;
 
+    private bool isArcade = true;
+
 	private void Awake()
     {
         tutorial = this;
+#if UNITY_WEBGL
+        isArcade = false;
+#endif
     }
 
     private void Start()
     {
-        LevelText.instance.SetText("Use       to move\npress       to shoot", 80);
+        if (isArcade)
+        {
+            LevelText.instance.SetText("Use       to move\npress       to shoot", 80);
+        }
+        else
+        {
+            LevelText.instance.SetText("Use ArrowKeys to move\npress END to shoot", 80);
+            LevelText.instance.DisableIcons();
+        }
         LevelText.instance.ShowText();
     }
 
@@ -80,7 +93,7 @@ public class Tutorial : MonoBehaviour
                         tutorialEnemy.transform.position = spawntopRef.position;
                         tutorialEnemy.OnSpawn();
                         tutorialEnemy.gameObject.SetActive(true);
-                        LevelText.instance.SetText("press END to shoot enemies", 80);
+                        LevelText.instance.SetText("destroy enemies\nby shooting them", 80);
                         LevelText.instance.TutorialElementFinished(false);
                         LevelText.instance.ShowText();
                     }

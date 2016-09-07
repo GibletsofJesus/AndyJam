@@ -26,6 +26,7 @@ public class LevelText : MonoBehaviour
     private bool iconsVisible = true;
     [SerializeField] private Image buttonIcon = null;
     [SerializeField] private Image joystickIcon = null;
+    [SerializeField] private Image[] joystickBalls = null;
 
     private bool fadeText = false;
 
@@ -104,16 +105,27 @@ public class LevelText : MonoBehaviour
                 textBuffer = string.Empty;
                 showText = true;
             }
-            iconsVisible = false;
-            buttonIcon.gameObject.SetActive(false);
-            joystickIcon.gameObject.SetActive(false);
+            DisableIcons();
         }
         if(iconsVisible)
         {
             buttonIcon.color = _colour;
             joystickIcon.color = _colour;
+            Color _ballColour = joystickBalls[0].color;
+            _ballColour.a = _colour.a;
+            for (int i = 0; i < joystickBalls.Length; ++i)
+            {
+                joystickBalls[i].color = _ballColour;
+            }
         }
         displayText.color = _colour;
+    }
+
+    public void DisableIcons()
+    {
+        iconsVisible = false;
+        buttonIcon.gameObject.SetActive(false);
+        joystickIcon.gameObject.SetActive(false);
     }
 
     public void SetText(string _text, int _font = 128)
