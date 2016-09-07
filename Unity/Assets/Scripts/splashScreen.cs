@@ -30,15 +30,25 @@ public class splashScreen : MonoBehaviour
     private float shipToggleMaxCool = 0.35f;
     public bool leaderBool = false;
 
-	void Update()
+    void Start()
+    {
+#if UNITY_WEBGL
+        options[1].gameObject.SetActive(false);
+#endif
+    }
+
+    void Update()
     {
         if (allowStart)
         {
+#if !UNITY_WEBGL
             OptionSelect();
+#endif
             ChangeMenuColour();
         }
         MenuCooldown();
         buttonCool += Time.deltaTime;
+
         DisplayLeaderBoard();
 
         if ((!(shipToggleCool < shipToggleMaxCool)) && allowStart && ConvertToPos())
@@ -198,6 +208,7 @@ public class splashScreen : MonoBehaviour
     {
         if (!once)
         {
+#if !UNITY_WEBGL
             List<KeyValuePair<string, int>> k = LeaderBoard.instance.ReturnLeaderBoard();
             for (int i = 0; i < k.Count; i++)
             {
@@ -213,6 +224,7 @@ public class splashScreen : MonoBehaviour
                 scores[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.05f));
                 names[i].color = Color.Lerp(Color.green, Color.red, (float)(i * 0.05f));
             }
+#endif
         }
     }
     void ShowLeaderBoard(bool _onOff)
