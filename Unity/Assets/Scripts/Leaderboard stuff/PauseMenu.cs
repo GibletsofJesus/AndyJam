@@ -54,18 +54,18 @@ public class PauseMenu : MenuSelect
     {
         frameHolder.instance.enableFrameholding = !frameHolder.instance.enableFrameholding;
         if (frameHolder.instance.enableFrameholding)
-            box[2].text = "Frame hold: ON";
+            box[3].text = "Frame hold: ON";
         else
-            box[2].text = "Frame hold: OFF";
+            box[3].text = "Frame hold: OFF";
     }
 
     public void toggleRetroMode()
     {
         CameraScreenGrab.instance.SwitchMode(!CameraScreenGrab.instance.retroMode);
         if (CameraScreenGrab.instance.retroMode)
-            box[3].text = "Nostalgia mode: ON";
+            box[4].text = "Nostalgia mode: ON";
         else
-            box[3].text = "Nostalgia mode: OFF";
+            box[4].text = "Nostalgia mode: OFF";
     }
 
     void QuitToMain()
