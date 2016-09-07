@@ -5,16 +5,9 @@ using UnityEngine.UI;
 
 public class PauseMenu : MenuSelect 
 {
-    Slider slide;
-    Slider slide2;
-	// Use this for initialization
-	void Start ()
-    {
-        slide = box[0].GetComponentInChildren<Slider>();
-        slide2 = box[1].GetComponentInChildren<Slider>();
-	}
-	
-	// Update is called once per frame
+    [SerializeField]
+    Slider[] sliders;
+
 	protected override void Update()
     {
         base.Update();
@@ -25,27 +18,34 @@ public class PauseMenu : MenuSelect
     {
         if (selectBox == 0)
         {
-            ChangeVolumeSlide(slide);
-            soundManager.instance.volumeMultiplayer = slide.value;
+            ChangeVolumeSlide(sliders[0]);
+            soundManager.instance.volumeMultiplayer = sliders[0].value;
         }
         else if (selectBox == 1)
         {
-            ChangeVolumeSlide(slide2);
-            soundManager.instance.music.volume = slide2.value;
+            ChangeVolumeSlide(sliders[1]);
+            soundManager.instance.music.volume = sliders[1].value;
+        }
+        else if (selectBox == 2)
+        {
+            ChangeVolumeSlide(sliders[2]);
+            //Change screen shake amount
+            box[2].text = "Screen shake " + (int)(sliders[2].value*100)+"%";
+            CameraShake.instance.shakeMultiplier = sliders[2].value;
         }
         if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.End))
         {
-            if (selectBox == 2)
+            if (selectBox == 3)
             {
                 toggleFrameHolding();
             }
-            else if (selectBox == 3)
+            else if (selectBox == 4)
             {
                 toggleRetroMode();
             }
-            else if (selectBox == 4)
-                DoAction(QuitToMain);
             else if (selectBox == 5)
+                DoAction(QuitToMain);
+            else if (selectBox == 6)
                 DoAction(QuitGame);
         }
     }
@@ -81,7 +81,7 @@ public class PauseMenu : MenuSelect
 
     void ChangeVolumeSlide(Slider _sl)
     {
-        if (_sl.value > 0 || _sl.value < 1)
+        if (_sl.value > 0 || _sl.value < _sl.maxValue)
         {
             if (Input.GetJoystickNames().Length > 0)
             {

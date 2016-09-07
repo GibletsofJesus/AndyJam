@@ -12,15 +12,15 @@ public class CameraShake : MonoBehaviour
 	
 	// How long the object should shake for.
 	public float shakeDuration = 0f;
-	
-	// Amplitude of the shake. A larger value shakes the camera harder.
-	public float shakeAmount = 0.7f;
-	public float decreaseFactor = 1.0f;
-	
-	List<Vector3> originalPos = new List<Vector3>();
-	
-	void OnEnable()
-	{
+
+    // Amplitude of the shake. A larger value shakes the camera harder.
+    public float shakeAmount = 0.7f;
+    public float decreaseFactor = 1.0f;
+    public float shakeMultiplier = 1.0f;
+    List<Vector3> originalPos = new List<Vector3>();
+
+    void OnEnable()
+    {
         instance = this;
         originalPos.Clear();
         foreach(Transform v in camTransforms)
@@ -37,7 +37,7 @@ public class CameraShake : MonoBehaviour
             {
                 for (int i = 0; i < camTransforms.Length; i++)
                 {
-                    camTransforms[i].localPosition = originalPos[i] + Random.insideUnitSphere * shakeAmount;
+                    camTransforms[i].localPosition = originalPos[i] + Random.insideUnitSphere * shakeAmount*shakeMultiplier;
                 }
                 shakeDuration -= Time.deltaTime * decreaseFactor;
             }
