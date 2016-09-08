@@ -108,18 +108,9 @@ public class splashScreen : MonoBehaviour
                     break;
             }
         }
-        if (!Input.anyKey && Input.GetAxis("Horizontal") < 0.1f)
-        {
-            idletime += Time.deltaTime;
-        }
-        else
-            idletime = 0;
-
-        if (idletime > 180)
-            SceneManager.LoadScene(0);
     }
 
-    float idletime;
+    
 
     bool transitioning;
     

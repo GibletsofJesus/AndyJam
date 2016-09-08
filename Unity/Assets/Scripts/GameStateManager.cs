@@ -19,7 +19,9 @@ public class GameStateManager : MonoBehaviour {
 
     [SerializeField] private GameObject arrowFormation = null;
 
-	void Awake()
+    private float idletime;
+
+    void Awake()
     {
         instance = this;
         state = GameState.Gameplay;
@@ -145,5 +147,19 @@ public class GameStateManager : MonoBehaviour {
                 soundManager.instance.UnPauseAll();
             }
         }
-	}
+
+        if (!Input.anyKey && Input.GetAxis("Horizontal") < 0.1f && Input.GetAxis("Vertical") < 0.1f)
+        {
+            idletime += Time.deltaTime;
+        }
+        else
+        {
+            idletime = 0;
+        }
+
+        if (idletime > 45)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+    }
 }
