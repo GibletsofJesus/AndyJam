@@ -30,6 +30,8 @@ public class splashScreen : MonoBehaviour
     private float shipToggleMaxCool = 0.35f;
     public bool leaderBool = false;
 
+    private float idletime;
+
     void Start()
     {
 #if UNITY_WEBGL
@@ -107,6 +109,19 @@ public class splashScreen : MonoBehaviour
                     }
                     break;
             }
+        }
+        if (!Input.anyKey && Input.GetAxis("Horizontal") < 0.1f && Input.GetAxis("Vertical") < 0.1f)
+        {
+            idletime += Time.deltaTime;
+        }
+        else
+        {
+            idletime = 0;
+        }
+
+        if (idletime > 45)
+        {
+            SceneManager.LoadScene(0);
         }
     }
 
