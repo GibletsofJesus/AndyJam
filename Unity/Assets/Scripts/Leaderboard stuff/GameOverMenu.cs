@@ -28,11 +28,11 @@ public class GameOverMenu : MenuSelect
                     SceneManager.LoadScene(3);
                     break; 
                 }
-            case 2:
-                {
-                    Application.Quit();
-                    break;
-                }
+            //case 2:
+            //    {
+            //        Application.Quit();
+            //        break;
+            //    }
         }
 
 	}
