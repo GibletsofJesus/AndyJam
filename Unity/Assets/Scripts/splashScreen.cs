@@ -36,6 +36,8 @@ public class splashScreen : MonoBehaviour
     {
 #if UNITY_WEBGL
         options[1].gameObject.SetActive(false);
+        options[2].gameObject.SetActive(false);
+
 #endif
     }
 
@@ -104,8 +106,8 @@ public class splashScreen : MonoBehaviour
                 case 2:
                     if (Input.GetButton("Fire1") && allowStart && MenuCooldown())
                     {
-                        //Application.Quit();
-                        //soundManager.instance.playSound(swapSounds[0]);
+                        Application.Quit();
+                        soundManager.instance.playSound(swapSounds[0]);
                     }
                     break;
             }
@@ -143,7 +145,7 @@ public class splashScreen : MonoBehaviour
                 if (Input.GetAxis("Vertical") < 0)
                 {
                     menuSelect++;
-                    if (menuSelect > options.Length - 2)
+                    if (menuSelect > options.Length - 1)
                     {
                         menuSelect = 0;
                     }
@@ -153,7 +155,7 @@ public class splashScreen : MonoBehaviour
                     menuSelect--;
                     if (menuSelect < 0)
                     {
-                        menuSelect = options.Length - 2;
+                        menuSelect = options.Length - 1;
                     }
                 }
                 menuCool = 0;
